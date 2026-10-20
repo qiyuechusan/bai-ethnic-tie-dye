@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="蓝白之境——看、玩、问、练，沉浸式认识白族扎染。">
+  <meta name="theme-color" content="#f4f0e5">
+  <title>蓝白之境 · 白族扎染数字科普</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+  <style>
+    /* 增加一点平滑过渡，切换时不突兀 */
+    .page-view {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      padding-top: 100px; /* 给固定导航栏留出空间 */
+    }
+    .page-view.active {
+      display: block;
+      opacity: 1;
+    }
+    /* 针对首页特殊处理，因为首页自带 padding-top */
+    #view-home.active {
+      display: flex;
+      flex-direction: column;
+    }
+    /* 单个卡片居中显示的样式 */
+    .single-card-view {
+      width: min(calc(100% - 96px), 1000px);
+      margin: 40px auto 100px;
+    }
+  </style>
+</head>
+<body class="page-home">
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
+  <canvas class="dye-canvas" id="dyeCanvas" aria-hidden="true"></canvas>
+  <div class="paper-grain" aria-hidden="true"></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="nav-shell">
+      <a class="brand" href="javascript:void(0)" onclick="switchView('home')" aria-label="蓝白之境首页">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 4.5C19.4 13 13.2 20 13.2 28.1a10.8 10.8 0 1 0 21.6 0C34.8 20 28.6 13 24 4.5Z"/>
+            <path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/>
+          </svg>
+        </span>
+        <span class="brand-copy">
+          <strong>蓝白之境</strong>
+          <small>THE REALM OF INDIGO</small>
+        </span>
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="主导航">
+        <a href="javascript:void(0)" onclick="switchView('home')">首页</a>
+        <a href="javascript:void(0)" onclick="switchView('modules')">六个展区</a>
+        <a href="javascript:void(0)" onclick="switchView('craft')">工艺长卷</a>
+        <a href="javascript:void(0)" onclick="switchView('heritage')">纹样故事</a>
+        <a href="javascript:void(0)" onclick="switchView('about')">关于扎染</a>
+        <a class="mobile-login" href="index.html">登录 / 注册</a>
+      </nav>
+
+      <div class="header-actions">
+        <span class="visitor-state"><i></i>访客漫游中</span>
+        <a class="header-login" href="index.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="3.2"></circle>
+            <path d="M5.5 20c.6-4 2.7-6 6.5-6s5.9 2 6.5 6"></path>
+          </svg>
+          登录
+        </a>
+        <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="打开菜单">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ================= 视图 1：首页 ================= -->
+    <div id="view-home" class="page-view active">
+      <section class="home-hero" style="padding-top: 0;">
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <p class="hero-kicker reveal">
+              <span class="kicker-line"></span>
+              云南大理 · 周城
+              <i></i>
+              白族扎染技艺
+            </p>
+            <h1 class="reveal">
+              把苍洱的风，<br>
+              <span>染成一方蓝。</span>
+            </h1>
+            <p class="hero-description reveal">
+              从一株蓝草出发，循着扎结与浸染的痕迹，<br>
+              看见白族扎染在时间里沉淀出的万千纹样。
+            </p>
+            <div class="hero-actions reveal">
+              <a class="primary-link" href="javascript:void(0)" onclick="switchView('modules')">
+                <span>潜进蓝白</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 4v15M6.5 13.5 12 19l5.5-5.5"></path>
+                </svg>
+              </a>
+              <a class="quiet-link" href="javascript:void(0)" onclick="switchView('craft')">
+                先看一段工艺长卷
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+
+            <div class="hero-notes reveal">
+              <div><span class="note-index">A.</span><p><strong>看</strong><small>纹样与器物</small></p></div>
+              <div><span class="note-index">B.</span><p><strong>玩</strong><small>扎染与问答</small></p></div>
+              <div><span class="note-index">C.</span><p><strong>问</strong><small>知识与来处</small></p></div>
+              <div><span class="note-index">D.</span><p><strong>练</strong><small>亲手试一试</small></p></div>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal" aria-label="白族扎染蝴蝶与花卉纹样示意">
+            <div class="visual-orbit visual-orbit-one" aria-hidden="true"></div>
+            <div class="visual-orbit visual-orbit-two" aria-hidden="true"></div>
+            <span class="vertical-caption">HAND TIED · NATURALLY DYED · DALI</span>
+            <div class="hero-textile">
+              <img src="assets/indigo-textile.svg" alt="">
+              <span class="textile-glint" aria-hidden="true"></span>
+            </div>
+            <span class="round-stamp">蓝<br>白</span>
+            <div class="visual-caption">
+              <span>FIG. 01</span>
+              <p>蝴蝶花<br><small>扎染经典纹样之一</small></p>
+            </div>
+          </div>
+        </div>
+        <div class="hero-waterline" aria-hidden="true">
+          <svg viewBox="0 0 1600 100" preserveAspectRatio="none">
+            <path d="M0 70c180-35 310 18 500-2s325-58 510-24 343 26 590-18"></path>
+            <path d="M0 82c215-18 344 21 528 3s345-47 526-16 331 21 546-11"></path>
+          </svg>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= 视图 2：六个展区 ================= -->
+    <div id="view-modules" class="page-view">
+      <section class="explore-section">
+        <div class="section-intro">
+          <div class="section-title-wrap reveal is-visible">
+            <p class="eyebrow"><span></span>EXPLORE THE BLUE / 06</p>
+            <h2>六种方式，<br>走进一匹蓝布。</h2>
+          </div>
+          <div class="section-side-copy reveal is-visible">
+            <span class="chapter-number">01</span>
+            <p>不用急着读懂它。<br>先从一片花纹、一次浸染、一个故事开始。</p>
+            <div class="section-rule"><i></i><span>六座数字展区</span></div>
+          </div>
+        </div>
+
+        <div class="module-grid">
+          <!-- 展区 01 -->
+          <article class="module-card module-diy reveal is-visible">
+            <div class="card-topline">
+              <span class="module-number">展区 01</span>
+              <span class="module-state">CORE EXPERIENCE</span>
+            </div>
+            <div class="diy-copy">
+              <span class="module-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M8 40 30 18M25 13l10 10M15 9c-4 0-7 3-7 7 0 3 2 5 4 7l5 5"></path><circle cx="31" cy="17" r="3"></circle><path d="M9 35c5 5 12 7 18 5"></path></svg>
+              </span>
+              <h3>在线蓝染纹样<br>DIY 模拟器</h3>
+              <p>选一种捆扎方式，看白布如何在浸染与氧化之间，慢慢长出独一无二的花。</p>
+              <span class="preview-pill"><i></i>核心体验 · 即将开放</span>
+            </div>
+            <div class="diy-art" aria-hidden="true">
+              <div class="dye-disc dye-disc-back"></div>
+              <div class="dye-disc dye-disc-main">
+                <span class="resist-ring ring-one"></span><span class="resist-ring ring-two"></span>
+                <span class="resist-knot knot-one"></span><span class="resist-knot knot-two"></span><span class="resist-knot knot-three"></span>
+              </div>
+              <div class="oxidation-scale"><span>黄绿</span><i></i><span>靛蓝</span></div>
+              <span class="diy-caption">捆扎 / 同心纹 / 自然防染</span>
+            </div>
+          </article>
+
+          <!-- 展区 02 -->
+          <article class="module-card module-craft reveal is-visible">
+            <div class="card-topline">
+              <span class="module-number">展区 02</span>
+              <span class="module-state">SCROLL STORY</span>
+            </div>
+            <div class="craft-copy">
+              <span class="module-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M24 6v36"></path><circle cx="24" cy="12" r="4"></circle><circle cx="24" cy="25" r="4"></circle><circle cx="24" cy="38" r="4"></circle><path d="M32 12h7M10 25h7M32 38h7"></path></svg>
+              </span>
+              <h3>七步成蓝<br>工艺长卷</h3>
+              <p>顺着时间向下走，从一株蓝草，到一匹有呼吸的布。</p>
+            </div>
+            <div class="mini-timeline" aria-hidden="true">
+              <span class="timeline-track"></span>
+              <div><b>01</b><p>采蓝草<small>BLUE HERB</small></p></div>
+              <div><b>02</b><p>制蓝靛<small>FERMENT</small></p></div>
+              <div><b>03</b><p>扎花<small>TIE & BIND</small></p></div>
+              <div><b>04</b><p>浸染<small>DIP & OXIDIZE</small></p></div>
+            </div>
+          </article>
+
+          <!-- 展区 03 -->
+          <article class="module-card module-pattern reveal is-visible">
+            <div class="card-topline">
+              <span class="module-number">展区 03</span>
+              <span class="module-state">COLLECT</span>
+            </div>
+            <div class="pattern-art" aria-hidden="true">
+              <svg viewBox="0 0 220 180">
+                <path class="butterfly-wing" d="M110 91C91 54 54 42 36 60c-19 20 0 54 45 56-26 15-32 42-17 50 16 9 37-12 46-40 9 28 30 49 46 40 15-8 9-35-17-50 45-2 64-36 45-56-18-18-55-6-74 31Z"></path>
+                <path class="butterfly-body" d="M110 66v74M102 69c-8-11-1-20 8-27 9 7 16 16 8 27"></path>
+                <circle cx="89" cy="82" r="9"></circle><circle cx="131" cy="82" r="9"></circle><circle cx="55" cy="60" r="5"></circle><circle cx="165" cy="60" r="5"></circle>
+              </svg>
+              <span class="pattern-label">蝶恋花 / 吉祥</span>
+            </div>
+            <div class="pattern-copy">
+              <span class="module-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M24 9c-9 0-16 6-16 14 0 6 4 10 9 12l-2 7 9-4 9 4-2-7c5-2 9-6 9-12 0-8-7-14-16-14Z"></path><path d="M24 15v15M16 19c3 4 5 6 8 6s5-2 8-6"></path></svg>
+              </span>
+              <h3>纹样图鉴<br>× 闯关答题</h3>
+              <p>读懂蝴蝶、梅花与铜钱纹的寓意，再用知识解锁下一张图鉴卡。</p>
+            </div>
+          </article>
+
+          <!-- 展区 04 -->
+          <article class="module-card module-ask reveal is-visible">
+            <div class="card-topline">
+              <span class="module-number">展区 04</span>
+              <span class="module-state">ASK & LEARN</span>
+            </div>
+            <div class="ask-copy">
+              <span class="module-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M8 10h32v23H23l-9 7v-7H8V10Z"></path><path d="M20 19c.5-4 7.8-4.6 8.5-.2.5 3.2-4 3.1-4 6.5M24.5 30h.1"></path></svg>
+              </span>
+              <h3>问蓝知染<br>非遗问答</h3>
+              <p>从易混淆的防染知识出发，每一次提问，都能沿着资料回到技艺的原点。</p>
+              <div class="question-preview" aria-hidden="true">
+                <span>绞缬</span><i>VS</i><span>蜡缬</span><b>它们究竟有什么不同？</b>
+              </div>
+            </div>
+            <div class="bubble-lines" aria-hidden="true"><span></span><span></span><span></span></div>
+          </article>
+
+          <!-- 展区 05 -->
+          <article class="module-card module-map reveal is-visible">
+            <div class="card-topline">
+              <span class="module-number">展区 05</span>
+              <span class="module-state">PLACES & PEOPLE</span>
+            </div>
+            <div class="mini-map" aria-hidden="true">
+              <svg viewBox="0 0 320 240">
+                <path class="map-shape" d="M45 84c29-38 77-33 104-53 35-26 75 4 105 31 23 20 24 55 7 83-17 29-59 50-101 52-45 2-92-12-112-46-17-30-19-44-3-67Z"></path>
+                <path class="map-river" d="M105 35c-2 45 29 60 12 92-13 25 20 40 35 66M211 88c-33 5-47 26-73 36"></path>
+                <g class="map-pin pin-main"><circle cx="184" cy="125" r="15"></circle><circle cx="184" cy="125" r="4"></circle><path d="M184 95v9"></path></g>
+                <g class="map-pin pin-small"><circle cx="128" cy="147" r="7"></circle><circle cx="128" cy="147" r="2"></circle></g>
+                <g class="map-pin pin-small second"><circle cx="232" cy="164" r="7"></circle><circle cx="232" cy="164" r="2"></circle></g>
+                <text x="198" y="119">大理 · 周城</text><text class="map-small-text" x="92" y="166">巍山</text><text class="map-small-text" x="240" y="183">喜洲</text>
+              </svg>
+              <span class="map-coordinate">25.85°N / 100.13°E</span>
+            </div>
+            <div class="map-copy">
+              <span class="module-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M24 43s13-13.2 13-23A13 13 0 1 0 11 20c0 9.8 13 23 13 23Z"></path><circle cx="24" cy="19.5" r="4.5"></circle></svg>
+              </span>
+              <h3>苍洱染迹<br>非遗地图</h3>
+              <p>沿着苍山与洱海，探访核心传承地、传承人故事与今日的扎染产业。</p>
+            </div>
+          </article>
+
+          <!-- 展区 06 -->
+          <article class="module-card module-gallery reveal is-visible">
+            <div class="gallery-copy">
+              <div class="card-topline"><span class="module-number">展区 06</span><span class="module-state">COMMUNITY GALLERY</span></div>
+              <div>
+                <span class="module-icon" aria-hidden="true">
+                  <svg viewBox="0 0 48 48"><rect x="6" y="9" width="36" height="30" rx="2"></rect><path d="m6 33 10-10 8 8 6-6 12 12M15 19h.1"></path></svg>
+                </span>
+                <h3>一方蓝布，<br><em>万千手艺。</em></h3>
+                <p>收藏每个人的扎染练习，也收藏纹样在当下继续生长的样子。</p>
+              </div>
+            </div>
+            <div class="gallery-strip" aria-hidden="true">
+              <figure class="swatch swatch-one"><span class="swatch-pattern pattern-bloom"></span><figcaption><b>01</b><small>螺旋捆扎</small></figcaption></figure>
+              <figure class="swatch swatch-two"><span class="swatch-pattern pattern-lines"></span><figcaption><b>02</b><small>风琴折叠</small></figcaption></figure>
+              <figure class="swatch swatch-three"><span class="swatch-pattern pattern-butterfly"></span><figcaption><b>03</b><small>缝扎蝶纹</small></figcaption></figure>
+              <figure class="swatch swatch-four"><span class="swatch-pattern pattern-rings"></span><figcaption><b>04</b><small>豆子绑扎</small></figcaption></figure>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= 视图 3：工艺长卷 ================= -->
+    <div id="view-craft" class="page-view">
+      <div class="single-card-view">
+        <article class="module-card module-craft reveal is-visible" style="min-height: 600px;">
+          <div class="card-topline">
+            <span class="module-number">展区 02 · 详情</span>
+            <span class="module-state">SCROLL STORY</span>
+          </div>
+          <div class="craft-copy">
+            <span class="module-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><path d="M24 6v36"></path><circle cx="24" cy="12" r="4"></circle><circle cx="24" cy="25" r="4"></circle><circle cx="24" cy="38" r="4"></circle><path d="M32 12h7M10 25h7M32 38h7"></path></svg>
+            </span>
+            <h3 style="font-size: 48px;">七步成蓝<br>工艺长卷</h3>
+            <p style="font-size: 18px;">顺着时间向下走，从一株蓝草，到一匹有呼吸的布。这里是详细的工艺流程展示区（A同学负责在此处开发）。</p>
+          </div>
+          <div class="mini-timeline" aria-hidden="true" style="margin-top: 60px;">
+            <span class="timeline-track"></span>
+            <div><b>01</b><p>采蓝草<small>BLUE HERB</small></p></div>
+            <div><b>02</b><p>制蓝靛<small>FERMENT</small></p></div>
+            <div><b>03</b><p>扎花<small>TIE & BIND</small></p></div>
+            <div><b>04</b><p>浸染<small>DIP & OXIDIZE</small></p></div>
+            <div><b>05</b><p>氧化<small>OXIDIZE</small></p></div>
+            <div><b>06</b><p>拆线<small>UNTIE</small></p></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- ================= 视图 4：纹样故事 ================= -->
+    <div id="view-heritage" class="page-view">
+      <div class="single-card-view">
+        <article class="module-card module-pattern reveal is-visible" style="min-height: 600px;">
+          <div class="card-topline">
+            <span class="module-number">展区 03 · 详情</span>
+            <span class="module-state">COLLECT</span>
+          </div>
+          <div class="pattern-art" aria-hidden="true" style="min-height: 300px;">
+            <svg viewBox="0 0 220 180" style="width: 300px;">
+              <path class="butterfly-wing" d="M110 91C91 54 54 42 36 60c-19 20 0 54 45 56-26 15-32 42-17 50 16 9 37-12 46-40 9 28 30 49 46 40 15-8 9-35-17-50 45-2 64-36 45-56-18-18-55-6-74 31Z"></path>
+              <path class="butterfly-body" d="M110 66v74M102 69c-8-11-1-20 8-27 9 7 16 16 8 27"></path>
+              <circle cx="89" cy="82" r="9"></circle><circle cx="131" cy="82" r="9"></circle><circle cx="55" cy="60" r="5"></circle><circle cx="165" cy="60" r="5"></circle>
+            </svg>
+            <span class="pattern-label">蝶恋花 / 吉祥</span>
+          </div>
+          <div class="pattern-copy">
+            <span class="module-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><path d="M24 9c-9 0-16 6-16 14 0 6 4 10 9 12l-2 7 9-4 9 4-2-7c5-2 9-6 9-12 0-8-7-14-16-14Z"></path><path d="M24 15v15M16 19c3 4 5 6 8 6s5-2 8-6"></path></svg>
+            </span>
+            <h3 style="font-size: 48px;">纹样图鉴<br>× 闯关答题</h3>
+            <p style="font-size: 18px;">读懂蝴蝶、梅花与铜钱纹的寓意，再用知识解锁下一张图鉴卡。（B同学负责在此处开发答题与收集功能）。</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- ================= 视图 5：关于扎染 ================= -->
+    <div id="view-about" class="page-view">
+      <section class="blue-manifesto" style="min-height: 80vh; margin-top: 100px;">
+        <div class="manifesto-mark reveal is-visible" aria-hidden="true">蓝</div>
+        <div class="manifesto-copy reveal is-visible">
+          <p class="eyebrow light"><span></span>NOT JUST A COLOR</p>
+          <h2>蓝色，是植物、时间与双手<br>共同写下的答案。</h2>
+          <p>扎染的魅力从不在图案本身。线如何扎、布如何折、靛缸浸多久，甚至空气里的温度，都会留下不同的痕迹。每一匹布，都无法被完全复制。</p>
+        </div>
+        <div class="manifesto-aside reveal is-visible">
+          <span>从看，到懂。</span>
+          <span>从一方蓝，到一方土地。</span>
+          <a href="javascript:void(0)" onclick="switchView('home')">回到首页 <i>↑</i></a>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <!-- 底部保持不变 -->
+    <div class="footer-brand">
+      <a class="brand invert" href="javascript:void(0)" onclick="switchView('home')" aria-label="蓝白之境首页">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 4.5C19.4 13 13.2 20 13.2 28.1a10.8 10.8 0 1 0 21.6 0C34.8 20 28.6 13 24 4.5Z"/>
+            <path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/>
+          </svg>
+        </span>
+        <span class="brand-copy"><strong>蓝白之境</strong><small>THE REALM OF INDIGO</small></span>
+      </a>
+      <p>让一匹蓝布，继续讲述<br>苍山洱海间的非遗故事。</p>
+    </div>
+    <div class="footer-nav">
+      <div>
+        <span>探索</span>
+        <a href="javascript:void(0)" onclick="switchView('modules')">六大展区</a>
+        <a href="javascript:void(0)" onclick="switchView('craft')">工艺长卷</a>
+        <a href="javascript:void(0)" onclick="switchView('heritage')">纹样图鉴</a>
+      </div>
+      <div>
+        <span>连接</span>
+        <a href="index.html">登录 / 注册</a>
+        <a href="home.html">管理入口</a>
+        <a href="javascript:void(0)" onclick="switchView('about')">关于蓝白之境</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 BAIZU TIE-DYE DIGITAL MUSEUM</span>
+      <span>云南大理 · 白族扎染数字科普站</span>
+    </div>
+  </footer>
+
+  <!-- 核心切换逻辑 -->
+  <script>
+    function switchView(viewName) {
+      // 1. 隐藏所有视图
+      document.querySelectorAll('.page-view').forEach(view => {
+        view.classList.remove('active');
+      });
+      // 2. 显示目标视图
+      document.getElementById('view-' + viewName).classList.add('active');
+
+      // 3. 返回顶部
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // 4. 如果是手机端，自动收起导航栏
+      const nav = document.getElementById('mainNav');
+      const menuButton = document.getElementById('menuButton');
+      if (nav && nav.classList.contains('is-open')) {
+        nav.classList.remove('is-open');
+        if(menuButton) menuButton.setAttribute('aria-expanded', 'false');
+      }
+    }
+  </script>
+</body>
+</html>
