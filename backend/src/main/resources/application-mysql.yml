@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    # createDatabaseIfNotExist=true 会在首次连接时自动创建 baizu_tiedye 数据库。
+    # 密码通过环境变量 DB_PASSWORD 传入，不要把真实密码提交到 Git。
+    url: ${DB_URL:jdbc:mysql://localhost:3306/baizu_tiedye?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update

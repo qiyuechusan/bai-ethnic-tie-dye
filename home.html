@@ -6,6 +6,7 @@
   <meta name="description" content="蓝白之境——看、玩、问、练，沉浸式认识白族扎染。">
   <meta name="theme-color" content="#f4f0e5">
   <title>蓝白之境 · 白族扎染数字科普</title>
+  <link rel="icon" type="image/svg+xml" href="assets/indigo-textile.svg">
   <link rel="stylesheet" href="styles.css">
   <script defer src="app.js"></script>
   <style>
@@ -171,7 +172,7 @@
               </span>
               <h3>在线蓝染纹样<br>DIY 模拟器</h3>
               <p>选一种捆扎方式，看白布如何在浸染与氧化之间，慢慢长出独一无二的花。</p>
-              <span class="preview-pill"><i></i>核心体验 · 即将开放</span>
+              <a class="preview-pill" href="diy.html"><i></i>进入扎染实验室</a>
             </div>
             <div class="diy-art" aria-hidden="true">
               <div class="dye-disc dye-disc-back"></div>
@@ -244,6 +245,7 @@
               <div class="question-preview" aria-hidden="true">
                 <span>绞缬</span><i>VS</i><span>蜡缬</span><b>它们究竟有什么不同？</b>
               </div>
+              <a class="preview-pill" href="quiz.html"><i></i>开始答题</a>
             </div>
             <div class="bubble-lines" aria-hidden="true"><span></span><span></span><span></span></div>
           </article>
@@ -425,6 +427,12 @@
         nav.classList.remove('is-open');
         if(menuButton) menuButton.setAttribute('aria-expanded', 'false');
       }
+    }
+
+    // 支持从 diy.html / quiz.html 通过 home.html#modules 等链接回到对应视图
+    const initialView = window.location.hash.replace('#', '');
+    if (initialView && document.getElementById('view-' + initialView)) {
+      switchView(initialView);
     }
   </script>
 </body>

@@ -1,0 +1,10 @@
+# IDE
+.idea/
+*.iml
+
+# Spring Boot build output
+backend/target/
+
+# Node / local dev
+node_modules/
+.DS_Store
