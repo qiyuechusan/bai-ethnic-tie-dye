@@ -8,6 +8,7 @@
   <title>蓝白之境 · 登录</title>
   <link rel="icon" type="image/svg+xml" href="assets/indigo-textile.svg">
   <link rel="stylesheet" href="styles.css">
+  <script defer src="js/api-base.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body class="page-login">
@@ -142,7 +143,11 @@
                 </svg>
               </button>
 
-              <p class="auth-switch-copy">还没有账号？<button id="showRegister" type="button">创建账号</button></p>
+              <button class="auth-switch-action" id="showRegister" type="button" data-auth-switch="register">
+                <span>还没有账号？</span>
+                <strong>创建账号</strong>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 7l5 5-5 5"></path></svg>
+              </button>
             </form>
           </div>
 
@@ -217,7 +222,11 @@
                 </svg>
               </button>
 
-              <p class="auth-switch-copy">已经注册？<button id="showLogin" type="button">返回登录</button></p>
+              <button class="auth-switch-action" id="showLogin" type="button" data-auth-switch="login">
+                <span>已经注册？</span>
+                <strong>返回登录</strong>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 7l5 5-5 5"></path></svg>
+              </button>
             </form>
           </div>
 

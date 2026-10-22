@@ -12,7 +12,11 @@ export async function request(path, options = {}) {
 
   let response;
   try {
-    response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+    response = await fetch(`${API_BASE}${path}`, {
+      credentials: 'include',
+      ...options,
+      headers,
+    });
   } catch (error) {
     throw new Error('无法连接后端服务，请确认 Spring Boot 已启动在 8080 端口');
   }

@@ -7,6 +7,7 @@ public record QuestionDto(
         String stem,
         String category,
         Integer difficulty,
+        Long patternId,
         List<OptionDto> options
 ) {
 }

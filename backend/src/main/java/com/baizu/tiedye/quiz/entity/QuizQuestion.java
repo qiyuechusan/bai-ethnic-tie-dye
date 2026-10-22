@@ -33,6 +33,19 @@ public class QuizQuestion {
     @Column(name = "chunk_id")
     private Long chunkId;
 
+    /**
+     * knowledge = 模块 6 非遗问答；pattern = 模块 3 纹样图鉴闯关。
+     * 两个页面共用题库与答题接口，但默认只返回各自 scope 的题目。
+     */
+    @Column(nullable = false, length = 16)
+    private String scope = "knowledge";
+
+    /**
+     * 模块 3 的题目关联的纹样 id；模块 6 的题目为 null。
+     */
+    @Column(name = "pattern_id")
+    private Long patternId;
+
     @Column(name = "sort_order", nullable = false)
     private Integer sortOrder = 0;
 
@@ -93,6 +106,22 @@ public class QuizQuestion {
 
     public void setChunkId(Long chunkId) {
         this.chunkId = chunkId;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    public Long getPatternId() {
+        return patternId;
+    }
+
+    public void setPatternId(Long patternId) {
+        this.patternId = patternId;
     }
 
     public Integer getSortOrder() {

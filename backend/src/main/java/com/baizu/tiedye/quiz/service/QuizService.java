@@ -37,11 +37,13 @@ public class QuizService {
         this.chunkRepository = chunkRepository;
     }
 
-    public QuestionListDto listQuestions(int limit, String category) {
+    public QuestionListDto listQuestions(int limit, String category, String scope) {
         String normalizedCategory = category == null ? null : category.trim();
+        String normalizedScope = (scope == null || scope.isBlank()) ? "knowledge" : scope.trim().toLowerCase(Locale.ROOT);
         List<QuizQuestion> questions = (normalizedCategory == null || normalizedCategory.isEmpty())
-                ? questionRepository.findByEnabledTrueOrderBySortOrderAsc()
-                : questionRepository.findByEnabledTrueAndCategoryOrderBySortOrderAsc(normalizedCategory);
+                ? questionRepository.findByEnabledTrueAndScopeOrderBySortOrderAsc(normalizedScope)
+                : questionRepository.findByEnabledTrueAndScopeAndCategoryOrderBySortOrderAsc(
+                        normalizedScope, normalizedCategory);
 
         int safeLimit = limit <= 0 ? 8 : Math.min(limit, 50);
         List<QuestionDto> items = questions.stream()
@@ -82,7 +84,8 @@ public class QuizService {
                 correctOption.getOptionKey(),
                 question.getExplanation(),
                 knowledge == null ? null : knowledge.source(),
-                knowledge
+                knowledge,
+                question.getPatternId()
         );
     }
 
@@ -96,6 +99,7 @@ public class QuizService {
                 question.getStem(),
                 question.getCategory(),
                 question.getDifficulty(),
+                question.getPatternId(),
                 options
         );
     }

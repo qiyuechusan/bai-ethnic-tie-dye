@@ -5,6 +5,20 @@
 # Spring Boot build output
 backend/target/
 
+# Uploaded artworks (runtime data)
+uploads/
+backend/uploads/
+
+# Local environment / secrets
+.env
+.env.*
+application-local.yml
+application-local.properties
+
+# Logs
+*.log
+logs/
+
 # Node / local dev
 node_modules/
 .DS_Store

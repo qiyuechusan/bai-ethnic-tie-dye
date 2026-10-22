@@ -31,8 +31,9 @@ public class QuizController {
     @GetMapping("/questions")
     public ApiResponse<QuestionListDto> questions(
             @RequestParam(defaultValue = "8") int limit,
-            @RequestParam(required = false) String category) {
-        return ApiResponse.ok(quizService.listQuestions(limit, category));
+            @RequestParam(required = false) String category,
+            @RequestParam(defaultValue = "knowledge") String scope) {
+        return ApiResponse.ok(quizService.listQuestions(limit, category, scope));
     }
 
     /**

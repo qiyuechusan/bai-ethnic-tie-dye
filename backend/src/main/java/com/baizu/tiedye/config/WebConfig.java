@@ -1,10 +1,13 @@
 package com.baizu.tiedye.config;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -18,6 +21,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${app.cors.allowed-origins:http://localhost:5500,http://127.0.0.1:5500}")
     private String allowedOrigins;
 
+    @Value("${app.upload.dir:${user.dir}/uploads}")
+    private String uploadDir;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         String[] origins = Arrays.stream(allowedOrigins.split(","))
@@ -27,8 +33,24 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addMapping("/api/**")
                 .allowedOrigins(origins)
-                .allowedMethods("GET", "POST", "OPTIONS")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
+                .allowCredentials(true)
                 .maxAge(3600);
+    }
+
+    /**
+     * 作品墙上传的图片保存在项目外（或 backend/uploads），
+     * 通过 /uploads/** 暴露为静态资源，避免把二进制文件打进 jar。
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        Path uploadRoot = Paths.get(uploadDir).toAbsolutePath().normalize();
+        String location = uploadRoot.toUri().toString();
+        if (!location.endsWith("/")) {
+            location += "/";
+        }
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations(location);
     }
 }

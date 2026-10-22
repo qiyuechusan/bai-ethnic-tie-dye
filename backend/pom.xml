@@ -34,6 +34,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+        <!-- 只用 BCrypt，不启用完整的 Spring Security 过滤器链 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
 
         <!-- 数据库：MySQL 8 -->
         <dependency>
@@ -63,6 +68,8 @@
                     <include>home.html</include>
                     <include>diy.html</include>
                     <include>quiz.html</include>
+                    <include>map.html</include>
+                    <include>timeline.html</include>
                     <include>styles.css</include>
                     <include>lab.css</include>
                     <include>app.js</include>
