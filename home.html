@@ -207,7 +207,7 @@
           </article>
 
           <!-- 展区 03 -->
-          <article class="module-card module-pattern reveal is-visible">
+          <article class="module-card module-pattern reveal is-visible" onclick="openModal('modal-pattern')" style="cursor: pointer;">
             <div class="card-topline">
               <span class="module-number">展区 03</span>
               <span class="module-state">COLLECT</span>
@@ -275,7 +275,7 @@
           </article>
 
           <!-- 展区 06 -->
-          <article class="module-card module-gallery reveal is-visible">
+          <article class="module-card module-gallery reveal is-visible" onclick="openModal('modal-ask')" style="cursor: pointer;">
             <div class="gallery-copy">
               <div class="card-topline"><span class="module-number">展区 06</span><span class="module-state">COMMUNITY GALLERY</span></div>
               <div>
@@ -427,5 +427,111 @@
       }
     }
   </script>
+  <!-- ===== 模块 3：图鉴与闯关 遮罩层 ===== -->
+  <div id="modal-pattern" class="custom-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('modal-pattern')">&times;</button>
+      <h2 class="modal-title">纹样图鉴与闯关</h2>
+      
+      <!-- 图鉴展示区 -->
+      <div class="gallery-wrapper">
+        <h3>我的图鉴</h3>
+        <div id="pattern-grid" class="pattern-grid">
+          <!-- JS 动态渲染纹样卡片 -->
+        </div>
+      </div>
+
+      <!-- 闯关答题区 -->
+      <div class="quiz-wrapper">
+        <h3>知识闯关</h3>
+        <div id="quiz-container">
+          <p id="quiz-question">加载题目中...</p>
+          <div id="quiz-options" class="quiz-options"></div>
+          <p id="quiz-feedback" class="quiz-feedback"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+      <!-- ===== 模块 4：作品墙 遮罩层 ===== -->
+  <div id="modal-ask" class="custom-modal" style="align-items: flex-start; padding-top: 5vh;">
+    <div class="modal-content" style="max-width: 1400px; background: var(--paper); box-shadow: inset 0 0 50px rgba(0,0,0,0.05);">
+      <button class="modal-close" onclick="closeModal('modal-ask')" style="z-index: 10;">&times;</button>
+      
+      <!-- 顶部标题和操作区 -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 class="modal-title" style="border: none; margin: 0; padding: 0; font-size: 36px;">匠人作品墙</h2>
+        <button onclick="toggleUploadForm()" style="padding: 12px 24px; background: var(--indigo-800); color: white; cursor: pointer; border: none; font-size: 15px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+          + 钉一张拍立得
+        </button>
+      </div>
+
+      <!-- 上传表单（拍立得相纸样式，默认隐藏） -->
+      <div id="upload-form-container" class="upload-section" style="display: none; margin-bottom: 40px; justify-content: center; display: flex;">
+        <div class="polaroid-form-card">
+          <form id="uploadForm" onsubmit="handleUpload(event)">
+            <!-- 拍立得相纸上的照片预览区 -->
+            <div class="polaroid-photo-preview" onclick="document.getElementById('fileInput').click()">
+              <span id="previewText" style="color:#999; font-family: var(--font-serif);">点击此处选择照片</span>
+              <img id="previewImg" src="" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0;">
+            </div>
+            <input id="fileInput" type="file" name="file" accept="image/*" required style="display: none;" onchange="previewImage(this)">
+            
+            <!-- 底部留白手写区 -->
+            <div class="polaroid-bottom">
+              <input type="text" name="title" placeholder="作品名称" required class="marker-input" style="font-size: 20px; font-weight: bold;">
+              <input type="text" name="authorName" placeholder="你的称呼 (选填)" class="marker-input">
+              <textarea name="description" placeholder="写下一句感悟..." class="marker-input" rows="2" style="resize:none;"></textarea>
+              
+              <select name="tieMethod" class="marker-input" style="margin-top: 10px;">
+                <option value="捆扎">螺旋捆扎</option>
+                <option value="缝扎">缝扎勾勒</option>
+                <option value="折叠夹扎">风琴折叠</option>
+              </select>
+              
+              <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button type="submit" class="btn-pill">挂上麻绳</button>
+                <button type="button" onclick="toggleUploadForm()" class="btn-pill" style="background: #ccc; color: #333;">取消</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- 筛选标签 -->
+      <div class="filter-tags">
+        <button class="active" onclick="filterArtworks('全部', this)">全部</button>
+        <button onclick="filterArtworks('捆扎', this)">螺旋捆扎</button>
+        <button onclick="filterArtworks('折叠夹扎', this)">风琴折叠</button>
+        <button onclick="filterArtworks('缝扎', this)">缝扎勾勒</button>
+      </div>
+
+      <!-- 麻绳展示墙 -->
+      <div class="clothesline-container">
+        <div class="rope"></div>
+        <div id="artwork-grid" class="clothesline-items">
+          <!-- JS 动态渲染拍立得卡片 -->
+        </div>
+      </div>
+            <!-- ===== 点击放大的灯箱 (Lightbox) ===== -->
+      <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+          <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+          <img id="lightbox-img" src="" alt="放大图片">
+          <div class="lightbox-info">
+            <h2 id="lightbox-title"></h2>
+            <p id="lightbox-desc"></p>
+            <div class="lightbox-meta">
+              <span id="lightbox-author"></span>
+              <div class="like-vat" id="lightbox-like" onclick="likeFromLightbox(event)">
+                <i class="vat-icon"></i>
+                <span class="like-count" id="lightbox-likes">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
