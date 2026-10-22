@@ -80,65 +80,149 @@
           <div class="login-card-heading">
             <span class="section-number">01 / 入口</span>
             <span class="stamp" aria-hidden="true">染</span>
-            <p class="card-kicker">WELCOME BACK</p>
+            <p class="card-kicker" id="authKicker">WELCOME BACK</p>
             <h2 id="entry-title">回到染坊</h2>
-            <p>继续探索那一抹正在氧化的蓝。</p>
+            <p id="authSubtitle">继续探索那一抹正在氧化的蓝。</p>
           </div>
 
-          <form id="loginForm" novalidate>
-            <div class="field-group">
-              <label for="account">账号</label>
-              <div class="field">
-                <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="12" cy="8" r="3.5"></circle>
-                  <path d="M5.5 20c.5-4.1 2.6-6.2 6.5-6.2s6 2.1 6.5 6.2"></path>
-                </svg>
-                <input id="account" name="account" type="text" autocomplete="username" placeholder="手机号码或邮箱" aria-describedby="accountError">
-                <span class="field-focus-line" aria-hidden="true"></span>
-              </div>
-              <p class="field-error" id="accountError" aria-live="polite"></p>
-            </div>
+          <div class="auth-tabs" role="tablist" aria-label="账户入口">
+            <button class="auth-tab is-active" id="loginTab" type="button" role="tab" aria-selected="true" aria-controls="loginPanel" tabindex="0">登录</button>
+            <button class="auth-tab" id="registerTab" type="button" role="tab" aria-selected="false" aria-controls="registerPanel" tabindex="-1">注册</button>
+          </div>
 
-            <div class="field-group">
-              <label for="password">密码</label>
-              <div class="field">
-                <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="5.2" y="10" width="13.6" height="10" rx="2.4"></rect>
-                  <path d="M8.3 10V7.6a3.7 3.7 0 0 1 7.4 0V10M12 14v2.3"></path>
-                </svg>
-                <input id="password" name="password" type="password" autocomplete="current-password" placeholder="输入你的密码" aria-describedby="passwordError">
-                <button class="password-toggle" type="button" aria-label="显示密码" aria-pressed="false">
-                  <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M2.8 12s3.4-5.5 9.2-5.5S21.2 12 21.2 12 17.8 17.5 12 17.5 2.8 12 2.8 12Z"></path>
-                    <circle cx="12" cy="12" r="2.4"></circle>
+          <div class="auth-panel" id="loginPanel" role="tabpanel" aria-labelledby="loginTab">
+            <form id="loginForm" novalidate>
+              <div class="field-group">
+                <label for="account">账号</label>
+                <div class="field">
+                  <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3.5"></circle>
+                    <path d="M5.5 20c.5-4.1 2.6-6.2 6.5-6.2s6 2.1 6.5 6.2"></path>
                   </svg>
-                </button>
-                <span class="field-focus-line" aria-hidden="true"></span>
+                  <input id="account" name="account" type="text" autocomplete="username" placeholder="手机号或邮箱" aria-describedby="accountError">
+                  <span class="field-focus-line" aria-hidden="true"></span>
+                </div>
+                <p class="field-error" id="accountError" aria-live="polite"></p>
               </div>
-              <p class="field-error" id="passwordError" aria-live="polite"></p>
-            </div>
 
-            <div class="form-options">
-              <label class="remember">
-                <input type="checkbox" name="remember">
-                <span class="checkmark" aria-hidden="true"></span>
-                记住我
-              </label>
-              <button class="text-button" type="button" id="forgotButton">忘记密码？</button>
-            </div>
+              <div class="field-group">
+                <label for="password">密码</label>
+                <div class="field">
+                  <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="5.2" y="10" width="13.6" height="10" rx="2.4"></rect>
+                    <path d="M8.3 10V7.6a3.7 3.7 0 0 1 7.4 0V10M12 14v2.3"></path>
+                  </svg>
+                  <input id="password" name="password" type="password" autocomplete="current-password" placeholder="输入你的密码" aria-describedby="passwordError">
+                  <button class="password-toggle" type="button" aria-label="显示密码" aria-pressed="false">
+                    <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M2.8 12s3.4-5.5 9.2-5.5S21.2 12 21.2 12 17.8 17.5 12 17.5 2.8 12 2.8 12Z"></path>
+                      <circle cx="12" cy="12" r="2.4"></circle>
+                    </svg>
+                  </button>
+                  <span class="field-focus-line" aria-hidden="true"></span>
+                </div>
+                <p class="field-error" id="passwordError" aria-live="polite"></p>
+              </div>
 
-            <button class="login-submit" type="submit">
-              <span>进入蓝白之境</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 12h15M14 7l5 5-5 5"></path>
-              </svg>
-            </button>
+              <div class="form-options">
+                <label class="remember">
+                  <input type="checkbox" name="remember">
+                  <span class="checkmark" aria-hidden="true"></span>
+                  记住我
+                </label>
+                <button class="text-button" type="button" id="forgotButton">忘记密码？</button>
+              </div>
 
-            <p class="demo-hint">界面预览模式 · 输入任意账号和密码即可进入</p>
-          </form>
+              <p class="form-status" id="loginStatus" role="status" aria-live="polite"></p>
+
+              <button class="login-submit" type="submit">
+                <span>进入蓝白之境</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 12h15M14 7l5 5-5 5"></path>
+                </svg>
+              </button>
+
+              <p class="auth-switch-copy">还没有账号？<button id="showRegister" type="button">创建账号</button></p>
+            </form>
+          </div>
+
+          <div class="auth-panel" id="registerPanel" role="tabpanel" aria-labelledby="registerTab" hidden>
+            <form id="registerForm" novalidate>
+              <div class="field-group">
+                <label for="displayName">怎么称呼你</label>
+                <div class="field">
+                  <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 20.5c5.2 0 8.5-2.8 8.5-8.5S17.2 3.5 12 3.5 3.5 6.3 3.5 12s3.3 8.5 8.5 8.5Z"></path>
+                    <path d="M8.5 12h.1M15.4 12h.1M9 15.7c1.9 1.1 4.1 1.1 6 0"></path>
+                  </svg>
+                  <input id="displayName" name="displayName" type="text" autocomplete="nickname" placeholder="2–20 个字符" aria-describedby="displayNameError">
+                </div>
+                <p class="field-error" id="displayNameError" aria-live="polite"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="registerAccount">手机号或邮箱</label>
+                <div class="field">
+                  <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="3.5"></circle>
+                    <path d="M5.5 20c.5-4.1 2.6-6.2 6.5-6.2s6 2.1 6.5 6.2"></path>
+                  </svg>
+                  <input id="registerAccount" name="account" type="text" inputmode="email" autocomplete="username" placeholder="用于之后登录" aria-describedby="registerAccountError">
+                </div>
+                <p class="field-error" id="registerAccountError" aria-live="polite"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="registerPassword">设置密码</label>
+                <div class="field">
+                  <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="5.2" y="10" width="13.6" height="10" rx="2.4"></rect>
+                    <path d="M8.3 10V7.6a3.7 3.7 0 0 1 7.4 0V10M12 14v2.3"></path>
+                  </svg>
+                  <input id="registerPassword" name="password" type="password" autocomplete="new-password" placeholder="至少 8 个字符" aria-describedby="registerPasswordError">
+                  <button class="password-toggle" type="button" aria-label="显示密码" aria-pressed="false">
+                    <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M2.8 12s3.4-5.5 9.2-5.5S21.2 12 21.2 12 17.8 17.5 12 17.5 2.8 12 2.8 12Z"></path>
+                      <circle cx="12" cy="12" r="2.4"></circle>
+                    </svg>
+                  </button>
+                </div>
+                <p class="field-error" id="registerPasswordError" aria-live="polite"></p>
+              </div>
+
+              <div class="field-group">
+                <label for="confirmPassword">确认密码</label>
+                <div class="field">
+                  <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="5.2" y="10" width="13.6" height="10" rx="2.4"></rect>
+                    <path d="M8.3 10V7.6a3.7 3.7 0 0 1 7.4 0V10M12 14v2.3"></path>
+                  </svg>
+                  <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" placeholder="再次输入密码" aria-describedby="confirmPasswordError">
+                  <button class="password-toggle" type="button" aria-label="显示密码" aria-pressed="false">
+                    <svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M2.8 12s3.4-5.5 9.2-5.5S21.2 12 21.2 12 17.8 17.5 12 17.5 2.8 12 2.8 12Z"></path>
+                      <circle cx="12" cy="12" r="2.4"></circle>
+                    </svg>
+                  </button>
+                </div>
+                <p class="field-error" id="confirmPasswordError" aria-live="polite"></p>
+              </div>
+
+              <p class="form-status" id="registerStatus" role="status" aria-live="polite"></p>
+
+              <button class="login-submit register-submit" type="submit">
+                <span>创建我的账号</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 12h15M14 7l5 5-5 5"></path>
+                </svg>
+              </button>
+
+              <p class="auth-switch-copy">已经注册？<button id="showLogin" type="button">返回登录</button></p>
+            </form>
+          </div>
 
           <div class="login-divider"><span>或</span></div>
-          <a class="guest-link" href="home.html">
+          <a class="guest-link" id="guestButton" href="home.html">
             暂不登录，先逛一逛
             <span aria-hidden="true">↗</span>
           </a>

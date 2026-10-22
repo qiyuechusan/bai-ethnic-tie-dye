@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>苍洱寻迹 · 非遗地图 | 蓝白之境</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="assets/echarts.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body class="page-home page-standalone page-atlas">
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
+  <canvas class="dye-canvas" id="dyeCanvas" aria-hidden="true"></canvas>
+  <div class="paper-grain" aria-hidden="true"></div>
+
+  <!-- 头部导航（完全保留你的） -->
+  <header class="site-header" id="siteHeader">
+    <div class="nav-shell">
+      <a class="brand" href="home.html" aria-label="蓝白之境首页">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><path d="M24 4.5C19.4 13 13.2 20 13.2 28.1a10.8 10.8 0 1 0 21.6 0C34.8 20 28.6 13 24 4.5Z"/><path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/></svg>
+        </span>
+        <span class="brand-copy"><strong>蓝白之境</strong><small>THE REALM OF INDIGO</small></span>
+      </a>
+      <nav class="main-nav" id="mainNav" aria-label="主导航">
+        <a href="home.html">首页</a>
+        <a href="home.html#modules">六个展区</a>
+        <a href="timeline.html">工艺长卷</a>
+        <a class="is-active" href="map.html" aria-current="page">寻迹地图</a>
+        <a href="home.html#heritage">纹样故事</a>
+        <a href="home.html#about">关于扎染</a>
+      </nav>
+      <div class="header-actions">
+        <span class="visitor-state"><i></i>访客漫游中</span>
+        <a class="header-login" href="index.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"></circle><path d="M5.5 20c.6-4 2.7-6 6.5-6s5.9 2 6.5 6"></path></svg>登录
+        </a>
+        <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="打开菜单"><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main class="standalone-main" id="main-content">
+    <section class="atlas-section" aria-labelledby="atlas-title">
+      <header class="atlas-heading">
+        <div>
+          <p class="eyebrow"><span></span>TRACES OF INDIGO / DALI</p>
+          <h1 id="atlas-title">循一线蓝，<br>访三处染迹。</h1>
+        </div>
+        <div class="atlas-intro">
+          <span class="atlas-chapter">苍洱手记 · 地图 01</span>
+          <p>点一盏染缸，听一段地方与人的故事。用右侧路线带，继续走向下一站。</p>
+        </div>
+      </header>
+
+      <div class="atlas-layout">
+        <!-- 左侧地图区 -->
+        <div class="atlas-map-panel">
+          <div class="atlas-toolbar">
+            <span class="atlas-mode"><i></i>水墨地形 / 非遗寻迹</span>
+            <span class="atlas-legend"><i class="legend-dot"></i>扎染传承地 <i class="legend-river"></i>苍洱水系</span>
+          </div>
+
+          <div class="atlas-viewport" id="atlasViewport">
+            <div class="map-stage" id="mapStage">
+              <!-- 完整还原你的水墨底图 -->
+              <svg class="ink-map" viewBox="0 0 1100 720" preserveAspectRatio="none" role="img" aria-label="大理白族扎染文化点位水墨示意图">
+                <defs>
+                  <filter id="mapWash" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="2" seed="8" result="noise"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="noise" scale="9"></feDisplacementMap></filter>
+                  <filter id="mapSoft"><feGaussianBlur stdDeviation="18"></feGaussianBlur></filter>
+                  <pattern id="atlasGrid" width="52" height="52" patternUnits="userSpaceOnUse"><path d="M52 0H0V52" fill="none" stroke="#183f5d" stroke-opacity=".055" stroke-width="1"></path></pattern>
+                  <linearGradient id="lakeWash" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#b7d2d2" stop-opacity=".72"></stop><stop offset="1" stop-color="#dce7df" stop-opacity=".48"></stop></linearGradient>
+                  <radialGradient id="mountainMist"><stop stop-color="#d9e5e1" stop-opacity=".8"></stop><stop offset="1" stop-color="#d9e5e1" stop-opacity="0"></stop></radialGradient>
+                </defs>
+                <rect width="1100" height="720" fill="#eef0e5"></rect>
+                <rect width="1100" height="720" fill="url(#atlasGrid)"></rect>
+                <ellipse cx="316" cy="352" rx="410" ry="275" fill="url(#mountainMist)" filter="url(#mapSoft)"></ellipse>
+                <g class="mountain-contours" filter="url(#mapWash)">
+                  <path d="M-50 210c102-94 168-76 225-21 48 46 107 10 149-55 53-82 128-101 196-41 58 51 95 46 153 13 87-48 168-18 230 70"></path>
+                  <path d="M-60 260c99-76 169-58 223-6 51 49 119 12 164-48 55-75 120-84 180-28 57 53 104 51 168 15 78-43 150-16 207 62"></path>
+                  <path d="M-40 321c90-69 161-47 212-2 54 48 122 22 167-31 57-67 124-67 183-14 59 54 105 49 172 17 74-36 148-2 194 66"></path>
+                </g>
+                <g class="ink-lake">
+                  <path d="M364 346c44-84 141-138 259-137 121 1 221 61 262 151 40 89-2 180-98 226-94 45-217 32-304-17-83-47-157-137-119-223Z" fill="url(#lakeWash)"></path>
+                  <path d="M430 341c44-46 102-67 176-61 68 5 127 34 170 83M410 411c51 19 80 13 119-8M499 506c54 15 95 10 135-11M593 274c43 27 87 34 135 19"></path>
+                </g>
+                <g class="atlas-water-lines">
+                  <path d="M101 545c117-57 188-22 278 18 93 42 169 31 260-16 97-50 170-39 341 33"></path>
+                  <path d="M64 578c112-42 194-15 279 21 95 40 182 32 270-11 106-51 188-31 380 50"></path>
+                  <path d="M741 92c-42 92-32 155 12 215 45 61 51 128 13 205-27 56-61 91-111 123"></path>
+                </g>
+                <g class="atlas-roads">
+                  <path d="M188 560c125-73 240-112 374-136 109-20 201-68 324-170"></path>
+                  <path d="M268 229c95 66 190 113 299 155 93 36 174 87 254 167"></path>
+                </g>
+                <g class="atlas-labels">
+                  <text x="105" y="156">苍山</text><text x="366" y="588">苍 山 余 脉</text><text x="664" y="365">洱海</text><text x="740" y="205">大 理 坝 子</text><text x="132" y="484">漾 濞</text><text x="800" y="615">巍 山</text>
+                </g>
+                <g class="map-route-line" aria-hidden="true">
+                  <path data-route-segment="0" d="M585 326C545 360 482 407 449 451"></path>
+                  <path data-route-segment="1" d="M449 451C560 500 687 490 820 552"></path>
+                </g>
+              </svg>
+
+              <!-- 点位图标 -->
+              <button class="place-marker" type="button" data-place="zhoucheng" style="--marker-x: 53.2%; --marker-y: 45.3%;" aria-label="查看周城">
+                <span class="marker-wave"></span>
+                <span class="marker-vat"><svg viewBox="0 0 44 52" aria-hidden="true"><path d="M8 18c1 16 5 25 14 27 9-2 13-11 14-27"></path><ellipse cx="22" cy="18" rx="14" ry="6"></ellipse><path d="M13 32c6 3 12 3 18 0"></path></svg></span>
+                <span class="marker-label"><strong>周城</strong><small>扎染之乡</small></span>
+              </button>
+              <button class="place-marker" type="button" data-place="xizhou" style="--marker-x: 40.8%; --marker-y: 62.7%;" aria-label="查看喜洲">
+                <span class="marker-wave"></span>
+                <span class="marker-vat"><svg viewBox="0 0 44 52" aria-hidden="true"><path d="M8 18c1 16 5 25 14 27 9-2 13-11 14-27"></path><ellipse cx="22" cy="18" rx="14" ry="6"></ellipse><path d="M13 32c6 3 12 3 18 0"></path></svg></span>
+                <span class="marker-label"><strong>喜洲</strong><small>白族院落</small></span>
+              </button>
+              <button class="place-marker" type="button" data-place="weishan" style="--marker-x: 74.5%; --marker-y: 76.6%;" aria-label="查看巍山">
+                <span class="marker-wave"></span>
+                <span class="marker-vat"><svg viewBox="0 0 44 52" aria-hidden="true"><path d="M8 18c1 16 5 25 14 27 9-2 13-11 14-27"></path><ellipse cx="22" cy="18" rx="14" ry="6"></ellipse><path d="M13 32c6 3 12 3 18 0"></path></svg></span>
+                <span class="marker-label"><strong>巍山</strong><small>山地手作</small></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧信息侧边栏 -->
+        <aside class="atlas-sidebar" id="atlasSidebar">
+          <div class="atlas-sidebar-index">
+            <span id="routeCount">01 / 03</span><span>沿苍洱寻蓝</span>
+          </div>
+
+          <div class="place-visual" id="placeVisual" data-place="zhoucheng">
+            <!-- 手绘层 -->
+            <div id="placeSketch">
+              <span class="place-moon"></span><span class="place-mountain-back"></span>
+              <span class="place-building"></span><span class="place-cloth cloth-a"></span>
+              <span class="place-cloth cloth-b"></span><span class="place-figure"></span>
+            </div>
+            <!-- 照片层 -->
+            <img id="placePhoto" class="real-photo-layer" src="" alt="实景图">
+            <span class="place-coordinate" id="placeCoordinate" style="z-index: 8;">坐标加载中...</span>
+            <button id="togglePhotoBtn" class="toggle-photo-btn">看实景</button>
+          </div>
+
+          <div class="place-story">
+            <p class="place-kicker" id="placeKicker">加载中...</p>
+            <h2 id="placeName">--</h2>
+            <p class="place-lead" id="placeLead">--</p>
+
+            <dl class="place-facts">
+              <div><dt>在这里看什么</dt><dd id="placeSee">--</dd></div>
+              <div><dt>人物线索</dt><dd id="placePerson">--</dd></div>
+              <div><dt>今日图景</dt><dd id="placeNow">--</dd></div>
+            </dl>
+
+            <div class="place-note">
+              <span>HAND NOTE</span><p id="placeNote">--</p>
+            </div>
+
+            <button class="puzzle-cta" id="puzzleButton" type="button">
+              <span class="puzzle-mark" aria-hidden="true">?</span>
+              <span>
+                <small>非遗小考 · 点开图鉴</small>
+                <strong>你知道这里的传承人是谁吗？</strong>
+              </span>
+              <i aria-hidden="true">↗</i>
+            </button>
+
+            <div class="chart-heading">
+              <span>染坊微观察</span>
+              <small id="chartCaption">周城 · 数据加载中</small>
+            </div>
+            <div id="chartContainer" role="img" aria-label="地点扎染产业数据图表"></div>
+            <div id="chartFallback" class="chart-fallback" hidden></div>
+            <p class="chart-source" id="chartSource">数据口径：待补充</p>
+          </div>
+
+          <div class="place-route">
+            <button id="previousStop" type="button" aria-label="上一站"><span aria-hidden="true">←</span></button>
+            <div class="route-dots" id="routeDots"><i class="is-active"></i><i></i><i></i></div>
+            <button class="next-stop" id="nextStop" type="button">
+              <span id="nextStopLabel">下一站 · 喜洲</span><i aria-hidden="true">→</i>
+            </button>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <!-- 底部代码和你的保持一致 -->
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <a class="brand invert" href="home.html">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48"><path d="M24 4.5C19.4 13 13.2 20 13.2 28.1a10.8 10.8 0 1 0 21.6 0C34.8 20 28.6 13 24 4.5Z"/><path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/></svg>
+        </span>
+        <span class="brand-copy"><strong>蓝白之境</strong><small>THE REALM OF INDIGO</small></span>
+      </a>
+      <p>让一匹蓝布，继续讲述<br>苍山洱海间的非遗故事。</p>
+    </div>
+  </footer>
+
+  <div class="heritage-modal" id="puzzleModal" hidden>
+    <button class="puzzle-backdrop" type="button" data-close-puzzle aria-label="关闭图鉴"></button>
+    <section class="puzzle-card" role="dialog" aria-modal="true" aria-labelledby="puzzleTitle">
+      <button class="puzzle-close" type="button" data-close-puzzle aria-label="关闭图鉴">×</button>
+      <p class="puzzle-card-kicker" id="puzzlePlace">周城 · 人物图鉴</p>
+      <div class="puzzle-portrait" aria-hidden="true">
+        <span class="portrait-halo"></span>
+        <span class="portrait-head"></span>
+        <span class="portrait-body"></span>
+        <span class="portrait-thread"></span>
+      </div>
+      <h2 id="puzzleTitle">段银开</h2>
+      <p class="puzzle-role">白族扎染技艺代表性传承人</p>
+      <p class="puzzle-description" id="puzzleDescription">
+        长期参与白族扎染技艺的传承与染坊实践，让针线、靛缸与一代人的手艺被更多人看见。
+      </p>
+      <div class="puzzle-actions">
+        <a href="home.html#heritage">去纹样图鉴继续探索 <span>→</span></a>
+        <button type="button" data-close-puzzle>收好图鉴</button>
+      </div>
+    </section>
+  </div>
+
+  <script type="application/json" id="legacyMapData">
+    // 1. 数据源（如果想用本地图片，把 photo 的网址换成 "assets/xxx.jpg"）
+    const mapData = {
+      zhoucheng: {
+        name: "周城", kicker: "核心传承地 · 白族扎染",
+        lead: "苍山脚下、洱海西岸的白族村落。院落里的染缸与晾架，把扎染留在日常生活之中。",
+        see: "扎花针脚、板蓝根靛缸、院落晾布",
+        person: "段银开 · 白族扎染技艺代表性传承人",
+        now: "家庭染坊、研学体验与文创产品并行",
+        note: "先看一双手怎样把线缝进布里，再看蓝如何在空气里慢慢显出来。",
+        // 这里我用了网上真实的扎染图片，你可以换成本地的
+        photo: "https://images.unsplash.com/photo-1600188769093-f966e9090532?q=80&w=600&auto=format&fit=crop",
+        coord: "25.85°N / 100.13°E",
+        chart: { workers: 4000, shops: 200 }
+      },
+      xizhou: {
+        name: "喜洲", kicker: "白族院落 · 商帮文化",
+        lead: "保存完好的白族民居建筑群，扎染在这里与古建、商帮文化交织。",
+        see: "三坊一照壁、染布庭院、白族民居",
+        person: "地方手艺传承人 · 院落作坊",
+        now: "古镇文旅、非遗手作体验",
+        note: "推开一扇雕花木门，院子里挂着的不仅是布，也是喜洲人家的体面。",
+        photo: "https://images.unsplash.com/photo-1599827616141-4c5c2d0d09b2?q=80&w=600&auto=format&fit=crop",
+        coord: "25.72°N / 100.08°E",
+        chart: { workers: 1200, shops: 85 }
+      },
+      weishan: {
+        name: "巍山", kicker: "山地古城 · 手艺记忆",
+        lead: "沿苍洱向南进入巍山，扎染在这里与刺绣、织布等手艺共同构成地方记忆。",
+        see: "古城街巷、白族民居与山地手工艺",
+        person: "地方手艺传承者 · 家庭作坊",
+        now: "古城文旅与小型手作体验延续地方技艺",
+        note: "在巍山，染布不是孤立的，它和织布、挑花一起，缝进了古城的生活。",
+        photo: "https://images.unsplash.com/photo-1540304450101-584cdf8801d2?q=80&w=600&auto=format&fit=crop",
+        coord: "25.23°N / 100.31°E",
+        chart: { workers: 650, shops: 40 }
+      }
+    };
+
+    const placeKeys = ['zhoucheng', 'xizhou', 'weishan'];
+    let currentIndex = 0;
+    let myChart = null;
+
+    // 2. 图表渲染
+    function initChart(data) {
+      const chartDom = document.getElementById('chartContainer');
+      if (!myChart) myChart = echarts.init(chartDom);
+      const option = {
+        tooltip: { trigger: 'axis' },
+        grid: { left: '3%', right: '10%', bottom: '5%', top: '15%', containLabel: true },
+        xAxis: { type: 'value', axisLabel: { fontSize: 11 }, splitLine: { lineStyle: { type: 'dashed' } } },
+        yAxis: { type: 'category', data: ['经营户(家)', '从业人数'], axisLabel: { fontSize: 13, color: '#0b3863' }, axisTick: {show:false}, axisLine:{show:false} },
+        series: [{ type: 'bar', data: [data.shops, data.workers], itemStyle: { color: '#0b3863', borderRadius: [0, 4, 4, 0] }, barWidth: '50%', label: { show: true, position: 'right' } }]
+      };
+      myChart.setOption(option);
+    }
+
+    // 3. 切换地点
+    function updatePlace(placeId, index) {
+      currentIndex = index;
+      const data = mapData[placeId];
+
+      // 替换文字
+      document.getElementById('placeKicker').textContent = data.kicker;
+      document.getElementById('placeName').textContent = data.name;
+      document.getElementById('placeLead').textContent = data.lead;
+      document.getElementById('placeSee').textContent = data.see;
+      document.getElementById('placePerson').textContent = data.person;
+      document.getElementById('placeNow').textContent = data.now;
+      document.getElementById('placeNote').textContent = data.note;
+      document.getElementById('placeCoordinate').textContent = data.coord;
+      document.getElementById('placePhoto').src = data.photo;
+
+      // 激活状态
+      document.querySelectorAll('.place-marker').forEach(btn => btn.classList.remove('is-active'));
+      document.querySelector(`.place-marker[data-place="${placeId}"]`)?.classList.add('is-active');
+      document.getElementById('placeVisual').setAttribute('data-place', placeId); // 改变侧边栏插画样式
+
+      // 更新进度
+      document.querySelectorAll('.route-dots i').forEach((dot, i) => dot.classList.toggle('is-active', i === index));
+      document.getElementById('routeCount').textContent = `0${index + 1} / 03`;
+      const nextIdx = (index + 1) % 3;
+      document.getElementById('nextStopLabel').textContent = `下一站 · ${mapData[placeKeys[nextIdx]].name}`;
+
+      // 渲染图表
+      initChart(data.chart);
+    }
+
+    // 4. 初始化事件
+    document.addEventListener('DOMContentLoaded', () => {
+      updatePlace('zhoucheng', 0);
+
+      // 点击点位
+      document.querySelectorAll('.place-marker').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const placeId = e.currentTarget.getAttribute('data-place');
+          updatePlace(placeId, placeKeys.indexOf(placeId));
+        });
+      });
+
+      // 下一站/上一站
+      document.getElementById('nextStop').addEventListener('click', () => updatePlace(placeKeys[(currentIndex + 1) % 3], (currentIndex + 1) % 3));
+      document.getElementById('previousStop').addEventListener('click', () => updatePlace(placeKeys[(currentIndex - 1 + 3) % 3], (currentIndex - 1 + 3) % 3));
+
+      // 实景切换
+      const toggleBtn = document.getElementById('togglePhotoBtn');
+      const photoLayer = document.getElementById('placePhoto');
+      let isPhotoVisible = false;
+      toggleBtn.addEventListener('click', () => {
+        isPhotoVisible = !isPhotoVisible;
+        photoLayer.style.opacity = isPhotoVisible ? '1' : '0';
+        toggleBtn.textContent = isPhotoVisible ? '看手绘' : '看实景';
+      });
+
+      window.addEventListener('resize', () => { if (myChart) myChart.resize(); });
+    });
+  </script>
+</body>
+</html>
