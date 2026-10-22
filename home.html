@@ -53,11 +53,12 @@
       </a>
 
       <nav class="main-nav" id="mainNav" aria-label="主导航">
-        <a href="javascript:void(0)" onclick="switchView('home')">首页</a>
-        <a href="javascript:void(0)" onclick="switchView('modules')">六个展区</a>
-        <a href="javascript:void(0)" onclick="switchView('craft')">工艺长卷</a>
-        <a href="javascript:void(0)" onclick="switchView('heritage')">纹样故事</a>
-        <a href="javascript:void(0)" onclick="switchView('about')">关于扎染</a>
+        <a href="javascript:void(0)" data-view="home" onclick="switchView('home')">首页</a>
+        <a href="javascript:void(0)" data-view="modules" onclick="switchView('modules')">六个展区</a>
+        <a href="timeline.html">工艺长卷</a>
+        <a href="map.html">寻迹地图</a>
+        <a href="javascript:void(0)" data-view="heritage" onclick="switchView('heritage')">纹样故事</a>
+        <a href="javascript:void(0)" data-view="about" onclick="switchView('about')">关于扎染</a>
         <a class="mobile-login" href="index.html">登录 / 注册</a>
       </nav>
 
@@ -105,7 +106,7 @@
                   <path d="M12 4v15M6.5 13.5 12 19l5.5-5.5"></path>
                 </svg>
               </a>
-              <a class="quiet-link" href="javascript:void(0)" onclick="switchView('craft')">
+              <a class="quiet-link" href="timeline.html">
                 先看一段工艺长卷
                 <span aria-hidden="true">↗</span>
               </a>
@@ -204,6 +205,10 @@
               <div><b>03</b><p>扎花<small>TIE & BIND</small></p></div>
               <div><b>04</b><p>浸染<small>DIP & OXIDIZE</small></p></div>
             </div>
+            <button class="module-open" type="button" onclick="window.location.href='timeline.html'">
+              翻开长卷
+              <span aria-hidden="true">↗</span>
+            </button>
           </article>
 
           <!-- 展区 03 -->
@@ -271,6 +276,10 @@
               </span>
               <h3>苍洱染迹<br>非遗地图</h3>
               <p>沿着苍山与洱海，探访核心传承地、传承人故事与今日的扎染产业。</p>
+              <button class="module-open module-open-light" type="button" onclick="window.location.href='map.html'">
+                踏入地图
+                <span aria-hidden="true">↗</span>
+              </button>
             </div>
           </article>
 
@@ -299,33 +308,542 @@
 
     <!-- ================= 视图 3：工艺长卷 ================= -->
     <div id="view-craft" class="page-view">
-      <div class="single-card-view">
-        <article class="module-card module-craft reveal is-visible" style="min-height: 600px;">
-          <div class="card-topline">
-            <span class="module-number">展区 02 · 详情</span>
-            <span class="module-state">SCROLL STORY</span>
+      <section class="craft-book-section" aria-labelledby="craft-book-title">
+        <div class="craft-book">
+          <div class="book-page-edge" aria-hidden="true"></div>
+
+          <header class="book-cover">
+            <div class="cover-copy">
+              <p class="cover-overline">BAIZU TIE-DYE · SEVEN MOVEMENTS</p>
+              <h1 id="craft-book-title">七步，<br><em>成一匹蓝。</em></h1>
+              <p class="cover-intro">
+                一匹白布如何记住苍山的风、蓝草的汁与双手的温度？
+                请沿着这条缝线向下读，每一页，都是蓝白相见之前的一段路。
+              </p>
+              <div class="cover-edition">
+                <span>手作工序志</span>
+                <span>壹 / 七</span>
+                <span>大理 · 白族</span>
+              </div>
+            </div>
+            <div class="cover-art" aria-hidden="true">
+              <span class="cover-orbit orbit-a"></span>
+              <span class="cover-orbit orbit-b"></span>
+              <svg class="cover-embroidered" viewBox="0 0 360 430">
+                <path class="cover-fabric-shape" d="M74 42c55-25 111-4 172 2 45 4 72 42 63 95-10 58-5 121-42 190-25 46-64 75-117 58-47-15-94-8-116-55-28-60 6-106-4-163-8-46 0-103 44-127Z"></path>
+                <g class="cover-stitches">
+                  <path d="M181 110c-36-57-103-45-109-2-7 51 57 80 109 82-40 42-32 103 4 121 40 20 73-35 78-101 19 40 60 79 89 58 32-24 1-82-41-106 45-10 79-54 54-88-28-38-91-18-128 36Z"></path>
+                  <path d="M181 157v158M165 124c-12-17-2-35 16-44 18 9 28 27 16 44"></path>
+                  <circle cx="137" cy="191" r="22"></circle>
+                  <circle cx="231" cy="191" r="22"></circle>
+                  <circle cx="137" cy="191" r="13"></circle>
+                  <circle cx="231" cy="191" r="13"></circle>
+                </g>
+                <g class="cover-thread">
+                  <path d="M34 385c60-31 97-2 148 7 62 11 98-19 143-15"></path>
+                  <path d="m48 382 10-7 9 9-10 7Z"></path>
+                </g>
+              </svg>
+              <span class="cover-seal">蓝<br>续</span>
+              <span class="cover-caption">FIG. 07 / 蓝草 · 靛缸 · 手缝</span>
+            </div>
+            <div class="cover-scroll-note">
+              <span>向下翻页</span>
+              <i aria-hidden="true"></i>
+            </div>
+          </header>
+
+          <div class="book-prologue">
+            <span class="prologue-number">凡例</span>
+            <p>
+              白族扎染不是“把布染蓝”这么简单。防染的线扎在哪里，靛缸浸得多深，
+              空气里的氧如何让黄绿慢慢转为深蓝，都会决定最终的花。
+            </p>
+            <span class="prologue-note">阅读时请留意中线上的针脚。</span>
           </div>
-          <div class="craft-copy">
-            <span class="module-icon" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><path d="M24 6v36"></path><circle cx="24" cy="12" r="4"></circle><circle cx="24" cy="25" r="4"></circle><circle cx="24" cy="38" r="4"></circle><path d="M32 12h7M10 25h7M32 38h7"></path></svg>
-            </span>
-            <h3 style="font-size: 48px;">七步成蓝<br>工艺长卷</h3>
-            <p style="font-size: 18px;">顺着时间向下走，从一株蓝草，到一匹有呼吸的布。这里是详细的工艺流程展示区（A同学负责在此处开发）。</p>
+
+          <div class="book-body" id="bookBody">
+            <div class="book-spine" aria-hidden="true">
+              <span class="book-thread-dashed"></span>
+              <span class="book-thread-fill"></span>
+              <span class="book-thread-needle"><i></i></span>
+            </div>
+
+            <article class="book-step book-step-left" data-step="1" data-step-name="采蓝草">
+              <div class="step-page">
+                <div class="step-page-head">
+                  <span class="folio">P. 01</span>
+                  <span class="step-english">BLUE HERB</span>
+                </div>
+                <div class="step-illustration herb-illustration" aria-hidden="true">
+                  <svg viewBox="0 0 330 190">
+                    <path class="draw-line" d="M35 154c46-9 74-1 101 12 41 20 84 12 158-7"></path>
+                    <path class="draw-line" d="M93 147c-6-64 20-103 64-123M175 151c-8-61 14-103 56-126M132 124c-32-11-53-4-71 12M163 94c-32-8-55-1-72 18M205 108c28-17 52-15 76-5"></path>
+                    <path class="draw-leaf" d="M83 111c-30-25-51-14-57 8 23 9 43 5 57-8ZM117 74c-13-32-40-35-53-13 12 26 32 32 53 13ZM181 79c12-32 37-39 56-20-7 27-28 37-56 20ZM228 55c-6-30 10-49 34-44 10 22 0 41-34 44Z"></path>
+                    <path class="draw-line light" d="M52 166h226M71 170h57M208 170h48"></path>
+                  </svg>
+                  <span class="illustration-note">叶与根，皆可取色</span>
+                </div>
+                <div class="step-copy">
+                  <p class="step-kicker">一 · 从草木取色</p>
+                  <h3>采蓝草</h3>
+                  <p>
+                    蓝靛并非矿物颜料，而来自草木。大理蓝染多取板蓝根等植物，
+                    采摘茎叶后进入浸泡与发酵。布上那抹沉静的蓝，最初只是山野里的一片绿。
+                  </p>
+                  <dl class="step-details">
+                    <div><dt>原料</dt><dd>板蓝根茎叶</dd></div>
+                    <div><dt>手感</dt><dd>叶厚、色浓，略带草木气息</dd></div>
+                  </dl>
+                </div>
+                <span class="page-fold" aria-hidden="true"></span>
+              </div>
+            </article>
+
+            <article class="book-step book-step-right" data-step="2" data-step-name="制蓝靛">
+              <div class="step-page">
+                <div class="step-page-head">
+                  <span class="folio">P. 02</span>
+                  <span class="step-english">INDIGO VAT</span>
+                </div>
+                <div class="step-illustration vat-illustration" aria-hidden="true">
+                  <svg viewBox="0 0 330 190">
+                    <path class="draw-line" d="M70 73c9 45 21 87 44 99h105c24-13 35-55 43-99Z"></path>
+                    <ellipse class="vat-liquid" cx="166" cy="74" rx="97" ry="25"></ellipse>
+                    <path class="draw-line" d="M82 83c50 19 117 20 168-2M96 132c43 11 95 13 139-1"></path>
+                    <g class="vat-bubbles">
+                      <circle cx="126" cy="68" r="7"></circle>
+                      <circle cx="163" cy="59" r="4"></circle>
+                      <circle cx="197" cy="77" r="9"></circle>
+                      <circle cx="220" cy="63" r="3"></circle>
+                    </g>
+                    <path class="draw-line thin" d="M111 45c-16-18-3-30 12-36M151 39c-11-20 3-31 18-36M204 40c-9-16 0-26 12-32"></path>
+                  </svg>
+                  <span class="illustration-note">浸叶 · 发酵 · 打靛</span>
+                </div>
+                <div class="step-copy">
+                  <p class="step-kicker">二 · 让时间参与染色</p>
+                  <h3>制靛</h3>
+                  <p>
+                    蓝草在水中慢慢析出颜色，经过发酵与打靛，沉成靛泥。
+                    真正入缸前，还要以石灰水等调节染液。蓝并不是即时出现，而是被时间和微生物“养”出来的。
+                  </p>
+                  <dl class="step-details">
+                    <div><dt>关键</dt><dd>浸提、发酵、打靛、养缸</dd></div>
+                    <div><dt>气味</dt><dd>草木发酵后的清苦气息</dd></div>
+                  </dl>
+                </div>
+                <span class="page-fold" aria-hidden="true"></span>
+              </div>
+            </article>
+
+            <article class="book-step book-step-left" data-step="3" data-step-name="扎花">
+              <div class="step-page">
+                <div class="step-page-head">
+                  <span class="folio">P. 03</span>
+                  <span class="step-english">TIE &amp; BIND</span>
+                </div>
+                <div class="step-illustration tie-illustration" aria-hidden="true">
+                  <div class="cloth-hoop">
+                    <span class="hoop-ring"></span>
+                    <span class="hoop-knot knot-a"></span>
+                    <span class="hoop-knot knot-b"></span>
+                    <span class="hoop-knot knot-c"></span>
+                    <svg viewBox="0 0 260 170">
+                      <path class="thread-path" d="M26 121c33-71 80-89 107-51 22 30-13 61-39 34-25-26 45-76 88-45 31 23 16 62 51 76"></path>
+                      <path class="needle" d="m231 134 36-44M259 82l8 7-5 7-8-7Z"></path>
+                    </svg>
+                  </div>
+                  <span class="illustration-note">一针一线，预先留白</span>
+                </div>
+                <div class="step-copy">
+                  <p class="step-kicker">三 · 先画下看不见的花</p>
+                  <h3>扎花</h3>
+                  <p>
+                    这是扎染真正的“起稿”。匠人把布折叠、捏起、捆扎，或用针线沿纹样缝紧。
+                    被线缚住的地方染液进不去，拆线后才会留下清晰或朦胧的白。
+                  </p>
+                  <dl class="step-details">
+                    <div><dt>常见手法</dt><dd>捆扎、缝扎、折叠、夹染</dd></div>
+                    <div><dt>变量</dt><dd>线的松紧，决定花纹的呼吸感</dd></div>
+                  </dl>
+                </div>
+                <span class="page-fold" aria-hidden="true"></span>
+              </div>
+            </article>
+
+            <article class="book-step book-step-right" data-step="4" data-step-name="浸染">
+              <div class="step-page">
+                <div class="step-page-head">
+                  <span class="folio">P. 04</span>
+                  <span class="step-english">DIP &amp; DYE</span>
+                </div>
+                <div class="step-illustration dip-illustration" aria-hidden="true">
+                  <svg viewBox="0 0 330 190">
+                    <path class="draw-line" d="M37 120c55-16 89 15 139 2 46-12 78-5 118 11M35 133c62-11 92 12 143 1 47-10 77-3 117 10"></path>
+                    <path class="dye-cloth" d="M93 21c32-13 58 7 75 33 19 28 17 58-7 74-22 15-47 3-63-17-18-23-29-75-5-90Z"></path>
+                    <path class="draw-line light" d="M107 17c20 24 28 50 25 77M139 20c20 22 30 44 28 72"></path>
+                    <g class="vat-bubbles small">
+                      <circle cx="233" cy="118" r="4"></circle>
+                      <circle cx="255" cy="124" r="7"></circle>
+                      <circle cx="278" cy="116" r="3"></circle>
+                    </g>
+                    <path class="draw-line thin" d="M208 65c15-10 32-8 45 4M214 80c13-6 25-5 37 2"></path>
+                  </svg>
+                  <span class="illustration-note">反复浸入，让蓝色层层叠积</span>
+                </div>
+                <div class="step-copy">
+                  <p class="step-kicker">四 · 让布饮饱染液</p>
+                  <h3>浸染</h3>
+                  <p>
+                    扎好的布进入靛缸。第一次浸染往往不会得到很深的蓝，
+                    需要让布充分接触染液，再取出透氧，如此一遍遍重复。蓝色因次数与时间而渐深。
+                  </p>
+                  <dl class="step-details">
+                    <div><dt>动作</dt><dd>入缸、翻动、提起、沥液</dd></div>
+                    <div><dt>深浅</dt><dd>由浸染次数和染液状态共同决定</dd></div>
+                  </dl>
+                </div>
+                <span class="page-fold" aria-hidden="true"></span>
+              </div>
+            </article>
+
+            <article class="book-step book-step-left oxidation-step" data-step="5" data-step-name="氧化">
+              <div class="step-page">
+                <div class="step-page-head">
+                  <span class="folio">P. 05</span>
+                  <span class="step-english">OXIDATION</span>
+                </div>
+                <div class="step-illustration oxidation-illustration" aria-hidden="true">
+                  <div class="oxidation-opening">
+                    <span class="oxidation-cloth">
+                      <i class="oxidation-hole hole-a"></i>
+                      <i class="oxidation-hole hole-b"></i>
+                      <i class="oxidation-hole hole-c"></i>
+                      <b>出缸</b>
+                    </span>
+                    <span class="oxidation-air">空气正在显色</span>
+                  </div>
+                  <div class="oxidation-scale detailed">
+                    <span>黄绿</span>
+                    <i></i>
+                    <span>青蓝</span>
+                    <i></i>
+                    <span>深靛</span>
+                  </div>
+                </div>
+                <div class="step-copy">
+                  <p class="step-kicker">五 · 最奇妙的一刻</p>
+                  <h3>氧化显色</h3>
+                  <p>
+                    刚出缸的布常带着黄绿色调，像还没有决定要成为什么颜色。
+                    空气中的氧与靛蓝接触后，它会一点点加深，最终显出沉静的蓝——这一刻，颜色才真正浮现。
+                  </p>
+                  <div class="oxidation-quote">
+                    <span>黄绿</span>
+                    <i aria-hidden="true"></i>
+                    <strong>见风，成蓝</strong>
+                  </div>
+                </div>
+                <span class="page-fold" aria-hidden="true"></span>
+              </div>
+            </article>
+
+            <article class="book-step book-step-right" data-step="6" data-step-name="拆线">
+              <div class="step-page">
+                <div class="step-page-head">
+                  <span class="folio">P. 06</span>
+                  <span class="step-english">UNTIE</span>
+                </div>
+                <div class="step-illustration untie-illustration" aria-hidden="true">
+                  <div class="untie-cloth">
+                    <span class="untie-line line-a"></span>
+                    <span class="untie-line line-b"></span>
+                    <span class="untie-line line-c"></span>
+                    <span class="untie-flower"></span>
+                  </div>
+                  <svg class="scissors" viewBox="0 0 160 110">
+                    <circle cx="25" cy="78" r="14"></circle>
+                    <circle cx="48" cy="91" r="14"></circle>
+                    <path d="m35 66 94-50M52 80l80-64M93 52l8 12M76 64l8 12"></path>
+                  </svg>
+                  <span class="illustration-note">线松开，花就显出来了</span>
+                </div>
+                <div class="step-copy">
+                  <p class="step-kicker">六 · 拆开等待的答案</p>
+                  <h3>拆线</h3>
+                  <p>
+                    染色结束，并不意味着图案已经完成。匠人要逐一剪开、拆去捆线和缝线。
+                    被守住的白与染进去的蓝终于相遇，蝴蝶、梅花、放射纹在水洗之前就已显现。
+                  </p>
+                  <dl class="step-details">
+                    <div><dt>图案</dt><dd>拆线之后才见全貌</dd></div>
+                    <div><dt>质感</dt><dd>边缘自然晕散，每一匹都不同</dd></div>
+                  </dl>
+                </div>
+                <span class="page-fold" aria-hidden="true"></span>
+              </div>
+            </article>
+
+            <article class="book-step book-step-left" data-step="7" data-step-name="漂洗晾晒">
+              <div class="step-page">
+                <div class="step-page-head">
+                  <span class="folio">P. 07</span>
+                  <span class="step-english">RINSE &amp; DRY</span>
+                </div>
+                <div class="step-illustration dry-illustration" aria-hidden="true">
+                  <div class="drying-line"></div>
+                  <div class="hanging-cloth cloth-one">
+                    <span class="hang-pattern rings"></span>
+                  </div>
+                  <div class="hanging-cloth cloth-two">
+                    <span class="hang-pattern waves"></span>
+                  </div>
+                  <div class="hanging-cloth cloth-three">
+                    <span class="hang-pattern blossoms"></span>
+                  </div>
+                  <span class="illustration-note">漂去浮色，在风里晾干</span>
+                </div>
+                <div class="step-copy">
+                  <p class="step-kicker">七 · 把蓝留在布里</p>
+                  <h3>漂洗晾晒</h3>
+                  <p>
+                    最后用清水漂去浮色，让蓝白纹样变得通透，再展开、晾干。
+                    一匹扎染布到这里完成，但它的颜色仍会随着使用与日晒慢慢变化，继续留下时间的痕迹。
+                  </p>
+                  <dl class="step-details">
+                    <div><dt>完成</dt><dd>漂洗、脱水、展开、阴晾</dd></div>
+                    <div><dt>尾章</dt><dd>蓝会变旧，也会变得更温柔</dd></div>
+                  </dl>
+                </div>
+                <span class="page-fold" aria-hidden="true"></span>
+              </div>
+            </article>
           </div>
-          <div class="mini-timeline" aria-hidden="true" style="margin-top: 60px;">
-            <span class="timeline-track"></span>
-            <div><b>01</b><p>采蓝草<small>BLUE HERB</small></p></div>
-            <div><b>02</b><p>制蓝靛<small>FERMENT</small></p></div>
-            <div><b>03</b><p>扎花<small>TIE & BIND</small></p></div>
-            <div><b>04</b><p>浸染<small>DIP & OXIDIZE</small></p></div>
-            <div><b>05</b><p>氧化<small>OXIDIZE</small></p></div>
-            <div><b>06</b><p>拆线<small>UNTIE</small></p></div>
-          </div>
-        </article>
-      </div>
+
+          <footer class="book-colophon">
+            <div>
+              <span class="colophon-label">终</span>
+              <p>一匹布，缝进了七次等待。</p>
+            </div>
+            <a href="javascript:void(0)" onclick="switchView('map')">
+              沿着染迹去旅行
+              <span aria-hidden="true">→</span>
+            </a>
+          </footer>
+        </div>
+      </section>
     </div>
 
-    <!-- ================= 视图 4：纹样故事 ================= -->
+    <!-- ================= 视图 4：非遗地图 ================= -->
+    <div id="view-map" class="page-view">
+      <section class="atlas-section" aria-labelledby="atlas-title">
+        <header class="atlas-heading">
+          <div>
+            <p class="eyebrow"><span></span>TRACES OF INDIGO / DALI</p>
+            <h1 id="atlas-title">循一线蓝，<br>访三处染迹。</h1>
+          </div>
+          <div class="atlas-intro">
+            <span class="atlas-chapter">苍洱手记 · 地图 01</span>
+            <p>点一盏染缸，听一段地方与人的故事。用右侧路线带，继续走向下一站。</p>
+          </div>
+        </header>
+
+        <div class="atlas-layout">
+          <div class="atlas-map-panel">
+            <div class="atlas-toolbar">
+              <span class="atlas-mode"><i></i>水墨地形 / 非遗寻迹</span>
+              <span class="atlas-legend">
+                <i class="legend-dot"></i>扎染传承地
+                <i class="legend-river"></i>苍洱水系
+              </span>
+            </div>
+
+            <div class="atlas-viewport" id="atlasViewport">
+              <div class="map-stage" id="mapStage">
+                <svg class="ink-map" viewBox="0 0 1100 720" role="img" aria-label="大理白族扎染文化点位水墨示意图">
+                  <defs>
+                    <filter id="mapWash" x="-20%" y="-20%" width="140%" height="140%">
+                      <feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="2" seed="8" result="noise"></feTurbulence>
+                      <feDisplacementMap in="SourceGraphic" in2="noise" scale="9"></feDisplacementMap>
+                    </filter>
+                    <filter id="mapSoft">
+                      <feGaussianBlur stdDeviation="18"></feGaussianBlur>
+                    </filter>
+                    <pattern id="atlasGrid" width="52" height="52" patternUnits="userSpaceOnUse">
+                      <path d="M52 0H0V52" fill="none" stroke="#183f5d" stroke-opacity=".055" stroke-width="1"></path>
+                    </pattern>
+                    <linearGradient id="lakeWash" x1="0" y1="0" x2="1" y2="1">
+                      <stop stop-color="#b7d2d2" stop-opacity=".72"></stop>
+                      <stop offset="1" stop-color="#dce7df" stop-opacity=".48"></stop>
+                    </linearGradient>
+                    <radialGradient id="mountainMist">
+                      <stop stop-color="#d9e5e1" stop-opacity=".8"></stop>
+                      <stop offset="1" stop-color="#d9e5e1" stop-opacity="0"></stop>
+                    </radialGradient>
+                  </defs>
+
+                  <rect width="1100" height="720" fill="#eef0e5"></rect>
+                  <rect width="1100" height="720" fill="url(#atlasGrid)"></rect>
+                  <ellipse cx="316" cy="352" rx="410" ry="275" fill="url(#mountainMist)" filter="url(#mapSoft)"></ellipse>
+
+                  <g class="mountain-contours" filter="url(#mapWash)">
+                    <path d="M-50 210c102-94 168-76 225-21 48 46 107 10 149-55 53-82 128-101 196-41 58 51 95 46 153 13 87-48 168-18 230 70"></path>
+                    <path d="M-60 260c99-76 169-58 223-6 51 49 119 12 164-48 55-75 120-84 180-28 57 53 104 51 168 15 78-43 150-16 207 62"></path>
+                    <path d="M-40 321c90-69 161-47 212-2 54 48 122 22 167-31 57-67 124-67 183-14 59 54 105 49 172 17 74-36 148-2 194 66"></path>
+                    <path d="M16 389c72-55 141-39 196 2 61 46 139 28 185-20 53-55 122-53 180-5 55 45 112 44 171 19 63-26 126-10 170 36"></path>
+                    <path d="M-25 460c92-53 159-25 216 13 55 36 117 19 175-18 75-48 150-37 212 9 55 40 121 42 188 13 71-30 146-1 188 49"></path>
+                    <path d="M52 533c72-41 142-25 199 14 72 48 150 40 215-8 61-44 126-36 181 9 52 43 112 46 174 21 63-25 127-2 166 40"></path>
+                  </g>
+
+                  <g class="ink-lake">
+                    <path d="M364 346c44-84 141-138 259-137 121 1 221 61 262 151 40 89-2 180-98 226-94 45-217 32-304-17-83-47-157-137-119-223Z" fill="url(#lakeWash)"></path>
+                    <path d="M430 341c44-46 102-67 176-61 68 5 127 34 170 83M410 411c51 19 80 13 119-8M499 506c54 15 95 10 135-11M593 274c43 27 87 34 135 19"></path>
+                  </g>
+
+                  <g class="atlas-water-lines">
+                    <path d="M101 545c117-57 188-22 278 18 93 42 169 31 260-16 97-50 170-39 341 33"></path>
+                    <path d="M64 578c112-42 194-15 279 21 95 40 182 32 270-11 106-51 188-31 380 50"></path>
+                    <path d="M741 92c-42 92-32 155 12 215 45 61 51 128 13 205-27 56-61 91-111 123"></path>
+                  </g>
+
+                  <g class="atlas-roads">
+                    <path d="M188 560c125-73 240-112 374-136 109-20 201-68 324-170"></path>
+                    <path d="M268 229c95 66 190 113 299 155 93 36 174 87 254 167"></path>
+                    <path d="M382 96c39 124 53 249 42 375-6 66 17 120 63 171"></path>
+                  </g>
+
+                  <g class="atlas-labels">
+                    <text x="105" y="156">苍山</text>
+                    <text x="366" y="588">苍 山 余 脉</text>
+                    <text x="664" y="365">洱海</text>
+                    <text x="740" y="205">大 理 坝 子</text>
+                    <text x="132" y="484">漾 濞</text>
+                    <text x="800" y="615">巍 山</text>
+                  </g>
+
+                  <g class="map-route-line">
+                    <path d="M570 336C471 387 436 459 544 492c87 27 186 66 274 81"></path>
+                  </g>
+                </svg>
+
+                <button class="place-marker" type="button" data-place="zhoucheng" style="--marker-x: 53.2%; --marker-y: 45.3%;" aria-label="查看周城">
+                  <span class="marker-wave"></span>
+                  <span class="marker-vat">
+                    <svg viewBox="0 0 44 52" aria-hidden="true">
+                      <path d="M8 18c1 16 5 25 14 27 9-2 13-11 14-27"></path>
+                      <ellipse cx="22" cy="18" rx="14" ry="6"></ellipse>
+                      <path d="M13 32c6 3 12 3 18 0"></path>
+                    </svg>
+                  </span>
+                  <span class="marker-label"><strong>周城</strong><small>扎染之乡</small></span>
+                </button>
+
+                <button class="place-marker" type="button" data-place="xizhou" style="--marker-x: 40.8%; --marker-y: 62.7%;" aria-label="查看喜洲">
+                  <span class="marker-wave"></span>
+                  <span class="marker-vat">
+                    <svg viewBox="0 0 44 52" aria-hidden="true">
+                      <path d="M8 18c1 16 5 25 14 27 9-2 13-11 14-27"></path>
+                      <ellipse cx="22" cy="18" rx="14" ry="6"></ellipse>
+                      <path d="M13 32c6 3 12 3 18 0"></path>
+                    </svg>
+                  </span>
+                  <span class="marker-label"><strong>喜洲</strong><small>白族院落</small></span>
+                </button>
+
+                <button class="place-marker" type="button" data-place="weishan" style="--marker-x: 74.5%; --marker-y: 76.6%;" aria-label="查看巍山">
+                  <span class="marker-wave"></span>
+                  <span class="marker-vat">
+                    <svg viewBox="0 0 44 52" aria-hidden="true">
+                      <path d="M8 18c1 16 5 25 14 27 9-2 13-11 14-27"></path>
+                      <ellipse cx="22" cy="18" rx="14" ry="6"></ellipse>
+                      <path d="M13 32c6 3 12 3 18 0"></path>
+                    </svg>
+                  </span>
+                  <span class="marker-label"><strong>巍山</strong><small>山地手作</small></span>
+                </button>
+
+                <div class="map-compass" aria-hidden="true">
+                  <span>北</span>
+                  <i></i>
+                  <small>N</small>
+                </div>
+              </div>
+
+              <div class="map-watermark" aria-hidden="true">
+                <span>25°N</span>
+                <span>100°E</span>
+              </div>
+            </div>
+
+            <div class="atlas-footer">
+              <div class="map-scale"><span></span><small>10 km</small></div>
+              <p>示意地图 · 点位用于非遗叙事展示</p>
+            </div>
+          </div>
+
+          <aside class="atlas-sidebar" id="atlasSidebar" aria-live="polite">
+            <div class="atlas-sidebar-index">
+              <span id="routeCount">01 / 03</span>
+              <span>沿苍洱寻蓝</span>
+            </div>
+
+            <div class="place-visual" id="placeVisual" data-place="zhoucheng" aria-hidden="true">
+              <span class="place-moon"></span>
+              <span class="place-mountain-back"></span>
+              <span class="place-building"></span>
+              <span class="place-cloth cloth-a"></span>
+              <span class="place-cloth cloth-b"></span>
+              <span class="place-figure"></span>
+              <span class="place-coordinate" id="placeCoordinate">25.85°N / 100.13°E</span>
+            </div>
+
+            <div class="place-story">
+              <p class="place-kicker" id="placeKicker">核心传承地 · 白族扎染</p>
+              <h2 id="placeName">周城</h2>
+              <p class="place-lead" id="placeLead">
+                苍山脚下、洱海西岸的白族村落。院落里的染缸与晾架，把扎染留在日常生活之中。
+              </p>
+
+              <dl class="place-facts">
+                <div>
+                  <dt>在这里看什么</dt>
+                  <dd id="placeSee">扎花针脚、板蓝根靛缸、院落晾布</dd>
+                </div>
+                <div>
+                  <dt>人物线索</dt>
+                  <dd id="placePerson">段银开 · 白族扎染技艺代表性传承人</dd>
+                </div>
+                <div>
+                  <dt>今日图景</dt>
+                  <dd id="placeNow">家庭染坊、研学体验与文创产品并行</dd>
+                </div>
+              </dl>
+
+              <div class="place-note">
+                <span>HAND NOTE</span>
+                <p id="placeNote">先看一双手怎样把线缝进布里，再看蓝如何在空气里慢慢显出来。</p>
+              </div>
+            </div>
+
+            <div class="place-route">
+              <button id="previousStop" type="button" aria-label="上一站">
+                <span aria-hidden="true">←</span>
+              </button>
+              <div class="route-dots" id="routeDots" aria-label="当前路线进度">
+                <i class="is-active"></i><i></i><i></i>
+              </div>
+              <button class="next-stop" id="nextStop" type="button">
+                <span id="nextStopLabel">下一站 · 喜洲</span>
+                <i aria-hidden="true">→</i>
+              </button>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= 视图 5：纹样故事 ================= -->
     <div id="view-heritage" class="page-view">
       <div class="single-card-view">
         <article class="module-card module-pattern reveal is-visible" style="min-height: 600px;">
@@ -352,7 +870,7 @@
       </div>
     </div>
 
-    <!-- ================= 视图 5：关于扎染 ================= -->
+    <!-- ================= 视图 6：关于扎染 ================= -->
     <div id="view-about" class="page-view">
       <section class="blue-manifesto" style="min-height: 80vh; margin-top: 100px;">
         <div class="manifesto-mark reveal is-visible" aria-hidden="true">蓝</div>
@@ -389,7 +907,8 @@
       <div>
         <span>探索</span>
         <a href="javascript:void(0)" onclick="switchView('modules')">六大展区</a>
-        <a href="javascript:void(0)" onclick="switchView('craft')">工艺长卷</a>
+        <a href="timeline.html">工艺长卷</a>
+        <a href="map.html">寻迹地图</a>
         <a href="javascript:void(0)" onclick="switchView('heritage')">纹样图鉴</a>
       </div>
       <div>
@@ -408,15 +927,24 @@
   <!-- 核心切换逻辑 -->
   <script>
     function switchView(viewName) {
+      const targetView = document.getElementById('view-' + viewName);
+      if (!targetView) return;
+
       // 1. 隐藏所有视图
       document.querySelectorAll('.page-view').forEach(view => {
         view.classList.remove('active');
       });
       // 2. 显示目标视图
-      document.getElementById('view-' + viewName).classList.add('active');
+      targetView.classList.add('active');
+      document.body.dataset.view = viewName;
+      document.querySelectorAll('.main-nav [data-view]').forEach(link => {
+        link.classList.toggle('is-active', link.dataset.view === viewName);
+      });
 
       // 3. 返回顶部
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      window.dispatchEvent(new CustomEvent('viewchange', { detail: { viewName } }));
 
       // 4. 如果是手机端，自动收起导航栏
       const nav = document.getElementById('mainNav');
@@ -425,6 +953,16 @@
         nav.classList.remove('is-open');
         if(menuButton) menuButton.setAttribute('aria-expanded', 'false');
       }
+    }
+
+    const hashView = window.location.hash.slice(1);
+    const initialView = ['modules', 'heritage', 'about'].includes(hashView) ? hashView : 'home';
+    document.body.dataset.view = initialView;
+    document.querySelectorAll('.main-nav [data-view]').forEach(link => {
+      link.classList.toggle('is-active', link.dataset.view === initialView);
+    });
+    if (initialView !== 'home') {
+      window.requestAnimationFrame(() => switchView(initialView));
     }
   </script>
   <!-- ===== 模块 3：图鉴与闯关 遮罩层 ===== -->

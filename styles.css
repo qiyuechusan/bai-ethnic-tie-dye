@@ -192,6 +192,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .main-nav a::after { position: absolute; right: 0; bottom: -9px; left: 0; height: 1px; background: var(--indigo-600); content: ""; transform: scaleX(0); transform-origin: right; transition: transform 0.35s var(--ease-out); }
 .main-nav a:hover { color: var(--indigo-800); }
 .main-nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+.main-nav a.is-active { color: var(--indigo-800); }
+.main-nav a.is-active::after { transform: scaleX(1); transform-origin: left; }
 .main-nav .mobile-login { display: none; }
 
 .header-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 20px; }
