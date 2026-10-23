@@ -181,7 +181,6 @@ async function loadMethods() {
       throw new Error('接口没有返回扎结方式数据');
     }
     methods = data;
-    usingMock = false;
     dataBadge.textContent = '接口数据';
     methodCount.textContent = String(methods.length).padStart(2, '0');
     renderMethodList();
@@ -189,6 +188,7 @@ async function loadMethods() {
     startButton.disabled = false;
   } catch (error) {
     // 静态预览或后端尚未启动时仍可完整体验四种扎结方式。
+    console.warn('[DIY] 扎结方式接口请求失败：', error);
     useMockMethods('后端暂未连接，已自动切换到演示数据');
   }
 }
