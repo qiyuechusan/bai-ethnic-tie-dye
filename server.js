@@ -53,6 +53,11 @@ db.exec(`
     person TEXT NOT NULL,
     current_state TEXT NOT NULL,
     note TEXT NOT NULL,
+    master TEXT NOT NULL DEFAULT '',
+    pattern TEXT NOT NULL DEFAULT '',
+    quote TEXT NOT NULL DEFAULT '',
+    tour TEXT NOT NULL DEFAULT '',
+    tour_img TEXT NOT NULL DEFAULT '',
     photo TEXT NOT NULL,
     latitude REAL NOT NULL,
     longitude REAL NOT NULL,
@@ -73,6 +78,20 @@ db.exec(`
   );
 `);
 
+const placeColumns = db.prepare("PRAGMA table_info(map_places)").all().map((row) => row.name);
+const additionalPlaceColumns = [
+  ["master", "TEXT NOT NULL DEFAULT ''"],
+  ["pattern", "TEXT NOT NULL DEFAULT ''"],
+  ["quote", "TEXT NOT NULL DEFAULT ''"],
+  ["tour", "TEXT NOT NULL DEFAULT ''"],
+  ["tour_img", "TEXT NOT NULL DEFAULT ''"]
+];
+additionalPlaceColumns.forEach(([name, definition]) => {
+  if (!placeColumns.includes(name)) {
+    db.exec(`ALTER TABLE map_places ADD COLUMN ${name} ${definition}`);
+  }
+});
+
 const mapPlaceSeed = [
   {
     id: "zhoucheng",
@@ -83,6 +102,11 @@ const mapPlaceSeed = [
     person: "段银开 · 白族扎染技艺代表性传承人",
     currentState: "家庭染坊、研学体验与文创产品并行",
     note: "先看一双手怎样把线缝进布里，再看蓝如何在空气里慢慢显出来。",
+    master: "段银开、张翰敏",
+    pattern: "蝴蝶纹、梅花纹、铜钱纹",
+    quote: "白族女儿会说话就会唱歌，会走路就会跳舞。",
+    tour: "走进院落染坊看扎花与晾布，亲手染一块方巾；沿村巷走到古戏台，看蓝布怎样回到日常生活。",
+    tourImg: "assets/zhoucheng.jpg",
     photo: "assets/zhoucheng.jpg",
     latitude: 25.85,
     longitude: 100.13,
@@ -100,6 +124,11 @@ const mapPlaceSeed = [
     person: "地方匠人 · 院落中的家庭传承",
     currentState: "文化旅行与传统民居体验让手工艺被更多人看见",
     note: "在喜洲，染布不是孤立的，它和建筑、商帮与日常生活一起被记住。",
+    master: "喜洲院落染坊传承群体",
+    pattern: "蝴蝶纹、菊花纹、几何连续纹",
+    quote: "三坊一照壁，四合五天井；院里晾蓝布，门外是苍山。",
+    tour: "逛严家大院与喜洲老街，观察照壁和木雕，再在院落作坊体验扎染；顺路尝一口喜洲粑粑。",
+    tourImg: "assets/xizhou.jpg",
     photo: "assets/xizhou.jpg",
     latitude: 25.72,
     longitude: 100.08,
@@ -117,6 +146,11 @@ const mapPlaceSeed = [
     person: "地方手艺传承者 · 家庭作坊",
     currentState: "古城文旅与小型手作体验延续地方技艺",
     note: "把视野从一匹布移向它所生长的土地，蓝色就有了地方的方向。",
+    master: "熊文杰、熊天艳",
+    pattern: "太阳纹、八角花、回纹",
+    quote: "一座巍山城，半部南诏史；一根面里，也能吃出古城的日子。",
+    tour: "沿拱辰楼走进古城，逛南诏古街与老宅；找一家家庭作坊体验扎染，再尝一碗当地一根面。",
+    tourImg: "assets/weishan.jpg",
     photo: "assets/weishan.jpg",
     latitude: 25.23,
     longitude: 100.31,
@@ -128,9 +162,29 @@ const mapPlaceSeed = [
 ];
 
 const insertMapPlace = db.prepare(`
-  INSERT OR IGNORE INTO map_places
-  (id, name, kicker, lead, highlight, person, current_state, note, photo, latitude, longitude, map_x, map_y, map_scale, sort_order)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  INSERT INTO map_places
+  (id, name, kicker, lead, highlight, person, current_state, note, master, pattern, quote, tour, tour_img, photo, latitude, longitude, map_x, map_y, map_scale, sort_order)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  ON CONFLICT(id) DO UPDATE SET
+    name = excluded.name,
+    kicker = excluded.kicker,
+    lead = excluded.lead,
+    highlight = excluded.highlight,
+    person = excluded.person,
+    current_state = excluded.current_state,
+    note = excluded.note,
+    master = excluded.master,
+    pattern = excluded.pattern,
+    quote = excluded.quote,
+    tour = excluded.tour,
+    tour_img = excluded.tour_img,
+    photo = excluded.photo,
+    latitude = excluded.latitude,
+    longitude = excluded.longitude,
+    map_x = excluded.map_x,
+    map_y = excluded.map_y,
+    map_scale = excluded.map_scale,
+    sort_order = excluded.sort_order
 `);
 
 mapPlaceSeed.forEach((place) => {
@@ -143,6 +197,11 @@ mapPlaceSeed.forEach((place) => {
     place.person,
     place.currentState,
     place.note,
+    place.master,
+    place.pattern,
+    place.quote,
+    place.tour,
+    place.tourImg,
     place.photo,
     place.latitude,
     place.longitude,
@@ -368,6 +427,11 @@ async function handleApi(request, response, pathname) {
             'person', person,
             'currentState', current_state,
             'note', note,
+            'master', master,
+            'pattern', pattern,
+            'quote', quote,
+            'tour', tour,
+            'tourImg', tour_img,
             'photo', photo,
             'latitude', latitude,
             'longitude', longitude,
@@ -385,7 +449,8 @@ async function handleApi(request, response, pathname) {
 
     if (!places) {
       places = db.prepare(`
-        SELECT id, name, kicker, lead, highlight, person, current_state, note, photo,
+        SELECT id, name, kicker, lead, highlight, person, current_state, note,
+               master, pattern, quote, tour, tour_img, photo,
                latitude, longitude, map_x, map_y, map_scale
         FROM map_places
         ORDER BY sort_order ASC
@@ -398,6 +463,11 @@ async function handleApi(request, response, pathname) {
         person: row.person,
         currentState: row.current_state,
         note: row.note,
+        master: row.master,
+        pattern: row.pattern,
+        quote: row.quote,
+        tour: row.tour,
+        tourImg: row.tour_img,
         photo: row.photo,
         latitude: row.latitude,
         longitude: row.longitude,

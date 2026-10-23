@@ -31,6 +31,7 @@ Windows 也可以直接双击项目根目录的 `start.bat` 启动。此项目�
 - `home.html`：六大展区主页面
 - `timeline.html`：独立的线装书式七步工艺长卷
 - `map.html`：独立的苍洱水墨非遗地图
+- `place.html`：根据 `?place=` 参数展示独立地点手记，包含传承人、纹样、民谣、打卡指南和产业数据
 - `styles.css`：全局视觉、动效与响应式样式
 - `app.js`：靛蓝晕染背景、登录交互、滚动动效
 - `server.js`：静态文件服务、注册登录 API、会话校验与 SQLite 数据库
@@ -39,7 +40,7 @@ Windows 也可以直接双击项目根目录的 `start.bat` 启动。此项目�
 - `assets/indigo-textile.svg`：原创扎染蝴蝶花卉纹样矢量图
 - `assets/zhoucheng.jpg`、`xizhou.jpg`、`weishan.jpg`：地图地点实拍图
 - `assets/echarts.min.js`：本地 ECharts 运行文件
-- `preview-login.png`、`preview-home.png`：桌面端视觉预览
+- `preview-login.png`、`preview-home.png`、`preview-map.png`、`preview-place.png`：桌面端视觉预览
 
 当前已完成用户注册登录、工艺长卷、非遗地图和地图数据接口；其余展区与后台内容管理仍为界面原型。
 
@@ -52,7 +53,7 @@ Windows 也可以直接双击项目根目录的 `start.bat` 启动。此项目�
 
 ## 地图接口
 
-- `GET /api/map/places`：返回周城、喜洲、巍山的坐标、简介、人物、图片和地图定位参数。
+- `GET /api/map/places`：返回周城、喜洲、巍山的坐标、简介、传承人、特色纹样、地方民谣、打卡指南、图片和地图定位参数。
 - `GET /api/map/stats?place=zhoucheng`：返回指定地点的从业人数、经营作坊数、年产值和统计口径。
 
 本地默认使用 SQLite，服务启动时自动写入演示数据。配置 `DATABASE_URL` 后，两个接口会优先从 PostgreSQL 读取；首次部署可执行：
