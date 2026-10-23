@@ -15,8 +15,6 @@
 | 扎染实验室 | `diy.html` | 螺旋、缝扎、风琴折叠、豆结四种扎结方式 |
 | 问蓝知染 | `quiz.html` | 非遗知识问答与知识块解析 |
 
-
-
 ## 协作开发
 
 ### 负责「工艺长卷（模块 02）」和「非遗地图（模块 05）」的同学
@@ -75,8 +73,11 @@
 
 | 文件 | 用途 |
 |---|---|
+| `place.html` | 地点完整手记、传承人、纹样、打卡指南和产业数据 |
 | `js/api-base.js` | 接口地址与统一请求封装，所有模块共用 |
+| `js/http.js` | 统一请求头、Cookie 与接口响应处理 |
 | `styles.css` 顶部变量与通用组件 | 全站字体、颜色、按钮、页头页脚 |
+| `backend/src/main/java/com/baizu/tiedye/common/` | 统一接口响应与异常处理 |
 | `bootstrap/DataInitializer.java` | 所有模块的演示数据 |
 | `db/mysql-init.sql` | 交付用建库建表脚本 |
 
@@ -89,5 +90,3 @@
    .\mvnw.cmd spring-boot:run
    ```
 浏览器访问 <http://localhost:8080/>。前端页面、接口、上传图片都由这一个进程提供，不需要再单独启动前端。
-
-

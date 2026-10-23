@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="苍洱染迹地点手记——阅读白族扎染传承人、纹样、地方民谣与游览打卡指南。">
+  <meta name="theme-color" content="#f4f0e5">
+  <title>地方手记 | 蓝白之境</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="assets/echarts.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body class="page-home page-standalone page-place-detail">
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
+  <canvas class="dye-canvas" id="dyeCanvas" aria-hidden="true"></canvas>
+  <div class="paper-grain" aria-hidden="true"></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="nav-shell">
+      <a class="brand" href="home.html" aria-label="蓝白之境首页">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 4.5C19.4 13 13.2 20 13.2 28.1a10.8 10.8 0 1 0 21.6 0C34.8 20 28.6 13 24 4.5Z"/>
+            <path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/>
+          </svg>
+        </span>
+        <span class="brand-copy"><strong>蓝白之境</strong><small>THE REALM OF INDIGO</small></span>
+      </a>
+      <nav class="main-nav" id="mainNav" aria-label="主导航">
+        <a href="home.html">首页</a>
+        <a href="home.html#modules">六个展区</a>
+        <a href="timeline.html">工艺长卷</a>
+        <a class="is-active" href="map.html">寻迹地图</a>
+        <a href="home.html#heritage">纹样故事</a>
+        <a href="home.html#about">关于扎染</a>
+        <a class="mobile-login" href="index.html">登录 / 注册</a>
+      </nav>
+      <div class="header-actions">
+        <span class="visitor-state"><i></i>访客漫游中</span>
+        <a class="header-login" href="index.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"></circle><path d="M5.5 20c.6-4 2.7-6 6.5-6s5.9 2 6.5 6"></path></svg>
+          登录
+        </a>
+        <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="打开菜单">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="standalone-main place-detail-main" id="main-content">
+    <section class="place-detail-shell">
+      <aside class="place-detail-profile">
+        <div>
+          <a class="detail-back" id="detailBackMap" href="map.html">
+            <span aria-hidden="true">←</span>
+            回到苍洱寻迹
+          </a>
+          <p class="place-detail-kicker" id="detailKicker">正在展开地方手记</p>
+          <h1 id="detailName">苍洱染迹</h1>
+          <p class="place-detail-lead" id="detailLead">
+            沿着一匹蓝布，走进村落、院落与日常生活。
+          </p>
+        </div>
+
+          <figure class="place-detail-photo">
+          <img id="detailPhoto" src="assets/zhoucheng.jpg" alt="白族扎染地点实景">
+          <button type="button" class="photo-nav-btn prev" id="photoPrevBtn" aria-label="上一张图片">←</button>
+          <button type="button" class="photo-nav-btn next" id="photoNextBtn" aria-label="下一张图片">→</button>
+          <span class="detail-photo-index" id="detailIndex">1 / 3</span>
+          <figcaption id="detailCaption">云南大理 · 白族扎染文化现场</figcaption>
+        </figure>
+
+        <blockquote class="detail-profile-quote">
+          <span>在地絮语 · LOCAL VOICE</span>
+          <p id="placeQuote">白族女儿会说话就会唱歌，会走路就会跳舞。</p>
+        </blockquote>
+          <div class="detail-extra-story">
+          <!-- 标题留空，由 JS 注入 -->
+          <h3 class="detail-story-title">故事· <span id="detailStoryTitle">正在展开...</span></h3>
+          <p class="detail-story-desc" id="detailStoryDesc">
+            正在加载地方故事...
+          </p>
+          <figure class="detail-story-figure">
+            <!-- 修改这里的 src -->
+            <img id="detailStoryImg" src="assets/zhoucheng-story.jpg" alt="在地故事实景">
+            <figcaption>日常生活中的扎染图景</figcaption>
+          </figure>
+        </div>
+      </aside>
+
+      <section class="place-detail-workbench">
+        <header class="detail-workbench-head">
+        </header>
+
+        <nav class="detail-tab-bar" role="tablist" aria-label="地方手记内容">
+          <button class="tab-btn is-active" type="button" role="tab" aria-selected="true" onclick="switchTab('story', this)">地方故事</button>
+          <button class="tab-btn" type="button" role="tab" aria-selected="false" onclick="switchTab('itinerary', this)">游览指南</button>
+          <button class="tab-btn" type="button" role="tab" aria-selected="false" onclick="switchTab('dye', this)">植物染</button>
+          <button class="tab-btn" type="button" role="tab" aria-selected="false" onclick="switchTab('culture', this)">纹样民俗</button>
+          <button class="tab-btn" type="button" role="tab" aria-selected="false" onclick="switchTab('data', this)">产业数据</button>
+        </nav>
+
+        <div class="detail-tab-window">
+          <div id="tab-story" class="tab-content detail-story-panel" style="display: block;">
+              <div class="detail-story-heading">
+              <span class="detail-section-number">01</span>
+              <div>
+                <p class="detail-section-kicker">ABOUT THIS PLACE</p>
+                <h2>苍山脚下，<br>这座城的故事。</h2>
+              </div>
+            </div>
+            <p class="detail-story-note" id="detailNote">先看一双手怎样把线缝进布里，再看蓝如何在空气里慢慢显出来。</p>
+                  <div class="detail-record-grid">
+          <button type="button" onclick="showExploreModal('master')" style="text-align:left; cursor:pointer; border:0; background:transparent; padding:0;" class="detail-record-card">
+            <article style="width:100%; height:100%; border:0; margin:0;">
+              <span>传承人</span>
+              <h3>MAKERS</h3>
+              <p id="placeMaster">--</p>
+            </article>
+          </button>
+
+          <button type="button" onclick="showExploreModal('pattern')" style="text-align:left; cursor:pointer; border:0; background:transparent; padding:0;" class="detail-record-card">
+            <article style="width:100%; height:100%; border:0; margin:0;">
+              <span>特色纹样</span>
+              <h3>PATTERNS</h3>
+              <p id="placePattern">--</p>
+            </article>
+          </button>
+
+          <button type="button" onclick="showExploreModal('see')" style="text-align:left; cursor:pointer; border:0; background:transparent; padding:0;" class="detail-record-card">
+            <article style="width:100%; height:100%; border:0; margin:0;">
+              <span>到了看什么</span>
+              <h3>TO SEE</h3>
+              <p id="detailSee">--</p>
+            </article>
+          </button>
+
+          <button type="button" onclick="showExploreModal('now')" style="text-align:left; cursor:pointer; border:0; background:transparent; padding:0;" class="detail-record-card">
+            <article style="width:100%; height:100%; border:0; margin:0;">
+              <span>今日图景</span>
+              <h3>NOW</h3>
+              <p id="detailNow">--</p>
+            </article>
+          </button>
+        </div>
+          </div>
+
+                   <div id="tab-itinerary" class="tab-content" style="display: none;">
+            <div class="detail-editorial-row" style="grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+
+              <!-- 左侧：打卡清单 -->
+              <div>
+                <p class="detail-section-kicker">A SMALL ITINERARY</p>
+                <h2>去这里，可以做这四件事。</h2>
+
+                <div id="tourChecklist" class="tour-checklist"></div>
+
+                <a class="detail-inline-link" id="detailMapLink" href="map.html?place=zhoucheng" style="margin-top: 20px;">在地图上看看 <span>↗</span></a>
+              </div>
+
+              <!-- 右侧：打卡实景图与成就 -->
+              <div class="tour-right-panel">
+                <!-- 默认显示的空状态 -->
+                <div id="tourPhotoEmpty" class="tour-photo-empty">
+                  <span>点击左侧任务<br>解锁实景</span>
+                </div>
+                <!-- 打卡后显示的实景图 -->
+                <img id="tourPhotoReveal" src="" alt="解锁实景" class="tour-photo-reveal" style="display: none;">
+
+                               <!-- 全打卡后的成就徽章 -->
+                <div id="tourAchievement" class="tour-achievement" style="display: none;">
+                  <!-- 👇 修改成下面这样 👇 -->
+                  <div class="achievement-seal">
+                    <div>非</div><div>遗</div>
+                    <div>达</div><div>人</div>
+                  </div>
+                  <!-- 👆 ---------------- 👆 -->
+                  <p>恭喜你解锁了【<span id="achievementPlace"></span>寻蓝】全部打卡！</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+                           <div id="tab-dye" class="tab-content" style="display: none;">
+            <div class="detail-editorial-row" style="grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: start;">
+
+              <!-- 左侧：硬核科普文字 -->
+              <div class="dye-science-text">
+                <p class="detail-section-kicker">PLANT DYE / 板蓝根</p>
+                <h2>这抹蓝，究竟是哪里来的？</h2>
+
+                <div class="dye-text-block">
+                  <h3>1. 植物的发酵与沉淀</h3>
+                  <p>白族扎染的蓝取自板蓝根等植物。村民采摘茎叶，将其浸泡在水中发酵。在这个过程中，植物里的吲哚酚会游离出来。随后加入石灰水（碱性），通过打靛使其沉淀，最终得到深蓝色的“靛泥”。</p>
+                </div>
+
+                <div class="dye-text-block">
+                  <h3>2. 神奇的氧化还原反应</h3>
+                  <p>浸染后的布面刚出缸时，呈现的是黄绿色。这是因为此时的靛蓝处于“隐色体”状态，溶解在染液中。接触空气中的氧气后，它才会慢慢氧化，分子结构改变，最终变成深邃的靛蓝色。</p>
+                </div>
+
+                <div class="dye-text-block">
+                  <h3>3. 物理防染的东方智慧</h3>
+                  <p>那白族花纹是怎么来的？其实原理极其简单：靠“扎”。用线把布紧紧扎起来，被线缚住的地方染液进不去，就留住了布原本的白。拆线后，蓝底白花便如变魔术般显现出来。</p>
+                </div>
+              </div>
+
+              <!-- 右侧：动态氧化模拟器与配图 -->
+              <div class="dye-right-col">
+                <!-- 顶部配图 -->
+                <figure class="dye-top-image">
+                  <img src="assets/indigo-vat.jpg" alt="植物染料和染缸">
+                  <figcaption>传统植物制靛与染缸</figcaption>
+                </figure>
+
+                <!-- 模拟器区域 -->
+                <div class="dye-slider-container">
+                  <label>拖动滑块，吹入空气，见证氧化显色：</label>
+                  <input type="range" min="0" max="100" value="0" id="oxidationSlider" class="dye-slider">
+                  <div class="dye-slider-labels">
+                    <span>刚出缸 (黄绿)</span>
+                    <span>风中氧化</span>
+                    <span>最终显色</span>
+                  </div>
+                </div>
+
+                <div class="dye-simulator-panel">
+                  <div class="dye-cloth-sim" id="dyeClothSim">
+                    <span class="dye-text" id="dyeStatusText">黄绿色 · 湿润</span>
+                    <div class="dye-pattern-hole"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+                <div id="tab-culture" class="tab-content" style="display: none;">
+            <div class="detail-editorial-row" style="grid-template-columns: 1fr; gap: 20px; align-items: start;">
+
+              <div>
+                <p class="detail-section-kicker">PATTERNS & DAILY LIFE</p>
+                <h2>不仅是布，更是白族人的史诗。</h2>
+                <p class="detail-body-copy" style="max-width: 800px;">
+                  扎染纹样进入婚嫁、节庆与日常服饰。蝴蝶纹承载创世想象，梅花纹寄托坚韧，几何连续纹则让布面像一段不断延伸的生活叙事。
+                </p>
+                <p class="detail-body-copy" style="max-width: 800px; font-size: 13px; color: #8a9695; margin-top: 10px;">
+                  👉 互动提示：将鼠标悬停在下方卡片上（或点击），可翻开纹样图鉴，了解其背后的民俗寓意。
+                </p>
+              </div>
+
+
+              <div class="pattern-cards-grid" id="patternCardsContainer">
+
+              </div>
+              </div>
+
+
+            </div>
+
+                    <div id="tab-data" class="tab-content" style="display: none;">
+            <div class="detail-data-heading">
+              <div>
+                <p class="detail-section-kicker">LOCAL INDUSTRY</p>
+                <h2>扎染给这里留下了什么？</h2>
+              </div>
+              <button type="button" class="data-badge-btn" onclick="alert('当前数据为线上抓取与线下访谈综合评估，部分年产值数据正在进一步调研中。')">数据看板</button>
+            </div>
+
+                    <!-- 3个数据卡片 -->
+            <div class="detail-stats" aria-label="扎染产业微数据">
+              <!-- 从业人数 -->
+              <div onclick="showDataModal('workers')" style="cursor: pointer;">
+                <span>👥 从业人数</span>
+                <strong id="detailWorkers">--</strong>
+                <small>人</small>
+              </div>
+              <!-- 经营作坊 -->
+              <div onclick="showDataModal('workshops')" style="cursor: pointer;">
+                <span>🏠 经营作坊</span>
+                <strong id="detailWorkshops">--</strong>
+                <small>家</small>
+              </div>
+              <!-- 年产值 -->
+              <div onclick="showDataModal('output')" style="cursor: pointer;">
+                <span>💰 年产值</span>
+                <strong id="detailOutput">待调研</strong>
+                <small id="detailOutputUnit"></small>
+              </div>
+            </div>
+
+            <p class="detail-data-note" id="detailSourceNote">数据口径加载中</p>
+
+            <!-- 👇 新增：产业发展动态图表 👇 -->
+            <div class="industry-chart-container">
+              <div class="chart-header">
+                <span>近五年非遗研学体验人次趋势</span>
+                <small>数据示意 · 单位：万人次</small>
+              </div>
+              <div id="industryChart" style="width: 100%; height: 220px; margin-top: 15px;"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <footer class="detail-workbench-footer">
+          <a id="detailPrevious" href="map.html"><span>←</span><small>上一处</small><strong>返回地图</strong></a>
+          <a id="detailNext" href="map.html"><small>下一处</small><strong>继续寻蓝</strong><span>→</span></a>
+        </footer>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <a class="brand invert" href="home.html" aria-label="蓝白之境首页">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 4.5C19.4 13 13.2 20 13.2 28.1a10.8 10.8 0 1 0 21.6 0C34.8 20 28.6 13 24 4.5Z"/>
+            <path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/>
+          </svg>
+        </span>
+        <span class="brand-copy"><strong>蓝白之境</strong><small>THE REALM OF INDIGO</small></span>
+      </a>
+      <p>让一匹蓝布，继续讲述<br>苍山洱海间的非遗故事。</p>
+    </div>
+    <div class="footer-nav">
+      <div>
+        <span>探索</span>
+        <a href="map.html">寻迹地图</a>
+        <a href="timeline.html">工艺长卷</a>
+        <a href="home.html#heritage">纹样图鉴</a>
+      </div>
+      <div>
+        <span>连接</span>
+        <a href="index.html">登录 / 注册</a>
+        <a href="home.html">返回首页</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 BAIZU TIE-DYE DIGITAL MUSEUM</span>
+      <span>云南大理 · 白族扎染数字科普站</span>
+    </div>
+  </footer>
+  <script>
+           function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-content').forEach(function(el) {
+        el.style.setProperty('display', 'none', 'important');
+        el.classList.remove('is-changing');
+      });
+
+      document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.classList.remove('is-active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+
+      const target = document.getElementById('tab-' + tabId);
+      if (target) {
+        target.style.setProperty('display', 'block', 'important');
+        void target.offsetWidth;
+        target.classList.add('is-changing');
+      }
+
+      btnElement.classList.add('is-active');
+      btnElement.setAttribute('aria-selected', 'true');
+
+      // “产业数据”页签显示后再初始化图表，避免隐藏容器宽度为 0。
+      if (tabId === 'data') {
+        window.setTimeout(() => {
+          if (typeof window.refreshIndustryChart === "function") {
+            window.refreshIndustryChart();
+          }
+        }, 80);
+      }
+    }
+  </script>
+  <!-- 独立的介绍弹窗 -->
+  <div class="heritage-modal" id="exploreModal" hidden>
+    <button class="puzzle-backdrop" type="button" onclick="closeExploreModal()" aria-label="关闭"></button>
+    <section class="puzzle-card" role="dialog" aria-modal="true" style="max-height: 85vh; display: flex; flex-direction: column;">
+      <button class="puzzle-close" type="button" onclick="closeExploreModal()" aria-label="关闭">×</button>
+
+      <p class="puzzle-card-kicker" id="exploreModalKicker">田野手记 · 详细档案</p>
+      <h2 id="exploreModalTitle" style="margin-bottom: 15px;">传承人</h2>
+
+      <!-- 👇 核心修改：增加了一个可以滚动的容器 👇 -->
+      <div id="exploreModalContent" style="flex: 1; overflow-y: auto; padding-right: 8px; scrollbar-width: thin;">
+        <!-- JS 会把图片、图表和文字塞到这里 -->
+      </div>
+      <!-- 👆 ------------------------------------ 👆 -->
+
+      <div class="puzzle-actions" style="margin-top: 15px; flex-shrink: 0;">
+        <button type="button" onclick="closeExploreModal()">收好档案</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // 对应卡片的中文名称
+    const exploreTitles = {
+      master: "代表性传承人",
+      pattern: "特色纹样寓意",
+      see: "核心在地风物",
+      now: "今日产业图景"
+    };
+
+    const exploreImages = {
+      zhoucheng: {
+        master: ["assets/person-duanyinkai.jpg", "assets/person-zhanghanmin.jpg"],
+        pattern: ["assets/pattern-closeup.jpg"],
+        see: ["assets/data-master.jpg", "assets/zhoucheng.jpg"],
+        now: ["assets/data-study.jpg"]
+      },
+      xizhou: {
+        master: ["assets/person-xizhou.jpg"],
+        pattern: ["assets/pattern-closeup.jpg"],
+        see: ["assets/xizhou.jpg"],
+        now: ["assets/data-study.jpg"]
+      },
+      weishan: {
+        master: ["assets/person-xiongwenjie.jpg", "assets/person-xiongtianyan.jpg"],
+        pattern: ["assets/pattern-closeup.jpg"],
+        see: ["assets/weishan.jpg"],
+        now: ["assets/data-study.jpg"]
+      }
+    };
+    function showExploreModal(type) {
+      const currentPlaceId = new URLSearchParams(window.location.search).get("place") || "zhoucheng";
+      const place = window.currentPlaceData || {};
+
+      document.getElementById("exploreModalKicker").textContent = `${place?.name || "当前地点"} · 详细档案`;
+      document.getElementById("exploreModalTitle").textContent = exploreTitles[type] || "详细档案";
+
+      const container = document.getElementById("exploreModalContent");
+      let htmlContent = "";
+
+      // 👇 核心修复：如果是在巍山看传承人，强制使用下面这组数据 👇
+      let personsData = place?.persons;
+
+      if (currentPlaceId === "weishan" && type === "master") {
+        personsData = [
+          {
+            name: "熊文杰",
+            role: "省级代表性传承人",
+            img: "assets/person-xiongwenjie.jpg",
+            desc: "熊文杰，巍山扎染技艺省级代表性传承人。他结合彝族文化创新了多种染布技法，发明了扎花机，大大提高了产能，创立了兴巍工艺厂，产品远销海外。"
+          },
+          {
+            name: "熊天艳",
+            role: "县级代表性传承人",
+            img: "assets/person-xiongtianyan.jpg",
+            desc: "熊天艳，熊文杰之女，巍山扎染县级代表性传承人。她返乡接班，在古城非遗街区开设扎染体验馆，用年轻人的方式让巍山扎染成为当地文旅的新名片。"
+          }
+        ];
+      }
+
+      // 获取当前要展示的数据
+      let detail = place?.exploreData?.[type];
+      if (type === "pattern" && Array.isArray(place?.pattern)) {
+        detail = place.pattern;
+      }
+
+      // ================= 1. 传承人（一图一文） =================
+      if (type === "master" && Array.isArray(personsData) && personsData.length > 0) {
+        htmlContent = personsData.map(person => `
+          <div style="margin-bottom: 35px; border-bottom: 1px dashed rgba(13,55,87,0.15); padding-bottom: 20px;">
+            <img src="${person.img || 'assets/data-master.jpg'}"
+                 onerror="this.src='assets/data-master.jpg'"
+                 style="width: 100%; height: 220px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);"
+                 alt="${person.name}">
+            <h3 style="font-family: var(--font-round); color: #0b3863; font-size: 24px; margin-bottom: 5px;">${person.name}</h3>
+            <p style="color: #24648e; font-size: 13px; margin-bottom: 12px; font-weight: bold;">${person.role}</p>
+            <p style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify;">${person.desc}</p>
+          </div>
+        `).join("");
+      }
+      // ================= 2. 通用数组渲染 =================
+      else if (Array.isArray(detail) && detail.length > 0) {
+        htmlContent = detail.map(item => `
+          <div style="margin-bottom: 24px; border-bottom: 1px dashed rgba(13,55,87,0.15); padding-bottom: 20px;">
+            <img src="${item.img || 'assets/placeholder.jpg'}"
+                 onerror="this.src='assets/pattern-closeup.jpg'"
+                 style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);"
+                 alt="${item.title || '配图'}">
+            <h3 style="font-family: var(--font-round); color: #0b3863; font-size: 20px; margin-bottom: 8px;">${item.title || ''}</h3>
+            <p style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify;">${item.desc || item.text || ''}</p>
+          </div>
+        `).join("");
+      }
+      // ================= 3. 纯文本兜底 =================
+      else {
+        let text = "暂无详细档案。";
+        if (typeof detail === "string") {
+          text = detail;
+        } else if (detail && detail.text) {
+          text = detail.text;
+        } else if (place?.exploreData?.[type]) {
+          text = place.exploreData[type];
+        }
+
+        if (typeof text === 'object') {
+          text = "暂无纯文本描述，请在档案中查看图文。";
+        }
+
+        htmlContent = `
+          <p style="color: #5c6f73; font-size: 15px; line-height: 1.9; text-align: justify;">${text}</p>
+        `;
+      }
+
+      container.innerHTML = htmlContent;
+      document.getElementById("exploreModal").hidden = false;
+      document.body.classList.add("modal-open");
+      document.querySelector("#exploreModal .puzzle-close")?.focus();
+    }
+    function closeExploreModal() {
+      document.getElementById("exploreModal").hidden = true;
+      document.body.classList.remove("modal-open");
+    }
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Escape") closeExploreModal();
+    });
+  </script>
+  <!-- 产业数据详细弹窗 -->
+  <div class="heritage-modal" id="dataModal" hidden>
+    <button class="puzzle-backdrop" type="button" onclick="closeDataModal()" aria-label="关闭"></button>
+    <section class="puzzle-card" role="dialog" aria-modal="true" style="max-height: 85vh; display: flex; flex-direction: column; width: min(92vw, 600px);">
+      <button class="puzzle-close" type="button" onclick="closeDataModal()" aria-label="关闭">×</button>
+      <p class="puzzle-card-kicker" id="dataModalKicker">周城 · 产业数据档案</p>
+      <h2 id="dataModalTitle" style="margin-bottom: 15px;">从业人数</h2>
+
+      <!-- 图表容器 -->
+      <div id="dataModalChart" style="width: 100%; height: 200px; margin-bottom: 20px;"></div>
+
+      <!-- 图文报道 -->
+      <div id="dataModalText" style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify; overflow-y: auto;">
+      </div>
+    </section>
+  </div>
+    <script>
+    // 动态渲染纹样卡片
+    window.renderPatternCards = function() {
+      const container = document.getElementById("patternCardsContainer");
+      if (!container) return;
+
+      // 从 app.js 挂载的全局变量获取数据
+      const patterns = window.currentPatternData || [];
+
+      if (!patterns || !patterns.length) {
+        container.innerHTML = `<p style="color: #8a9695; font-size: 14px;">暂无纹样数据，请检查 app.js 是否传递成功。</p>`;
+        return;
+      }
+
+      container.innerHTML = "";
+      patterns.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "flip-card";
+        card.innerHTML = `
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <div class="card-icon">🦋</div>
+              <h4>${item.title || "纹样"}</h4>
+              <span>点击翻看</span>
+            </div>
+            <div class="flip-card-back">
+              <img src="${item.img || 'assets/pattern-closeup.jpg'}"
+                   onerror="this.src='assets/pattern-closeup.jpg'"
+                   alt="${item.title}">
+              <p>${item.desc}</p>
+            </div>
+          </div>
+        `;
+        card.onclick = function() {
+          this.classList.toggle('is-flipped');
+        };
+        container.appendChild(card);
+      });
+    };
+
+    // 页面加载完成后，延迟 100ms 执行
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(window.renderPatternCards, 100);
+    });
+
+    // 👇 新增：监听 Tab 切换，点开“纹样民俗”时强制重绘（防止在隐藏状态下渲染失败）
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.textContent.trim() === '纹样民俗') {
+          if (typeof window.renderPatternCards === 'function') {
+            setTimeout(window.renderPatternCards, 50);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

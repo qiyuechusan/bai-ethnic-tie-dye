@@ -145,36 +145,152 @@
           </div>
 
           <div class="place-story">
-            <p class="place-kicker" id="placeKicker">加载中...</p>
-            <h2 id="placeName">--</h2>
-            <p class="place-lead" id="placeLead">--</p>
-
-            <dl class="place-facts">
-              <div><dt>在这里看什么</dt><dd id="placeSee">--</dd></div>
-              <div><dt>人物线索</dt><dd id="placePerson">--</dd></div>
-              <div><dt>今日图景</dt><dd id="placeNow">--</dd></div>
-            </dl>
-
-            <div class="place-note">
-              <span>HAND NOTE</span><p id="placeNote">--</p>
+            <div class="place-heading-row">
+              <div>
+                <p class="place-kicker" id="placeKicker">加载中...</p>
+                <h2 id="placeName">--</h2>
+              </div>
+              <span class="place-heading-mark" id="placeHeadingMark" aria-hidden="true">染</span>
             </div>
 
-            <button class="puzzle-cta" id="puzzleButton" type="button">
-              <span class="puzzle-mark" aria-hidden="true">?</span>
-              <span>
-                <small>非遗小考 · 点开图鉴</small>
-                <strong>你知道这里的传承人是谁吗？</strong>
-              </span>
-              <i aria-hidden="true">↗</i>
-            </button>
-
-            <div class="chart-heading">
-              <span>染坊微观察</span>
-              <small id="chartCaption">周城 · 数据加载中</small>
+            <div class="sidebar-tabs" role="tablist" aria-label="地点信息分类">
+              <button class="sidebar-tab is-active" type="button" role="tab" aria-selected="true" data-map-tab="story">地方</button>
+              <button class="sidebar-tab" type="button" role="tab" aria-selected="false" data-map-tab="voice">手记</button>
+              <button class="sidebar-tab" type="button" role="tab" aria-selected="false" data-map-tab="data">数据</button>
             </div>
-            <div id="chartContainer" role="img" aria-label="地点扎染产业数据图表"></div>
-            <div id="chartFallback" class="chart-fallback" hidden></div>
-            <p class="chart-source" id="chartSource">数据口径：待补充</p>
+
+            <div class="sidebar-panels">
+              <section class="sidebar-panel is-active" data-map-panel="story" role="tabpanel">
+                <p class="place-lead" id="placeLead">--</p>
+                                              <dl class="place-facts">
+                  <div style="cursor:pointer;" onclick="showExploreModal('master')" title="点击查看传承人详细档案">
+                    <dt>代表性传承人</dt>
+                    <dd>点击查看 &rarr;</dd>
+                  </div>
+                  <div style="cursor:pointer;" onclick="showExploreModal('pattern')" title="点击查看特色纹样详细档案">
+                    <dt>特色纹样寓意</dt>
+                    <dd>点击查看 &rarr;</dd>
+                  </div>
+                  <div style="cursor:pointer;" onclick="showExploreModal('geo')" title="点击查看地理风土详细档案">
+                    <dt>地理风土</dt>
+                    <dd>点击查看 &rarr;</dd>
+                  </div>
+                  <div style="cursor:pointer;" onclick="showExploreModal('landmark')" title="点击查看文化地标详细档案">
+                    <dt>文化地标</dt>
+                    <dd>点击查看 &rarr;</dd>
+                  </div>
+                  <div style="cursor:pointer;" onclick="showExploreModal('color')" title="点击查看当地色谱详细档案">
+                    <dt>当地色谱</dt>
+                    <dd>点击查看 &rarr;</dd>
+                  </div>
+                </dl>
+              </section>
+
+              <section class="sidebar-panel" data-map-panel="voice" role="tabpanel" hidden>
+                <div class="place-note">
+                  <span>在地絮语 · LOCAL VOICE</span><p id="placeQuote">--</p>
+                </div>
+
+                <a class="full-story-link" id="placeDetailLink" href="place.html?place=zhoucheng">
+                  <span>
+                    <small>完整地方手记</small>
+                    <strong>民谣、打卡指南与更多故事</strong>
+                  </span>
+                  <i aria-hidden="true">↗</i>
+                </a>
+
+                <button class="puzzle-cta" id="puzzleButton" type="button">
+                  <span class="puzzle-mark" aria-hidden="true">?</span>
+                  <span>
+                    <small>非遗小考 · 点开图鉴</small>
+                    <strong>你知道这里的传承人是谁吗？</strong>
+                  </span>
+                  <i aria-hidden="true">↗</i>
+                </button>
+              </section>
+
+                            <section class="sidebar-panel" data-map-panel="data" role="tabpanel" hidden>
+
+                <div class="chart-heading">
+                  <span>染坊微观察</span>
+                  <small id="chartCaption">周城 · 产业图谱</small>
+                </div>
+
+                                <!-- 1. 顶部：4个核心数据卡片 -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;">
+                  <div style="background: rgba(255,255,255,0.6); border: 1px solid rgba(13,57,89,0.08); border-radius: 6px; padding: 10px; text-align: center;">
+                    <span style="font-size: 11px; color: #8a9695; display: block; margin-bottom: 2px;">👥 从业人数</span>
+                    <strong id="statWorkers" style="font-size: 18px; color: #0b3863; font-family: var(--font-round);">--</strong>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.6); border: 1px solid rgba(13,57,89,0.08); border-radius: 6px; padding: 10px; text-align: center;">
+                    <span style="font-size: 11px; color: #8a9695; display: block; margin-bottom: 2px;">🏠 经营作坊</span>
+                    <strong id="statWorkshops" style="font-size: 18px; color: #0b3863; font-family: var(--font-round);">--</strong>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.6); border: 1px solid rgba(13,57,89,0.08); border-radius: 6px; padding: 10px; text-align: center;">
+                    <span style="font-size: 11px; color: #8a9695; display: block; margin-bottom: 2px;">💰 年产值</span>
+                    <strong id="statOutput" style="font-size: 18px; color: #0b3863; font-family: var(--font-round);">--</strong>
+                  </div>
+                  <div style="background: rgba(255,255,255,0.6); border: 1px solid rgba(13,57,89,0.08); border-radius: 6px; padding: 10px; text-align: center;">
+                    <span style="font-size: 11px; color: #8a9695; display: block; margin-bottom: 2px;">🎓 研学接待</span>
+                    <strong id="statStudents" style="font-size: 18px; color: #0b3863; font-family: var(--font-round);">--</strong>
+                  </div>
+                </div>
+
+                <!-- 2. 研学体验实景图 -->
+                <figure style="margin-top: 15px; margin-bottom: 15px;">
+                  <img src="assets/data-study.jpg" alt="扎染研学体验" style="width: 100%; height: 90px; object-fit: cover; border-radius: 6px;">
+                  <figcaption style="text-align: right; font-size: 10px; color: #8a9695; margin-top: 4px; font-style: italic;">▲ 非遗扎染研学实景</figcaption>
+                </figure>
+
+                <!-- 3. 传承人梯队条形图 -->
+                <div style="margin-top: 15px;">
+                  <span style="font-size: 12px; color: #435c67; display: block; margin-bottom: 8px; font-weight: bold;">非遗传承人梯队</span>
+
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="font-size: 11px; width: 40px; color: #5c6b70;">国家级</span>
+                    <div style="flex: 1; background: rgba(13,57,89,0.08); height: 8px; border-radius: 4px; overflow: hidden;">
+                      <div style="width: 15%; background: #0b3863; height: 100%;"></div>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="font-size: 11px; width: 40px; color: #5c6b70;">省级</span>
+                    <div style="flex: 1; background: rgba(13,57,89,0.08); height: 8px; border-radius: 4px; overflow: hidden;">
+                      <div style="width: 35%; background: #24648e; height: 100%;"></div>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                    <span style="font-size: 11px; width: 40px; color: #5c6b70;">州/市级</span>
+                    <div style="flex: 1; background: rgba(13,57,89,0.08); height: 8px; border-radius: 4px; overflow: hidden;">
+                      <div style="width: 60%; background: #7fa596; height: 100%;"></div>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 11px; width: 40px; color: #5c6b70;">县级</span>
+                    <div style="flex: 1; background: rgba(13,57,89,0.08); height: 8px; border-radius: 4px; overflow: hidden;">
+                      <div style="width: 70%; background: #a9b784; height: 100%;"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 4. 传承人教学实景图 -->
+                <figure style="margin-top: 15px; margin-bottom: 15px;">
+                  <img src="assets/data-master.jpg" alt="手艺人教学" style="width: 100%; height: 90px; object-fit: cover; border-radius: 6px;">
+                  <figcaption style="text-align: right; font-size: 10px; color: #8a9695; margin-top: 4px; font-style: italic;">▲ 老手艺人教授扎花技法</figcaption>
+                </figure>
+
+                <!-- 5. 数据洞察文字 (加上了 id 方便 JS 控制) -->
+                <div style="padding: 10px 12px; border-left: 2px solid #24648e; background: rgba(36,100,142,0.04);">
+                  <p id="dataInsightText" style="font-size: 12px; line-height: 1.6; color: #5c6b70; margin: 0;">
+                    <strong>数据洞察：</strong>加载中...
+                  </p>
+                </div>
+
+                <p class="chart-source" id="chartSource" style="margin-top: 12px;">数据口径：基于各村委及文旅局调研数据</p>
+              </section>
+            </div>
           </div>
 
           <div class="place-route">
@@ -202,28 +318,150 @@
     </div>
   </footer>
 
-  <div class="heritage-modal" id="puzzleModal" hidden>
+   <div class="heritage-modal" id="puzzleModal" hidden>
     <button class="puzzle-backdrop" type="button" data-close-puzzle aria-label="关闭图鉴"></button>
     <section class="puzzle-card" role="dialog" aria-modal="true" aria-labelledby="puzzleTitle">
       <button class="puzzle-close" type="button" data-close-puzzle aria-label="关闭图鉴">×</button>
       <p class="puzzle-card-kicker" id="puzzlePlace">周城 · 人物图鉴</p>
-      <div class="puzzle-portrait" aria-hidden="true">
-        <span class="portrait-halo"></span>
-        <span class="portrait-head"></span>
-        <span class="portrait-body"></span>
-        <span class="portrait-thread"></span>
+
+      <h2 id="puzzleTitle" style="margin-bottom: 20px;">段银开、张翰敏</h2>
+
+      <!-- 👇 关键：这里放一个动态容器，并且允许它上下滑动 👇 -->
+      <div id="puzzleContent" style="max-height: 50vh; overflow-y: auto; padding-right: 10px;">
+        <!-- JS 会把内容塞到这里 -->
       </div>
-      <h2 id="puzzleTitle">段银开</h2>
-      <p class="puzzle-role">白族扎染技艺代表性传承人</p>
-      <p class="puzzle-description" id="puzzleDescription">
-        长期参与白族扎染技艺的传承与染坊实践，让针线、靛缸与一代人的手艺被更多人看见。
-      </p>
-      <div class="puzzle-actions">
-        <a href="home.html#pattern">去纹样图鉴继续探索 <span>→</span></a>
+      <!-- 👆 ------------------------------------------ 👆 -->
+
+      <div class="puzzle-actions" style="margin-top: 20px;">
+        <a href="home.html#heritage">去纹样图鉴继续探索 <span>→</span></a>
         <button type="button" data-close-puzzle>收好图鉴</button>
       </div>
     </section>
   </div>
+  <!-- 地图页：卡片详情弹窗 -->
+  <div class="heritage-modal" id="exploreModal" hidden>
+    <button class="puzzle-backdrop" type="button" onclick="closeExploreModal()" aria-label="关闭"></button>
+    <section class="puzzle-card" role="dialog" aria-modal="true" style="max-height: 85vh; display: flex; flex-direction: column; width: min(92vw, 600px);">
+      <button class="puzzle-close" type="button" onclick="closeExploreModal()" aria-label="关闭">×</button>
 
-</body>
+      <p class="puzzle-card-kicker" id="exploreModalKicker">田野手记 · 详细档案</p>
+      <h2 id="exploreModalTitle" style="margin-bottom: 15px;">传承人</h2>
+
+      <div id="exploreModalContent" style="flex: 1; overflow-y: auto; padding-right: 8px; scrollbar-width: thin;">
+        <!-- JS 会把内容塞到这里 -->
+      </div>
+
+      <div class="puzzle-actions" style="margin-top: 15px; flex-shrink: 0;">
+        <button type="button" onclick="closeExploreModal()">收好档案</button>
+      </div>
+    </section>
+  </div>
+    <script>
+    // 地图页：卡片详情弹窗渲染（强制本地数据版，不读 app.js 的旧数据）
+    window.showExploreModal = function(type) {
+      const place = window.currentMapPlaceData;
+      const modal = document.getElementById("exploreModal");
+      const kicker = document.getElementById("exploreModalKicker");
+      const title = document.getElementById("exploreModalTitle");
+      const container = document.getElementById("exploreModalContent");
+
+      if (!modal || !container || !place) return;
+
+      // ==========================================
+      // 🚨 核心修复：把最新的真实图片在这里写死
+      // ==========================================
+           const hardcodedLocalData = {
+        weishan: {
+          pattern: [
+            // 👇 换成你截图里真实的 .jpg 文件
+            { img: "assets/weishan-sun.jpg", title: "太阳纹", desc: "象征光明与生机，彝族图腾常见元素。" },
+            { img: "assets/weishan-flower.jpg", title: "八角花", desc: "彝族服饰中常见的吉祥图案。" },
+            { img: "assets/weishan-hui.jpg", title: "回纹", desc: "寓意连绵不断，结合挑花与刺绣。" }
+          ]
+        },
+        xizhou: {
+          pattern: [
+            { img: "assets/pattern-butterfly.jpg", title: "蝴蝶纹", desc: "喜洲白族院落中常见的纹样，寓意美好姻缘。" },
+            { img: "assets/pattern-plum.jpg", title: "菊花纹", desc: "常与当地商帮文化结合，寓意富贵与长寿。" },
+            { img: "assets/pattern-jihe.jpg", title: "几何连续纹", desc: "常见于照壁和门窗，与木雕呼应。" }
+          ]
+        },
+        zhoucheng: {
+          pattern: [
+            { img: "assets/pattern-butterfly.jpg", title: "蝴蝶纹", desc: "源自白族创世神话，寓意生命轮回与美好爱情。" },
+            { img: "assets/pattern-plum.jpg", title: "梅花纹", desc: "大理风大，梅花迎风傲雪，象征坚韧品格。" },
+            { img: "assets/pattern-coin.jpg", title: "铜钱纹", desc: "喜洲商帮走南闯北，寄托招财进宝的朴素愿望。" }
+          ]
+        }
+      };
+
+      const titles = {
+        master: "代表性传承人",
+        pattern: "特色纹样寓意",
+        geo: "地理风土",
+        landmark: "文化地标",
+        color: "当地色谱"
+      };
+      kicker.textContent = `${place.name} · 详细档案`;
+      title.textContent = titles[type] || "详细档案";
+
+      let htmlContent = "";
+      let finalDetail = null;
+
+      // 1. 如果是“特色纹样”，强制使用上面写死的数据
+      if (type === "pattern" && hardcodedLocalData[place.id]) {
+        finalDetail = hardcodedLocalData[place.id].pattern;
+      }
+      // 2. 如果是其他类型，去读 app.js 原来的数据
+      else {
+        finalDetail = place.exploreData ? place.exploreData[type] : null;
+      }
+
+      // 3. 开始渲染
+      if (Array.isArray(finalDetail) && finalDetail.length > 0) {
+        htmlContent = finalDetail.map(item => `
+          <div style="margin-bottom: 24px; border-bottom: 1px dashed rgba(13,55,87,0.15); padding-bottom: 20px;">
+            <!-- 加了 onerror，如果找不到图片，会变成灰底而不是裂图 -->
+            <img src="${item.img || 'assets/placeholder.jpg'}"
+                 onerror="this.src='https://via.placeholder.com/400x200?text=图片加载失败'"
+                 style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);"
+                 alt="${item.title}">
+            <h3 style="font-family: var(--font-round); color: #0b3863; font-size: 20px; margin-bottom: 8px;">${item.title}</h3>
+            <p style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify;">${item.desc || item.text || ''}</p>
+          </div>
+        `).join("");
+      }
+      // 渲染传承人
+      else if (type === "master" && place.persons && place.persons.length) {
+        htmlContent = place.persons.map(person => `
+          <div style="margin-bottom: 24px; border-bottom: 1px dashed rgba(13,55,87,0.15); padding-bottom: 20px;">
+            <img src="${person.img || 'assets/data-master.jpg'}" style="width: 100%; height: 210px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <h3 style="font-family: var(--font-round); color: #0b3863; font-size: 24px; margin-bottom: 5px;">${person.name}</h3>
+            <p style="color: #24648e; font-size: 12px; margin-bottom: 12px; font-weight: bold;">${person.role}</p>
+            <p style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify;">${person.desc}</p>
+          </div>
+        `).join("");
+      }
+      // 渲染纯文本
+      else {
+        let text = typeof finalDetail === "string" ? finalDetail : (finalDetail?.text || "暂无详细档案。");
+        htmlContent = `<p style="color: #5c6f73; font-size: 15px; line-height: 1.9; text-align: justify;">${text}</p>`;
+      }
+
+      container.innerHTML = htmlContent;
+      modal.hidden = false;
+      document.body.classList.add("modal-open");
+    };
+
+    window.closeExploreModal = function() {
+      const modal = document.getElementById("exploreModal");
+      if (modal) modal.hidden = true;
+      document.body.classList.remove("modal-open");
+    };
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key === "Escape") window.closeExploreModal();
+    });
+  </script>
+
 </html>
