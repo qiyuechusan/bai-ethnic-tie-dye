@@ -1,65 +1,92 @@
-# 蓝白之境
+# 蓝白之境 · 白族扎染数字科普站
 
-白族扎染非遗数字科普站，包含注册登录、用户数据库、访客漫游与多个非遗交互展区。
+一个以白族扎染为主题的数字非遗科普站。前端是原生 HTML / CSS / JavaScript 多页面应用，后端统一为 **JDK 17 + Spring Boot 3.5 + Spring Data JPA + MySQL 8**，前后端同源部署，启动一个进程即可浏览全部页面。
 
-## 预览
+## 功能模块
 
-需要 Node.js 22.5 或更高版本：
+| 模块 | 页面 | 内容 |
+|---|---|---|
+| 登录 / 访客 | `index.html` | 注册、登录、游客漫游、会话保持 |
+| 六大展区 | `home.html` | 首页、六个展区入口、纹样图鉴、作品墙 |
+| 纹样图鉴 | `home.html` → 展区 03 | 9 个纹样、答题解锁、纹样寓意 |
+| 作品墙 | `home.html` → 展区 06 | 作品浏览、筛选、点赞、图片上传 |
+| 工艺长卷 | `timeline.html` | 七步成蓝的工序长卷 |
+| 非遗地图 | `map.html` | 周城 / 喜洲 / 巍山三地故事与统计图表 |
+| 扎染实验室 | `diy.html` | 螺旋、缝扎、风琴折叠、豆结四种扎结方式 |
+| 问蓝知染 | `quiz.html` | 非遗知识问答与知识块解析 |
 
-```powershell
-npm start
-```
+## 协作开发
 
-Windows 也可以直接双击项目根目录的 `start.bat` 启动。此项目使用 Node.js 后端，不需要 `app.py` 或 Python Web 框架。
+### 负责「工艺长卷（模块 02）」和「非遗地图（模块 05）」的同学
 
-然后打开 `http://127.0.0.1:4174`。首次使用请先注册，注册完成后使用手机号或邮箱登录；也可以选择“暂不登录，先逛一逛”进入访客模式。
+**工艺长卷 `timeline.html`**
 
-登录与注册依赖本地服务，不能通过直接双击 `index.html` 完成认证。
+| 文件 | 用途 |
+|---|---|
+| `timeline.html` | 长卷页面结构、七步工序内容 |
+| `app.js` → `setupCraftStory()` | 滚动进度、书页展开、绣线动画 |
+| `styles.css` → `.craft-book` / `.book-*` / `.cover-*` 段落 | 长卷与封面样式 |
+| `assets/` | 长卷配图资源 |
 
-## 用户数据
+**非遗地图 `map.html`**
 
-- SQLite 数据库：`data/lanbai.sqlite`
-- 用户表：`users`，保存昵称、登录账号、密码哈希、注册时间和最近登录时间
-- 会话表：`sessions`，只保存会话令牌哈希与过期时间
-- 密码使用 Node.js `scrypt` 加盐哈希，不保存明文密码
-- 登录状态使用 HttpOnly、SameSite Cookie
-- `data/*.sqlite` 已加入 `.gitignore`，不会把用户数据库提交到 Git
+| 文件 | 用途 |
+|---|---|
+| `map.html` | 地图页面、地点标记、人物图鉴弹层 |
+| `app.js` → `setupAtlas()` | 地点切换、ECharts 图表、图鉴弹层交互 |
+| `assets/echarts.min.js` | 图表库 |
+| `styles.css` → `/* --- 3. 非遗地图 (map) --- */` 之后的 `.atlas-*` / `.marker-*` / `.ink-*` | 地图与图表样式 |
+| `backend/src/main/java/com/baizu/tiedye/atlas/` | 地图后端：`controller/AtlasController.java`、`service/AtlasService.java`、`repository/*`、`entity/MapPlace.java`、`entity/MapStat.java`、`dto/*` |
+| `db/mysql-init.sql` | 表结构：`map_place`、`map_stat` |
+| `bootstrap/DataInitializer.java` → `seedMap()` | 三个地点与统计数据 |
+| 接口 | `GET /api/map/places`、`GET /api/map/stats?place=zhoucheng` |
 
-## 页面
+### 负责「模块 3 纹样图鉴」和「模块 4 作品墙」的同学
 
-- `index.html`：沉浸式登录页
-- `home.html`：六大展区主页面
-- `timeline.html`：独立的线装书式七步工艺长卷
-- `map.html`：独立的苍洱水墨非遗地图
-- `place.html`：根据 `?place=` 参数展示独立地点手记，包含传承人、纹样、民谣、打卡指南和产业数据
-- `styles.css`：全局视觉、动效与响应式样式
-- `app.js`：靛蓝晕染背景、登录交互、滚动动效
-- `server.js`：静态文件服务、注册登录 API、会话校验与 SQLite 数据库
-- `package.json`：服务启动配置
-- `db/postgres.sql`：地图点位与产业数据的 PostgreSQL 建表及初始数据脚本
-- `assets/indigo-textile.svg`：原创扎染蝴蝶花卉纹样矢量图
-- `assets/zhoucheng.jpg`、`xizhou.jpg`、`weishan.jpg`：地图地点实拍图
-- `assets/echarts.min.js`：本地 ECharts 运行文件
-- `preview-login.png`、`preview-home.png`、`preview-map.png`、`preview-place.png`：桌面端视觉预览
+**模块 3：纹样图鉴 × 闯关答题**
 
-当前已完成用户注册登录、工艺长卷、非遗地图和地图数据接口；其余展区与后台内容管理仍为界面原型。
+| 文件 | 用途 |
+|---|---|
+| `home.html` | 展区 03 卡片、`#view-heritage` 纹样视图、`#modal-pattern` 图鉴与答题弹层 |
+| `app.js` | `openModal / closeModal / loadPatterns / renderPatterns / loadQuiz / renderQuiz / checkAnswer` |
+| `styles.css` → `模块 3 / 4：纹样图鉴与作品墙` 段落 | `.pattern-grid`、`.pattern-card`、`#modal-pattern .quiz-*` 等样式 |
+| `backend/src/main/java/com/baizu/tiedye/pattern/` | 纹样接口：`controller/dto/entity/repository/service` |
+| `backend/src/main/java/com/baizu/tiedye/quiz/` | 题库接口：`controller/dto/entity/repository/service` |
+| `db/mysql-init.sql` | 表结构：`pattern`、`quiz_question`、`quiz_option`、`knowledge_chunk` |
+| `bootstrap/DataInitializer.java` | `seedPatterns()`、`seedKnowledgeQuiz()`、`seedPatternQuiz()` |
+| 接口 | `GET /api/patterns`、`GET /api/quiz/questions?scope=pattern&limit=10`、`POST /api/quiz/answer` |
 
-## 已完成的独立页面
+**模块 4：作品墙**
 
-- `timeline.html`：线装书式封面、左右交错的七道工序、随滚动延伸的中线缝线、当前工序的翻页式入场，以及“黄绿 → 深靛”的氧化显色动画。
-- `map.html`：离线可运行的水墨风示意地图、染缸式点位、水波强调、地点手记侧栏、手绘与实拍切换、路线生长、ECharts 微看板、人物图鉴弹窗，以及“上一站 / 下一站”镜头联动。
+| 文件 | 用途 |
+|---|---|
+| `home.html` | 展区 06 卡片、`#modal-ask` 作品墙弹层、上传表单、`#lightbox` 大图预览 |
+| `app.js` | `loadArtworks / renderArtworks / filterArtworks / likeArtwork / handleUpload / previewImage / toggleUploadForm / openLightbox / closeLightbox / likeFromLightbox` |
+| `styles.css` → `模块 3 / 4` 段落 | `.gallery-*`、`.polaroid-*`、`.like-*`、`.upload-*`、`#lightbox` 等样式 |
+| `backend/src/main/java/com/baizu/tiedye/artwork/` | 作品接口：`controller/dto/entity/repository/service` |
+| `db/mysql-init.sql` | 表结构：`artwork` |
+| `bootstrap/DataInitializer.java` → `seedArtworks()` | 9 条演示作品 |
+| 上传目录 | `${UPLOAD_DIR}`，默认 `backend/uploads`，通过 `/uploads/**` 访问 |
+| 接口 | `GET /api/artworks`、`POST /api/artworks/upload`、`POST /api/artworks/{id}/like` |
 
-直接打开 `home.html` 后，可从顶部导航或六个展区卡片跳转到这两个独立页面，不需要安装任何依赖。
+**全站公共文件**
 
-## 地图接口
+| 文件 | 用途 |
+|---|---|
+| `place.html` | 地点完整手记、传承人、纹样、打卡指南和产业数据 |
+| `js/api-base.js` | 接口地址与统一请求封装，所有模块共用 |
+| `js/http.js` | 统一请求头、Cookie 与接口响应处理 |
+| `styles.css` 顶部变量与通用组件 | 全站字体、颜色、按钮、页头页脚 |
+| `backend/src/main/java/com/baizu/tiedye/common/` | 统一接口响应与异常处理 |
+| `bootstrap/DataInitializer.java` | 所有模块的演示数据 |
+| `db/mysql-init.sql` | 交付用建库建表脚本 |
 
-- `GET /api/map/places`：返回周城、喜洲、巍山的坐标、简介、传承人、特色纹样、地方民谣、打卡指南、图片和地图定位参数。
-- `GET /api/map/stats?place=zhoucheng`：返回指定地点的从业人数、经营作坊数、年产值和统计口径。
-
-本地默认使用 SQLite，服务启动时自动写入演示数据。配置 `DATABASE_URL` 后，两个接口会优先从 PostgreSQL 读取；首次部署可执行：
-
-```powershell
-psql "$env:DATABASE_URL" -f db/postgres.sql
-```
-
-当前产业统计属于演示口径，页面上已明确标注为“待调研”，正式发布前应替换为经过核实的调研数据。
+## 拉取项目后如何启动
+安装 **JDK 17**、**MySQL 8**，并确保 MySQL 服务已启动。
+进入后端目录启动（首次启动会自动建库建表并写入演示数据）：
+   ```powershell
+   cd backend
+   $env:DB_PASSWORD="你的MySQL密码"
+   .\mvnw.cmd spring-boot:run
+   ```
+浏览器访问 <http://localhost:8080/>。前端页面、接口、上传图片都由这一个进程提供，不需要再单独启动前端。

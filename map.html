@@ -6,6 +6,7 @@
   <title>苍洱寻迹 · 非遗地图 | 蓝白之境</title>
   <link rel="stylesheet" href="styles.css">
   <script defer src="assets/echarts.min.js"></script>
+  <script defer src="js/api-base.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body class="page-home page-standalone page-atlas">
@@ -25,15 +26,17 @@
       <nav class="main-nav" id="mainNav" aria-label="主导航">
         <a href="home.html">首页</a>
         <a href="home.html#modules">六个展区</a>
+        <a href="diy.html">扎染实验室</a>
         <a href="timeline.html">工艺长卷</a>
+        <a href="home.html#pattern">纹样图鉴</a>
+        <a href="quiz.html">问蓝知染</a>
         <a class="is-active" href="map.html" aria-current="page">寻迹地图</a>
-        <a href="home.html#heritage">纹样故事</a>
-        <a href="home.html#about">关于扎染</a>
+        <a href="home.html#gallery">作品墙</a>
       </nav>
       <div class="header-actions">
         <span class="visitor-state"><i></i>访客漫游中</span>
         <a class="header-login" href="index.html">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"></circle><path d="M5.5 20c.6-4 2.7-6 6.5-6s5.9 2 6.5 6"></path></svg>登录
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"></circle><path d="M5.5 20c.6-4 2.7-6 6.5-6s5.9 2 6.5 6"></path></svg>登录 / 注册
         </a>
         <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="打开菜单"><span></span><span></span></button>
       </div>

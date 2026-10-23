@@ -258,32 +258,19 @@
     }
 
     async function requestJson(url, body) {
-      let response;
       try {
-        response = await fetch(url, {
+        return await window.LANBAI_API(url.replace(/^\/api/, ""), {
           method: "POST",
-          credentials: "same-origin",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body)
         });
-      } catch {
-        throw new Error("无法连接登录服务，请先运行 npm start。");
+      } catch (error) {
+        const wrapped = new Error(
+          error.status ? (error.message || "请求未能完成，请稍后重试。")
+                       : "无法连接登录服务，请确认 Spring Boot 已启动。"
+        );
+        wrapped.status = error.status;
+        throw wrapped;
       }
-
-      let data = {};
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error("服务器返回了无法识别的响应。");
-      }
-
-      if (!response.ok) {
-        const error = new Error(data.message || "请求未能完成，请稍后重试。");
-        error.status = response.status;
-        error.data = data;
-        throw error;
-      }
-      return data;
     }
 
     function validAccount(value) {
@@ -392,8 +379,18 @@
       });
     });
 
-    showRegister.addEventListener("click", () => setMode("register"));
-    showLogin.addEventListener("click", () => setMode("login"));
+    // 登录 / 注册切换统一走事件委托：即使按钮重新渲染或直接点中文字区域也能生效。
+    card.addEventListener("click", (event) => {
+      const trigger = event.target.closest("#showRegister, #showLogin, [data-auth-switch]");
+      if (!trigger) return;
+      const wantsRegister = trigger.id === "showRegister" || trigger.dataset.authSwitch === "register";
+      setMode(wantsRegister ? "register" : "login");
+    });
+
+    // 支持 index.html?mode=register 直接进入注册面板。
+    if (new URLSearchParams(window.location.search).get("mode") === "register") {
+      setMode("register");
+    }
 
     forgot.addEventListener("click", () => {
       showToast("当前版本暂不支持自助找回密码，请联系项目管理员。");
@@ -446,7 +443,7 @@
           password: registerPassword.value
         });
 
-        account.value = data.user.account;
+        account.value = data.account;
         password.value = "";
         registerForm.reset();
         setMode("login");
@@ -490,12 +487,7 @@
     };
 
     try {
-      const response = await fetch("/api/session", {
-        credentials: "same-origin",
-        headers: { Accept: "application/json" }
-      });
-      if (!response.ok) return;
-      const session = await response.json();
+      const session = await window.LANBAI_API("/session");
 
       if (session.role === "user" && session.user) {
         setIdentity(`${session.user.displayName} · 已登录`);
@@ -506,10 +498,8 @@
           event.preventDefault();
           loginLink.setAttribute("aria-busy", "true");
           try {
-            await fetch("/api/logout", {
+            await window.LANBAI_API("/logout", {
               method: "POST",
-              credentials: "same-origin",
-              headers: { "Content-Type": "application/json" },
               body: "{}"
             });
           } finally {
@@ -586,6 +576,41 @@
       }, 1200);
     } else {
       revealItems.forEach((item) => item.classList.add("is-visible"));
+    }
+
+    // 六个展区整卡可点：data-href 跳转页面，data-modal 打开展区内弹层。
+    document.querySelectorAll(".module-card[data-href], .module-card[data-modal]").forEach((card) => {
+      const activate = () => {
+        const href = card.dataset.href;
+        const modalId = card.dataset.modal;
+        if (href) {
+          window.location.href = href;
+        } else if (modalId && typeof window.openModal === "function") {
+          window.openModal(modalId);
+        }
+      };
+
+      card.addEventListener("click", (event) => {
+        // 卡内自带的按钮 / 链接会自行处理，避免重复触发。
+        if (event.target.closest("a, button")) return;
+        activate();
+      });
+
+      card.addEventListener("keydown", (event) => {
+        if (event.target !== card) return;
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        activate();
+      });
+    });
+
+    // 其他页面通过 home.html#pattern / #gallery 直达对应展区弹层。
+    const deepLink = window.location.hash;
+    if (deepLink === "#pattern" || deepLink === "#gallery") {
+      const viewName = deepLink === "#pattern" ? "heritage" : "modules";
+      const modalId = deepLink === "#pattern" ? "modal-pattern" : "modal-ask";
+      if (typeof window.switchView === "function") window.switchView(viewName);
+      if (typeof window.openModal === "function") window.openModal(modalId);
     }
   }
 
@@ -1542,21 +1567,21 @@
         workshops: 200,
         annualOutput: "待调研",
         annualOutputUnit: "万元",
-        sourceNote: "本地预览数据 · 启动 npm start 后可读取数据库接口"
+        sourceNote: "本地预览数据 · 启动 Spring Boot 后可读取数据库接口"
       },
       xizhou: {
         workers: 1200,
         workshops: 85,
         annualOutput: "待调研",
         annualOutputUnit: "万元",
-        sourceNote: "本地预览数据 · 启动 npm start 后可读取数据库接口"
+        sourceNote: "本地预览数据 · 启动 Spring Boot 后可读取数据库接口"
       },
       weishan: {
         workers: 650,
         workshops: 40,
         annualOutput: "待调研",
         annualOutputUnit: "万元",
-        sourceNote: "本地预览数据 · 启动 npm start 后可读取数据库接口"
+        sourceNote: "本地预览数据 · 启动 Spring Boot 后可读取数据库接口"
       }
     };
 
@@ -1570,14 +1595,7 @@
     let lastStats = null;
     let lastStatsPlace = null;
 
-    const fetchJson = async (url) => {
-      const response = await fetch(url, {
-        credentials: "same-origin",
-        headers: { Accept: "application/json" }
-      });
-      if (!response.ok) throw new Error("地图数据暂时无法读取");
-      return response.json();
-    };
+    const fetchJson = (url) => window.LANBAI_API(url.replace(/^\/api/, ""));
 
     const updateCamera = (place) => {
       const rect = atlasViewport.getBoundingClientRect();
@@ -2034,8 +2052,9 @@
 
     try {
       const data = await fetchJson("/api/map/places");
-      if (Array.isArray(data.places) && data.places.length >= 3) {
-        places = data.places.map((apiPlace) => {
+      const apiPlaces = Array.isArray(data) ? data : data?.places;
+      if (Array.isArray(apiPlaces) && apiPlaces.length >= 3) {
+        places = apiPlaces.map((apiPlace) => {
           const localPlace = fallbackPlaces.find((place) => place.id === apiPlace.id) || {};
           return {
             ...localPlace,
@@ -2061,3 +2080,334 @@
   setupAtlas();
   setupPlaceDetail();
 })();
+// ==========================================
+// 阶段四：前后端联调逻辑
+// ==========================================
+function openModal(modalId) {
+  document.getElementById(modalId).classList.add('active');
+  if (modalId === 'modal-pattern') {
+    loadPatterns();
+    loadQuiz();
+  } else if (modalId === 'modal-ask') {
+    loadArtworks();
+  }
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).classList.remove('active');
+}
+
+// ---------------- 模块 3：图鉴与答题 ----------------
+let allPatterns = [];
+let allQuestions = [];
+let currentQuizIndex = 0;
+let unlockedIds = JSON.parse(localStorage.getItem('unlockedPatterns') || '[]');
+
+async function loadPatterns() {
+  if (allPatterns.length > 0) return renderPatterns();
+  try {
+    allPatterns = await window.LANBAI_API('/patterns');
+    renderPatterns();
+  } catch (err) {
+    console.error('获取纹样失败', err);
+  }
+}
+
+function renderPatterns() {
+  const grid = document.getElementById('pattern-grid');
+  grid.innerHTML = allPatterns.map(p => {
+    const isUnlocked = unlockedIds.includes(p.id);
+    // 由于你的图片路径是 assets/xxx.png，可以直接用
+    return `
+      <div class="pattern-card ${isUnlocked ? 'unlocked' : ''}">
+        <img src="${p.imageUrl}" alt="${p.name}" onerror="this.src='assets/indigo-textile.svg'">
+        <h4>${isUnlocked ? p.name : '未解锁'}</h4>
+        <p>${isUnlocked ? p.meaning : '答对题目解锁'}</p>
+      </div>
+    `;
+  }).join('');
+}
+
+async function loadQuiz() {
+  if (allQuestions.length > 0) return renderQuiz();
+  try {
+    // 模块 3 只取纹样题；正确答案只在提交后由后端返回。
+    const data = await window.LANBAI_API('/quiz/questions?scope=pattern&limit=10');
+    allQuestions = Array.isArray(data) ? data : (data.questions || []);
+    currentQuizIndex = 0;
+    renderQuiz();
+  } catch (err) {
+    console.error('获取题目失败', err);
+  }
+}
+
+let quizBusy = false;
+
+function renderQuiz() {
+  const q = allQuestions[currentQuizIndex];
+  const questionElement = document.getElementById('quiz-question');
+  const optionsElement = document.getElementById('quiz-options');
+  const feedback = document.getElementById('quiz-feedback');
+
+  if (!q) {
+    questionElement.textContent = "恭喜！所有题目已完成。";
+    optionsElement.innerHTML = "";
+    feedback.textContent = "";
+    return;
+  }
+
+  questionElement.textContent = `第 ${currentQuizIndex + 1} 题：${q.stem}`;
+  const options = q.options || [];
+  optionsElement.innerHTML = options
+    .map(option => `<button type="button" data-option-key="${option.key}">${option.key}. ${option.content}</button>`)
+    .join('');
+  optionsElement.querySelectorAll('button').forEach((button) => {
+    button.addEventListener('click', () => checkAnswer(q, button));
+  });
+  feedback.textContent = "";
+}
+
+async function checkAnswer(question, button) {
+  if (quizBusy) return;
+  const feedback = document.getElementById('quiz-feedback');
+  const buttons = Array.from(document.querySelectorAll('#quiz-options button'));
+  quizBusy = true;
+  buttons.forEach(item => { item.disabled = true; });
+
+  try {
+    const result = await window.LANBAI_API('/quiz/answer', {
+      method: 'POST',
+      body: JSON.stringify({ questionId: question.id, optionKey: button.dataset.optionKey })
+    });
+
+    if (result.correct) {
+      feedback.style.color = "green";
+      feedback.textContent = `回答正确！${result.explanation || ''}`;
+
+      if (result.patternId && !unlockedIds.includes(result.patternId)) {
+        unlockedIds.push(result.patternId);
+        localStorage.setItem('unlockedPatterns', JSON.stringify(unlockedIds));
+        renderPatterns(); // 实时更新图鉴解锁状态
+      }
+
+      setTimeout(() => {
+        currentQuizIndex++;
+        quizBusy = false;
+        renderQuiz();
+      }, 1800);
+    } else {
+      feedback.style.color = "red";
+      feedback.textContent = '回答错误，请再试一次。';
+      buttons.forEach(item => { item.disabled = false; });
+      quizBusy = false;
+    }
+  } catch (err) {
+    feedback.style.color = "red";
+    feedback.textContent = err.message || '答题失败，请稍后重试。';
+    buttons.forEach(item => { item.disabled = false; });
+    quizBusy = false;
+  }
+}
+
+// ---------------- 模块 4：作品墙 ----------------
+let currentArtworks = []; // 缓存当前获取的数据，用于筛选
+
+function toggleUploadForm() {
+  const container = document.getElementById('upload-form-container');
+  container.style.display = container.style.display === 'none' ? 'flex' : 'none';
+}
+
+// 预览上传的图片
+function previewImage(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('previewImg').src = e.target.result;
+      document.getElementById('previewImg').style.display = 'block';
+      document.getElementById('previewText').style.display = 'none';
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+async function loadArtworks() {
+  try {
+    currentArtworks = await window.LANBAI_API('/artworks');
+    renderArtworks(currentArtworks);
+  } catch (err) {
+    console.error('获取作品失败', err);
+  }
+}
+
+// 渲染画廊
+function renderArtworks(artworks) {
+  const grid = document.getElementById('artwork-grid');
+  if(artworks.length === 0) {
+    grid.innerHTML = '<p style="color:var(--muted); width:100%; text-align:center;">暂时还没有作品，快来挂上第一张拍立得吧！</p>';
+    return;
+  }
+
+  grid.innerHTML = artworks.map(a => {
+    const imgSrc = window.LANBAI_ASSET_URL(a.imageUrl);
+    const likes = a.likes || 0;
+
+    // 注意这里加了 onclick="openLightbox(${a.id})" 以及对应的事件
+    return `
+      <div class="polaroid-card" onclick="openLightbox(${a.id})">
+        <div class="clip"></div>
+        <img class="polaroid-image" src="${imgSrc}" alt="${a.title}" onerror="this.src='assets/indigo-textile.svg'">
+        <div class="polaroid-caption">
+          <div class="polaroid-title">${a.title}</div>
+          <div class="polaroid-desc">${a.description || '这位匠人很懒，没有留下感悟。'}</div>
+          <div class="polaroid-author">—— ${a.authorName} · ${a.tieMethod}</div>
+
+          <!-- 这里加了一个 event.stopPropagation()，防止点击点赞时触发灯箱弹出 -->
+          <div class="like-vat" onclick="event.stopPropagation(); likeArtwork(${a.id}, this)">
+            <i class="vat-icon"></i>
+            <span class="like-count">${likes}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// 筛选功能
+function filterArtworks(method, btnElement) {
+  // 切换按钮样式
+  document.querySelectorAll('.filter-tags button').forEach(btn => btn.classList.remove('active'));
+  btnElement.classList.add('active');
+
+  // 过滤数据
+  if (method === '全部') {
+    renderArtworks(currentArtworks);
+  } else {
+    const filtered = currentArtworks.filter(a => a.tieMethod === method);
+    renderArtworks(filtered);
+  }
+}
+
+// 点赞功能
+async function likeArtwork(id, element) {
+  // 防止重复点击
+  if(element.classList.contains('active')) return;
+
+  try {
+    const result = await window.LANBAI_API(`/artworks/${id}/like`, { method: 'POST' });
+    // 以服务端返回的最新点赞数为准，触发水波纹动画
+    const countSpan = element.querySelector('.like-count');
+    countSpan.textContent = result.likes;
+    element.classList.add('active');
+
+    // 同步更新缓存数据，免得切筛选时点赞数又变回去了
+    const artwork = currentArtworks.find(a => a.id === id);
+    if (artwork) artwork.likes = result.likes;
+  } catch (err) {
+    console.error('点赞失败', err);
+  }
+}
+
+async function handleUpload(event) {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+
+  // 提交按钮变文字
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = '悬挂中...';
+  submitBtn.disabled = true;
+
+  try {
+    await window.LANBAI_API('/artworks/upload', {
+      method: 'POST',
+      body: formData
+    });
+
+    // 清空表单和预览
+    event.target.reset();
+    document.getElementById('previewImg').style.display = 'none';
+    document.getElementById('previewText').style.display = 'block';
+
+    toggleUploadForm();
+    loadArtworks(); // 刷新列表
+  } catch (err) {
+    console.error(err);
+    alert(err.message || '上传失败');
+  } finally {
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+  }
+}
+// ===== 灯箱交互逻辑 =====
+let currentLightboxId = null;
+
+function openLightbox(id) {
+  const artwork = currentArtworks.find(a => a.id === id);
+  if (!artwork) return;
+
+  currentLightboxId = id;
+  const imgSrc = window.LANBAI_ASSET_URL(artwork.imageUrl);
+
+  document.getElementById('lightbox-img').src = imgSrc;
+  document.getElementById('lightbox-title').textContent = artwork.title;
+  document.getElementById('lightbox-desc').textContent = artwork.description || '这位匠人很懒，没有留下感悟。';
+  document.getElementById('lightbox-author').textContent = `作者：${artwork.authorName} · 技法：${artwork.tieMethod}`;
+
+  const likeSpan = document.getElementById('lightbox-likes');
+  likeSpan.textContent = artwork.likes || 0;
+
+  // 如果已经点过赞（颜色变深），这里也要同步
+  const likeVat = document.getElementById('lightbox-like');
+  if (artwork.liked) {
+    likeVat.classList.add('active');
+  } else {
+    likeVat.classList.remove('active');
+  }
+
+  document.getElementById('lightbox').classList.add('active');
+}
+
+function closeLightbox(event) {
+  // 如果点击的是外部背景，或者是关闭按钮，则关闭
+  if (!event || event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
+    document.getElementById('lightbox').classList.remove('active');
+    currentLightboxId = null;
+  }
+}
+
+// 从灯箱里点赞
+async function likeFromLightbox(event) {
+  event.stopPropagation();
+  const likeVat = document.getElementById('lightbox-like');
+  if (likeVat.classList.contains('active')) return; // 防止重复点
+
+  const id = currentLightboxId;
+  try {
+    const result = await window.LANBAI_API(`/artworks/${id}/like`, { method: 'POST' });
+    // 更新灯箱里的数字和状态
+    const countSpan = document.getElementById('lightbox-likes');
+    countSpan.textContent = result.likes;
+    likeVat.classList.add('active');
+
+    // 同步更新底层画廊的数据和UI
+    const artwork = currentArtworks.find(a => a.id === id);
+    if (artwork) {
+      artwork.likes = result.likes;
+      artwork.liked = true;
+    }
+
+    // 找到背后的卡片，更新它的点赞UI
+    const cards = document.querySelectorAll('.polaroid-card');
+    cards.forEach(card => {
+      if (card.getAttribute('onclick').includes(`(${id})`)) {
+        const miniLike = card.querySelector('.like-vat');
+        if (miniLike) {
+          miniLike.querySelector('.like-count').textContent = result.likes;
+          miniLike.classList.add('active');
+        }
+      }
+    });
+  } catch (err) {
+    console.error('点赞失败', err);
+  }
+}
