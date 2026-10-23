@@ -1,6 +1,7 @@
 import { fetchDiyMethods, mockDiyMethods } from './diy-api.js';
 import { createDiyRenderer } from './renderer/index.js';
 import { createSeed } from './renderer/random.js';
+import { USE_MOCK } from './config.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -20,7 +21,6 @@ const resetButton = $('diyReset');
 const downloadButton = $('diyDownload');
 const reseedButton = $('diyReseed');
 const errorPanel = $('diyError');
-const errorText = $('diyErrorText');
 const retryButton = $('diyRetry');
 const mockButton = $('diyUseMock');
 const dataBadge = $('diyDataBadge');
@@ -33,7 +33,6 @@ let selectedIndex = -1;
 let dips = 1;
 let busy = false;
 let hasDyed = false;
-let usingMock = false;
 
 function updateSeedLabel() {
   seedLabel.textContent = renderer.getSeed();
@@ -151,17 +150,15 @@ function selectMethod(index) {
   resetPreviewState();
 }
 
-function showLoadError(error) {
-  errorText.textContent = error?.message || '暂时无法读取扎结方式。';
-  errorPanel.hidden = false;
-  methodList.replaceChildren();
-  const message = document.createElement('p');
-  message.className = 'diy-loading';
-  message.textContent = '未能读取扎结方式。';
-  methodList.append(message);
-  methodCount.textContent = '--';
-  setBusy(false);
-  startButton.disabled = true;
+function useMockMethods(message = '已切换到演示数据') {
+  methods = mockDiyMethods;
+  dataBadge.textContent = '演示数据';
+  methodCount.textContent = String(methods.length).padStart(2, '0');
+  errorPanel.hidden = true;
+  renderMethodList();
+  selectMethod(0);
+  startButton.disabled = false;
+  if (message) showToast(message);
 }
 
 async function loadMethods() {
@@ -172,6 +169,11 @@ async function loadMethods() {
   loading.textContent = '正在读取扎结方式…';
   methodList.append(loading);
   startButton.disabled = true;
+
+  if (USE_MOCK) {
+    useMockMethods('当前使用本地演示数据');
+    return;
+  }
 
   try {
     const data = await fetchDiyMethods();
@@ -186,7 +188,8 @@ async function loadMethods() {
     selectMethod(0);
     startButton.disabled = false;
   } catch (error) {
-    showLoadError(error);
+    // 静态预览或后端尚未启动时仍可完整体验四种扎结方式。
+    useMockMethods('后端暂未连接，已自动切换到演示数据');
   }
 }
 
@@ -269,15 +272,7 @@ $('diyDips').addEventListener('click', (event) => {
 retryButton.addEventListener('click', loadMethods);
 
 mockButton.addEventListener('click', () => {
-  methods = mockDiyMethods;
-  usingMock = true;
-  dataBadge.textContent = '演示数据';
-  methodCount.textContent = String(methods.length).padStart(2, '0');
-  errorPanel.hidden = true;
-  renderMethodList();
-  selectMethod(0);
-  startButton.disabled = false;
-  showToast('已切换到演示数据');
+  useMockMethods();
 });
 
 updateSeedLabel();
