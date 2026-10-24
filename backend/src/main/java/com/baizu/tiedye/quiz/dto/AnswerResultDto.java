@@ -5,8 +5,6 @@ public record AnswerResultDto(
         boolean correct,
         String correctOptionKey,
         String explanation,
-        String source,
-        KnowledgeDto knowledge,
         Long patternId
 ) {
 }

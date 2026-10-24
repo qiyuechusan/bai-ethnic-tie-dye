@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="蓝白之境·问蓝知染：通过辨析题与知识块，理解白族扎染的工艺、纹样与历史。">
+  <meta name="description" content="蓝白之境·问蓝知染：和白族扎染智能导师对话，检索知识库、辨析概念、生成练习题与纹样。">
   <meta name="theme-color" content="#f4f0e5">
   <title>蓝白之境 · 问蓝知染</title>
   <link rel="icon" type="image/svg+xml" href="assets/indigo-textile.svg">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="lab.css">
+  <link rel="stylesheet" href="lab-agent.css">
+  <link rel="stylesheet" href="tutor.css">
   <script defer src="js/api-base.js"></script>
   <script defer src="app.js"></script>
-  <script type="module" src="js/quiz-page.js"></script>
+  <script type="module" src="js/tutor-page.js?v=20261024b"></script>
 </head>
 <body class="page-home page-lab page-quiz">
   <a class="skip-link" href="#main-content">跳到主要内容</a>
@@ -64,96 +66,87 @@
   <main class="lab-page" id="main-content">
     <header class="lab-heading reveal">
       <div class="lab-heading-copy">
-        <p class="eyebrow"><span></span>MODULE 06 / ASK &amp; LEARN</p>
-        <h1>问蓝知染，<br><em>一题一答。</em></h1>
+        <h1>问蓝知染，<br><em>一问问到底。</em></h1>
       </div>
       <div class="lab-heading-side">
-        <p>从容易混淆的防染知识出发，答完一题，就沿着资料回到技艺的原点。<br>没有标准答案的堆砌，只有一条可以继续查证的线索。</p>
-        <div class="lab-heading-meta">
-          <span>RAG / KNOWLEDGE GROUNDED</span>
-          <span id="quizDataBadge" class="lab-badge">接口题库</span>
-        </div>
+        <p>先检索知识库，再决定是答疑、出题，还是调用扎染实验室画一张纹样。<br>答不上来时，它会告诉你“没收录”，而不是编一个答案。</p>
       </div>
     </header>
 
-    <section class="quiz-shell lab-panel reveal" aria-label="白族扎染知识答题">
-      <div class="quiz-topbar" id="quizTopbar">
-        <div class="quiz-progress-label">
-          <span class="section-number">01 / 答题进度</span>
-          <strong id="quizIndex">01 / 08</strong>
-        </div>
-        <div class="quiz-dots" id="quizDots" aria-hidden="true"></div>
-        <div class="quiz-score">答对 <b id="quizScore">0</b> 题</div>
-      </div>
-
-      <div class="quiz-grid" id="quizGrid">
-        <div class="quiz-main">
-          <div class="quiz-tags">
-            <span id="quizCategory">加载中</span>
-            <span id="quizDifficulty">难度 ···</span>
+    <section class="tutor-shell lab-panel reveal" id="tutorView" aria-label="智能非遗导师">
+      <div class="tutor-main">
+        <div class="tutor-toolbar">
+          <div class="tutor-toolbar-title">
+            <span class="section-number">01 / 智能导师</span>
+            <strong>问蓝知染</strong>
           </div>
-          <h2 id="quizStem">正在读取题目…</h2>
-          <div class="quiz-options" id="quizOptions" role="radiogroup" aria-label="选项"></div>
+          <div class="tutor-toolbar-actions">
+            <button class="lab-quiet" id="tutorHistoryButton" type="button">历史会话</button>
+            <button class="lab-quiet" id="tutorNewSession" type="button">新会话</button>
+          </div>
+        </div>
 
-          <div class="quiz-actions">
-            <button class="lab-primary" id="quizSubmit" type="button" disabled>
-              <span>提交答案</span>
+        <div class="tutor-messages" id="tutorMessages" role="log" aria-live="polite">
+          <div class="tutor-empty" id="tutorEmpty">
+            <span class="section-number">从这里开始</span>
+            <h2>先看看我能回答什么。</h2>
+            <p>我掌握白族扎染的扎结技法、氧化显色、纹样语义、易混辨析、非遗与产地、工艺流程。你可以直接提问，也可以让我出题或画纹样。</p>
+            <div class="tutor-suggestions" id="tutorEmptySuggestions"></div>
+          </div>
+        </div>
+
+        <form class="tutor-composer" id="tutorComposer">
+          <label class="sr-only" for="tutorInput">输入问题</label>
+          <textarea id="tutorInput" rows="2" maxlength="500"
+            placeholder="试试：扎染和蜡染怎么区分？"></textarea>
+          <div class="tutor-composer-actions">
+            <div class="tutor-quick-actions">
+              <button type="button" class="tutor-chip" data-quick="考我一道防染辨析题">出题</button>
+              <button type="button" class="tutor-chip" data-quick="画一个蝴蝶纹看看">画纹样</button>
+            </div>
+            <button class="lab-primary" id="tutorSend" type="submit">
+              <span>发送</span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10M13 7l5 5-5 5"></path></svg>
             </button>
-            <button class="lab-quiet" id="quizNext" type="button" hidden>下一题</button>
           </div>
+        </form>
+      </div>
 
-          <div class="quiz-feedback" id="quizFeedback" hidden>
-            <div class="quiz-verdict" id="quizVerdict"></div>
-            <div class="quiz-explanation">
-              <span class="section-number">解析</span>
-              <p id="quizExplanation"></p>
-              <p class="quiz-source" id="quizSource"></p>
-              <div class="quiz-knowledge" id="quizKnowledge"></div>
-            </div>
+      <aside class="tutor-side">
+        <div class="tutor-side-card">
+          <span class="section-number">02 / 知识范围</span>
+          <div id="tutorCatalog">
+            <p class="tutor-catalog-summary">正在读取知识库…</p>
           </div>
         </div>
 
-        <aside class="quiz-side">
-          <div class="quiz-side-card">
-            <span class="section-number">02 / 知识坐标</span>
-            <h3>不是背答案，<br>是回到资料。</h3>
-            <p>每道题都对应一个知识块。提交后会展示解析、来源和相关资料，方便继续查证。</p>
-            <div class="quiz-side-rule"><i></i><span>KNOWLEDGE CHUNK</span></div>
-            <span class="quiz-side-note">RAG · LIGHTWEIGHT / NO LLM</span>
-          </div>
-
-          <section class="lab-error" id="quizError" hidden>
-            <span class="section-number">CONNECTION</span>
-            <p id="quizErrorText">暂时无法连接题库接口。</p>
-            <div class="lab-error-actions">
-              <button class="lab-quiet" id="quizRetry" type="button">重试</button>
-              <button class="lab-quiet" id="quizUseMock" type="button">使用演示题库</button>
-            </div>
-          </section>
-        </aside>
-      </div>
-
-      <div class="quiz-result" id="quizResult" hidden>
-        <span class="section-number">RESULT / 答题完成</span>
-        <h2><span id="quizResultScore">0 / 8</span><br>题答对了。</h2>
-        <p id="quizResultText"></p>
-        <div class="quiz-result-actions">
-          <button class="lab-primary" id="quizRestart" type="button">
-            <span>再答一轮</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v6h-6"></path></svg>
-          </button>
-          <a class="lab-quiet" href="home.html#modules">回到六个展区</a>
+        <div class="tutor-side-card" id="tutorStatsCard" hidden>
+          <span class="section-number">03 / 学习画像</span>
+          <div id="tutorStats"></div>
         </div>
-      </div>
+      </aside>
     </section>
 
-    <section class="lab-notes reveal" aria-label="答题说明">
-      <div><span>01</span><p><strong>先判断</strong><small>选项不会提前泄露正确答案。</small></p></div>
-      <div><span>02</span><p><strong>再对照</strong><small>提交后由后端判定，并返回解析。</small></p></div>
-      <div><span>03</span><p><strong>后查证</strong><small>每道题都附有知识块与资料来源。</small></p></div>
+    <section class="lab-notes reveal" aria-label="使用说明">
+      <div><span>01</span><p><strong>先问</strong><small>用自然语言提问，导师会先检索知识库。</small></p></div>
+      <div><span>02</span><p><strong>再辨</strong><small>出题、判分与学习画像都由服务端完成。</small></p></div>
+      <div><span>03</span><p><strong>后看</strong><small>每条回答都附引用，可回到知识分片查证。</small></p></div>
     </section>
   </main>
+
+  <div class="tutor-history-modal" id="tutorHistoryModal" hidden>
+    <button class="tutor-history-backdrop" id="tutorHistoryBackdrop" type="button" aria-label="关闭历史会话"></button>
+    <section class="tutor-history-card" role="dialog" aria-modal="true" aria-labelledby="tutorHistoryTitle">
+      <header class="tutor-history-head">
+        <div>
+          <span class="section-number">历史会话</span>
+          <h2 id="tutorHistoryTitle">我的提问记录</h2>
+        </div>
+        <button class="tutor-history-close" id="tutorHistoryClose" type="button" aria-label="关闭">×</button>
+      </header>
+      <div class="tutor-history-list" id="tutorHistoryList"></div>
+    </section>
+  </div>
 
   <footer class="site-footer">
     <div class="footer-brand">

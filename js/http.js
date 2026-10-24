@@ -29,10 +29,19 @@ export async function request(path, options = {}) {
   }
 
   if (!response.ok) {
-    throw new Error(payload?.message || `请求失败（HTTP ${response.status}）`);
+    if (response.status === 401) {
+      window.location.href = 'index.html?loginRequired=1';
+    }
+    const error = new Error(payload?.message || `请求失败（HTTP ${response.status}）`);
+    error.status = response.status;
+    error.code = payload?.code;
+    throw error;
   }
   if (payload?.code !== 0) {
-    throw new Error(payload?.message || '请求失败');
+    const error = new Error(payload?.message || '请求失败');
+    error.status = response.status;
+    error.code = payload?.code;
+    throw error;
   }
   return payload.data;
 }

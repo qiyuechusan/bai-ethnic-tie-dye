@@ -1,0 +1,98 @@
+[
+  {
+    "chunkKey": "motif_semantics_butterfly_01",
+    "category": "motif",
+    "title": "蝴蝶纹的文化寓意",
+    "text": "蝴蝶纹是白族扎染中最具代表性的纹样之一。白族民间流传“化蝶”的叙事，蝴蝶常被用来寄托爱情、生命延续、吉祥与美好生活。扎染中的蝴蝶多以左右镜像的蝶翅为基本单元，用缝扎勾勒轮廓，翅尖与触须再用缚扎或撮扎表现细节。需要说明的是，具体寓意会随地域、家庭和使用场景变化，这里给出的是常见文化解读。",
+    "keywords": ["蝴蝶纹", "化蝶", "爱情", "吉祥", "镜像对称", "缝扎"],
+    "metadata": {
+      "keywords": ["蝴蝶纹", "化蝶", "爱情", "吉祥", "镜像对称"],
+      "motif": "butterfly",
+      "symmetry": "mirror",
+      "confidence_note": "常见文化解读"
+    },
+    "source": "白族扎染纹样资料与地方口述整理",
+    "confidence": "B",
+    "role": "fact"
+  },
+  {
+    "chunkKey": "motif_semantics_erhai_01",
+    "category": "motif",
+    "title": "洱海波纹的家园意象",
+    "text": "洱海波纹以水平起伏的波浪为骨架，常被理解为苍山洱海自然环境的缩影，寄托对家园、丰收和日子绵长的祝愿。工艺上常用缚扎形成条纹，用缝扎勾勒曲线，扎结点沿波浪走向分布。它既能做成连续的边饰，也能作为围巾、衣襟上的主纹。",
+    "keywords": ["洱海波纹", "水波", "家园", "缚扎", "条纹", "连续纹"],
+    "metadata": {
+      "keywords": ["洱海波纹", "水波", "家园", "缚扎", "条纹"],
+      "motif": "wave",
+      "symmetry": "none",
+      "confidence_note": "常见文化解读"
+    },
+    "source": "白族扎染纹样资料与地方口述整理",
+    "confidence": "B",
+    "role": "fact"
+  },
+  {
+    "chunkKey": "motif_semantics_octagon_01",
+    "category": "motif",
+    "title": "八角花纹的圆满寓意",
+    "text": "八角花又称八瓣花，八个花瓣绕中心均匀分布，形成八折旋转对称。白族与彝族服饰中都常见八角花，常被理解为圆满、吉祥、族群团结与生活安定。扎染中常用撮扎处理花心、缝扎勾勒花瓣，再按45度旋转重复基本单元。",
+    "keywords": ["八角花", "八瓣花", "旋转对称", "圆满", "吉祥", "彝族"],
+    "metadata": {
+      "keywords": ["八角花", "八瓣花", "旋转对称", "圆满", "彝族"],
+      "motif": "octagon",
+      "symmetry": "rotational",
+      "confidence_note": "常见文化解读"
+    },
+    "source": "白族/彝族服饰纹样资料与地方口述整理",
+    "confidence": "B",
+    "role": "fact"
+  },
+  {
+    "chunkKey": "motif_semantics_plum_01",
+    "category": "motif",
+    "title": "梅花纹的坚韧意象",
+    "text": "梅花纹常被解读为坚韧、高洁和迎难而上的品格。大理风大，梅花在早春开放，民间常借梅花表达对生活的祝愿。扎染中的梅花多以五瓣为基本单元，用缝扎勾勒花瓣、撮扎点出花心，常出现在衣襟、袖口和桌布边饰上。",
+    "keywords": ["梅花纹", "坚韧", "高洁", "五瓣", "缝扎"],
+    "metadata": {
+      "keywords": ["梅花纹", "坚韧", "高洁", "五瓣", "缝扎"],
+      "motif": "plum",
+      "symmetry": "rotational",
+      "confidence_note": "常见文化解读"
+    },
+    "source": "白族扎染纹样资料与地方口述整理",
+    "confidence": "B",
+    "role": "fact"
+  },
+  {
+    "chunkKey": "motif_semantics_coin_01",
+    "category": "motif",
+    "title": "铜钱纹的世俗祝愿",
+    "text": "铜钱纹常以圆形方孔或连续圆环表现，寄托招财进宝、财源广进的朴素愿望。喜洲商帮走南闯北，铜钱纹常出现在商贾人家的布匹和家居织物中。它既是几何纹样，也带有明显的世俗生活气息。",
+    "keywords": ["铜钱纹", "招财", "商帮", "几何纹", "方孔"],
+    "metadata": {
+      "keywords": ["铜钱纹", "招财", "商帮", "几何纹", "方孔"],
+      "motif": "coin",
+      "symmetry": "rotational",
+      "confidence_note": "常见文化解读"
+    },
+    "source": "白族扎染纹样资料与喜洲商帮文化资料整理",
+    "confidence": "B",
+    "role": "fact"
+  },
+  {
+    "chunkKey": "motif_semantics_fret_01",
+    "category": "motif",
+    "title": "回纹的连绵不断",
+    "text": "回纹以连续折转的线条构成，常被理解为生生不息、福泽绵长。它适合做边饰和二方连续构图，扎染中可用夹扎形成规整块面，也可用缝扎勾勒连续线条。回纹与方格、八角花等几何纹样常一起出现，构成有秩序的布面节奏。",
+    "keywords": ["回纹", "连绵", "二方连续", "夹扎", "几何纹"],
+    "metadata": {
+      "keywords": ["回纹", "连绵", "二方连续", "夹扎", "几何纹"],
+      "motif": "fret",
+      "symmetry": "none",
+      "confidence_note": "常见文化解读"
+    },
+    "source": "白族扎染纹样资料与地方口述整理",
+    "confidence": "B",
+    "role": "fact"
+  }
+]

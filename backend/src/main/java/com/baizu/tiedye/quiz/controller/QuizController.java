@@ -26,18 +26,18 @@ public class QuizController {
     }
 
     /**
-     * 获取答题列表。响应中不包含正确答案与解析。
+     * 获取纹样图鉴答题列表。响应中不包含正确答案与解析。
      */
     @GetMapping("/questions")
     public ApiResponse<QuestionListDto> questions(
             @RequestParam(defaultValue = "8") int limit,
             @RequestParam(required = false) String category,
-            @RequestParam(defaultValue = "knowledge") String scope) {
+            @RequestParam(defaultValue = "pattern") String scope) {
         return ApiResponse.ok(quizService.listQuestions(limit, category, scope));
     }
 
     /**
-     * 提交答案，由后端判定并返回解析、来源和相关知识块。
+     * 提交纹样图鉴答案，由后端判定并返回解析。
      */
     @PostMapping("/answer")
     public ApiResponse<AnswerResultDto> answer(@Valid @RequestBody AnswerRequest request) {

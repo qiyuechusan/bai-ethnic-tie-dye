@@ -28,4 +28,10 @@ public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Long
     @Modifying
     @Query("update QuizQuestion q set q.scope = 'knowledge' where q.scope is null or q.scope = ''")
     int fillMissingScope();
+
+    /**
+     * 模块 6 旧版经典答题的题目；清理历史模拟数据时使用。
+     */
+    @Query("select q from QuizQuestion q where q.scope is null or q.scope <> 'pattern'")
+    List<QuizQuestion> findNonPatternQuestions();
 }

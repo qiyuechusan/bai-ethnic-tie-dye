@@ -7,8 +7,11 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.baizu.tiedye.auth.interceptor.LoginRequiredInterceptor;
 
 /**
  * 开发时前端可能运行在 5500（Live Server / npx serve），
@@ -23,6 +26,22 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Value("${app.upload.dir:${user.dir}/uploads}")
     private String uploadDir;
+
+    private final LoginRequiredInterceptor loginRequiredInterceptor;
+
+    public WebConfig(LoginRequiredInterceptor loginRequiredInterceptor) {
+        this.loginRequiredInterceptor = loginRequiredInterceptor;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loginRequiredInterceptor)
+                .addPathPatterns(
+                        "/diy.html",
+                        "/quiz.html",
+                        "/api/diy/agent/**",
+                        "/api/tutor/**");
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

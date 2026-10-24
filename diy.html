@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="蓝白之境·扎染实验室：选择扎结方式，在线体验白族蓝染的浸染与氧化过程。">
+  <meta name="description" content="蓝白之境·扎染实验室：用自然语言描述纹样，由智能服务检索扎染知识库并生成纹样与氧化参数。">
   <meta name="theme-color" content="#f4f0e5">
   <title>蓝白之境 · 扎染实验室</title>
   <link rel="icon" type="image/svg+xml" href="assets/indigo-textile.svg">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="lab.css">
+  <link rel="stylesheet" href="lab-agent.css">
   <script defer src="js/api-base.js"></script>
   <script defer src="app.js"></script>
-  <script type="module" src="js/diy-page.js?v=20261023c"></script>
+  <script type="module" src="js/diy-page.js?v=20261024b"></script>
 </head>
 <body class="page-home page-lab page-diy">
   <a class="skip-link" href="#main-content">跳到主要内容</a>
@@ -64,15 +65,10 @@
   <main class="lab-page" id="main-content">
     <header class="lab-heading reveal">
       <div class="lab-heading-copy">
-        <p class="eyebrow"><span></span>MODULE 05 / DIY DYE LAB</p>
         <h1>把一块白布，<br><em>交给蓝与时间。</em></h1>
       </div>
       <div class="lab-heading-side">
-        <p>选择一种扎结方式，系紧、浸染、等待氧化。<br>同一枚种子，会得到同一片纹样；换一枚种子，就换一种偶然。</p>
-        <div class="lab-heading-meta">
-          <span>CANVAS / 900 × 1125</span>
-          <span id="diyDataBadge" class="lab-badge">接口数据</span>
-        </div>
+        <p>用一句话描述纹样、面料和深浅，系统会检索扎染知识库，生成可渲染的纹样与氧化参数。</p>
       </div>
     </header>
 
@@ -81,10 +77,10 @@
         <div class="diy-stage-head">
           <div>
             <span class="section-number">01 / 染布台</span>
-            <h2 id="diyMethodName">螺旋绞缬</h2>
+            <h2 id="diyMethodName">等待生成</h2>
           </div>
-          <button class="diy-seed" id="diyReseed" type="button" title="换一枚随机种子">
-            <span>SEED</span><b id="diySeed">----</b>
+          <button class="diy-seed" id="diyReseed" type="button" title="换一个随机种子">
+            <span>随机种子</span><b id="diySeed">----</b>
           </button>
         </div>
 
@@ -96,34 +92,67 @@
         <div class="diy-canvas-caption">
           <div class="diy-status">
             <span class="diy-oxidation-dot" id="diyOxidationDot" aria-hidden="true"></span>
-            <span id="diyStatus">选择扎结方式后，开始浸染</span>
+            <span id="diyStatus">描述纹样后生成参数</span>
           </div>
-          <span class="diy-phase" id="diyPhase">PREVIEW</span>
+          <span class="diy-phase" id="diyPhase">预览</span>
         </div>
         <div class="diy-progress" aria-hidden="true"><i id="diyProgressBar"></i></div>
       </div>
 
       <aside class="diy-controls reveal">
-        <section class="control-block">
+        <section class="control-block ai-panel" id="diyAiPanel">
           <div class="control-heading">
-            <span class="section-number">02 / 扎结方式</span>
-            <span class="control-count" id="diyMethodCount">04</span>
+            <span class="section-number">02 / 纹样参数</span>
           </div>
-          <div class="diy-method-list" id="diyMethodList" role="list" aria-label="扎结方式列表">
-            <p class="diy-loading">正在读取扎结方式…</p>
+          <label class="ai-field-label" for="diyPrompt">描述你想要的纹样</label>
+          <textarea id="diyPrompt" class="ai-textarea" rows="3" maxlength="300"
+            placeholder="例如：用棉布做一块洱海波纹的围巾，浓度高一点，颜色深一些"></textarea>
+          <div class="ai-chip-row" id="diySuggestions" aria-label="灵感描述"></div>
+          <div class="ai-field-grid">
+            <label class="ai-field-label">面料
+              <select id="diyFabric">
+                <option value="cotton">棉</option>
+                <option value="linen">亚麻</option>
+                <option value="silk">蚕丝</option>
+              </select>
+            </label>
+            <label class="ai-field-label">染料浓度
+              <span class="ai-range-row">
+                <input type="range" id="diyConcentration" min="0.1" max="1" step="0.05" value="0.8">
+                <output id="diyConcentrationValue" for="diyConcentration">0.80</output>
+              </span>
+            </label>
           </div>
-          <p class="diy-method-note" id="diyMethodNote">每一种扎结方式，都会在布面留下不同的防染痕迹。</p>
+          <button class="lab-primary" id="diyGenerate" type="button">
+            <span>生成纹样参数</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10M13 7l5 5-5 5"></path></svg>
+          </button>
+          <p class="control-hint" id="diyAiStatus" role="status" aria-live="polite">
+            系统会先检索扎染知识库，再生成纹样与氧化参数。请先登录并配置可用的模型服务。
+          </p>
+          <div class="ai-result" id="diyAiResult" hidden>
+            <p id="diyAiExplanation"></p>
+            <details class="ai-citations">
+              <summary>查看知识依据</summary>
+              <ul id="diyAiCitations"></ul>
+            </details>
+            <div class="ai-result-actions">
+              <button class="lab-quiet" id="diyAiReseed" type="button">换一个种子</button>
+              <button class="lab-quiet" id="diyAiNewSession" type="button">新会话</button>
+            </div>
+          </div>
         </section>
 
         <section class="control-block">
           <div class="control-heading">
             <span class="section-number">03 / 浸染次数</span>
-            <span class="control-count">DIPS</span>
+            <span class="control-count">次数</span>
           </div>
           <div class="diy-dips" id="diyDips" role="group" aria-label="浸染次数">
             <button type="button" data-dips="1" class="is-active" aria-pressed="true">1 次</button>
             <button type="button" data-dips="2" aria-pressed="false">2 次</button>
             <button type="button" data-dips="3" aria-pressed="false">3 次</button>
+            <button type="button" data-dips="4" aria-pressed="false">4 次</button>
           </div>
           <p class="control-hint">浸染次数越多，蓝色越深，纹样边缘的层次也越明显。</p>
         </section>
@@ -133,7 +162,7 @@
             <span class="section-number">04 / 操作</span>
           </div>
           <div class="diy-actions">
-            <button class="lab-primary" id="diyStart" type="button">
+            <button class="lab-primary" id="diyStart" type="button" disabled>
               <span>开始浸染</span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10M13 7l5 5-5 5"></path></svg>
             </button>
@@ -142,28 +171,19 @@
               <button class="lab-quiet" id="diyReset" type="button">重置预览</button>
             </div>
             <button class="lab-quiet lab-wide" id="diyDownload" type="button">
-              <span>下载作品 PNG</span>
+              <span>下载作品图片</span>
               <span aria-hidden="true">↓</span>
             </button>
           </div>
-          <p class="control-hint">浸染后会经历约 2.4 秒的氧化动画：黄绿 → 青绿 → 靛蓝。</p>
-        </section>
-
-        <section class="lab-error" id="diyError" hidden>
-          <span class="section-number">CONNECTION</span>
-          <p id="diyErrorText">暂时无法连接后端接口。</p>
-          <div class="lab-error-actions">
-            <button class="lab-quiet" id="diyRetry" type="button">重试</button>
-            <button class="lab-quiet" id="diyUseMock" type="button">使用演示数据</button>
-          </div>
+          <p class="control-hint">氧化动画的色值与时长由生成参数决定。</p>
         </section>
       </aside>
     </section>
 
     <section class="lab-notes reveal" aria-label="使用说明">
-      <div><span>01</span><p><strong>扎结</strong><small>线绳扎得越紧，染液越难进入。</small></p></div>
-      <div><span>02</span><p><strong>浸染</strong><small>靛蓝在还原态染液中呈黄绿色。</small></p></div>
-      <div><span>03</span><p><strong>氧化</strong><small>接触空气后，蓝色才慢慢显现。</small></p></div>
+      <div><span>01</span><p><strong>描述</strong><small>用自然语言说明纹样、面料和深浅。</small></p></div>
+      <div><span>02</span><p><strong>检索</strong><small>系统先检索扎染工艺与纹样知识。</small></p></div>
+      <div><span>03</span><p><strong>渲染</strong><small>生成参数驱动画布与氧化动画。</small></p></div>
     </section>
   </main>
 

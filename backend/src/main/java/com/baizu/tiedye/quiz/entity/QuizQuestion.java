@@ -30,18 +30,14 @@ public class QuizQuestion {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String explanation;
 
-    @Column(name = "chunk_id")
-    private Long chunkId;
-
     /**
-     * knowledge = 模块 6 非遗问答；pattern = 模块 3 纹样图鉴闯关。
-     * 两个页面共用题库与答题接口，但默认只返回各自 scope 的题目。
+     * 当前只保留模块 3 的 pattern 题库；旧的 knowledge 题库已移除。
      */
     @Column(nullable = false, length = 16)
-    private String scope = "knowledge";
+    private String scope = "pattern";
 
     /**
-     * 模块 3 的题目关联的纹样 id；模块 6 的题目为 null。
+     * 模块 3 的题目关联的纹样 id。
      */
     @Column(name = "pattern_id")
     private Long patternId;
@@ -98,14 +94,6 @@ public class QuizQuestion {
 
     public void setExplanation(String explanation) {
         this.explanation = explanation;
-    }
-
-    public Long getChunkId() {
-        return chunkId;
-    }
-
-    public void setChunkId(Long chunkId) {
-        this.chunkId = chunkId;
     }
 
     public String getScope() {

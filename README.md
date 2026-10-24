@@ -12,8 +12,8 @@
 | 作品墙 | `home.html` → 展区 06 | 作品浏览、筛选、点赞、图片上传 |
 | 工艺长卷 | `timeline.html` | 七步成蓝的工序长卷 |
 | 非遗地图 | `map.html` | 周城 / 喜洲 / 巍山三地故事与统计图表 |
-| 扎染实验室 | `diy.html` | 螺旋、缝扎、风琴折叠、豆结四种扎结方式 |
-| 问蓝知染 | `quiz.html` | 非遗知识问答与知识块解析 |
+| 扎染实验室 | `diy.html` | 用自然语言生成纹样与氧化参数（需登录） |
+| 问蓝知染 | `quiz.html` | 智能非遗导师：RAG 问答、出题、画纹样、历史会话（需登录） |
 
 ## 协作开发
 
@@ -52,7 +52,7 @@
 | `styles.css` → `模块 3 / 4：纹样图鉴与作品墙` 段落 | `.pattern-grid`、`.pattern-card`、`#modal-pattern .quiz-*` 等样式 |
 | `backend/src/main/java/com/baizu/tiedye/pattern/` | 纹样接口：`controller/dto/entity/repository/service` |
 | `backend/src/main/java/com/baizu/tiedye/quiz/` | 题库接口：`controller/dto/entity/repository/service` |
-| `db/mysql-init.sql` | 表结构：`pattern`、`quiz_question`、`quiz_option`、`knowledge_chunk` |
+| `db/mysql-init.sql` | 表结构：`pattern`、`quiz_question`、`quiz_option`（模块 3） |
 | `bootstrap/DataInitializer.java` | `seedPatterns()`、`seedKnowledgeQuiz()`、`seedPatternQuiz()` |
 | 接口 | `GET /api/patterns`、`GET /api/quiz/questions?scope=pattern&limit=10`、`POST /api/quiz/answer` |
 
@@ -69,6 +69,7 @@
 | 上传目录 | `${UPLOAD_DIR}`，默认 `backend/uploads`，通过 `/uploads/**` 访问 |
 | 接口 | `GET /api/artworks`、`POST /api/artworks/upload`、`POST /api/artworks/{id}/like` |
 
+
 **全站公共文件**
 
 | 文件 | 用途 |
@@ -78,8 +79,10 @@
 | `js/http.js` | 统一请求头、Cookie 与接口响应处理 |
 | `styles.css` 顶部变量与通用组件 | 全站字体、颜色、按钮、页头页脚 |
 | `backend/src/main/java/com/baizu/tiedye/common/` | 统一接口响应与异常处理 |
-| `bootstrap/DataInitializer.java` | 所有模块的演示数据 |
-| `db/mysql-init.sql` | 交付用建库建表脚本 |
+| `bootstrap/DataInitializer.java` | 旧模块的演示数据 |
+| `db/mysql-init.sql` | 交付用建库建表脚本（包含模块 5/6 新表） |
+| `db/agent-rag-init.sql` | 已有数据库的模块 5/6 升级脚本 |
+| `docs/agent-api.md` | 模块 5/6 接口、JSON 参数、ReAct 动作与数据结构说明 |
 
 ## 拉取项目后如何启动
 安装 **JDK 17**、**MySQL 8**，并确保 MySQL 服务已启动。

@@ -10,14 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baizu.tiedye.common.ApiException;
 import com.baizu.tiedye.quiz.dto.AnswerRequest;
 import com.baizu.tiedye.quiz.dto.AnswerResultDto;
-import com.baizu.tiedye.quiz.dto.KnowledgeDto;
 import com.baizu.tiedye.quiz.dto.OptionDto;
 import com.baizu.tiedye.quiz.dto.QuestionDto;
 import com.baizu.tiedye.quiz.dto.QuestionListDto;
-import com.baizu.tiedye.quiz.entity.KnowledgeChunk;
 import com.baizu.tiedye.quiz.entity.QuizOption;
 import com.baizu.tiedye.quiz.entity.QuizQuestion;
-import com.baizu.tiedye.quiz.repository.KnowledgeChunkRepository;
 import com.baizu.tiedye.quiz.repository.QuizOptionRepository;
 import com.baizu.tiedye.quiz.repository.QuizQuestionRepository;
 
@@ -27,19 +24,16 @@ public class QuizService {
 
     private final QuizQuestionRepository questionRepository;
     private final QuizOptionRepository optionRepository;
-    private final KnowledgeChunkRepository chunkRepository;
 
     public QuizService(QuizQuestionRepository questionRepository,
-                       QuizOptionRepository optionRepository,
-                       KnowledgeChunkRepository chunkRepository) {
+                       QuizOptionRepository optionRepository) {
         this.questionRepository = questionRepository;
         this.optionRepository = optionRepository;
-        this.chunkRepository = chunkRepository;
     }
 
     public QuestionListDto listQuestions(int limit, String category, String scope) {
         String normalizedCategory = category == null ? null : category.trim();
-        String normalizedScope = (scope == null || scope.isBlank()) ? "knowledge" : scope.trim().toLowerCase(Locale.ROOT);
+        String normalizedScope = (scope == null || scope.isBlank()) ? "pattern" : scope.trim().toLowerCase(Locale.ROOT);
         List<QuizQuestion> questions = (normalizedCategory == null || normalizedCategory.isEmpty())
                 ? questionRepository.findByEnabledTrueAndScopeOrderBySortOrderAsc(normalizedScope)
                 : questionRepository.findByEnabledTrueAndScopeAndCategoryOrderBySortOrderAsc(
@@ -71,20 +65,11 @@ public class QuizService {
                 .findFirst()
                 .orElseThrow(() -> new ApiException(50000, "题目缺少正确答案", HttpStatus.INTERNAL_SERVER_ERROR));
 
-        KnowledgeDto knowledge = null;
-        if (question.getChunkId() != null) {
-            knowledge = chunkRepository.findById(question.getChunkId())
-                    .map(this::toKnowledgeDto)
-                    .orElse(null);
-        }
-
         return new AnswerResultDto(
                 question.getId(),
                 Boolean.TRUE.equals(selected.getCorrect()),
                 correctOption.getOptionKey(),
                 question.getExplanation(),
-                knowledge == null ? null : knowledge.source(),
-                knowledge,
                 question.getPatternId()
         );
     }
@@ -104,7 +89,4 @@ public class QuizService {
         );
     }
 
-    private KnowledgeDto toKnowledgeDto(KnowledgeChunk chunk) {
-        return new KnowledgeDto(chunk.getId(), chunk.getTitle(), chunk.getContent(), chunk.getSource());
-    }
 }

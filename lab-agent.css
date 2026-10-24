@@ -1,0 +1,239 @@
+/* 模块 5 / 6 的 Agent 界面：模式切换、AI 表单、引用、聊天与题卡。 */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ai-mode-switch {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line, rgba(13, 57, 89, 0.12));
+}
+
+.mode-segment {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(13, 57, 89, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.mode-segment button {
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted, #5c6b70);
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.mode-segment button.is-active {
+  background: var(--indigo-800, #0b3863);
+  color: #f7f3e8;
+}
+
+.mode-segment button:focus-visible {
+  outline: 2px solid var(--indigo-600, #24648e);
+  outline-offset: 2px;
+}
+
+.lab-badge.is-offline {
+  border-color: rgba(158, 106, 42, 0.35);
+  background: rgba(158, 106, 42, 0.10);
+  color: #8a5a22;
+}
+
+.lab-badge.is-online {
+  border-color: rgba(36, 100, 142, 0.35);
+  background: rgba(36, 100, 142, 0.10);
+  color: #1d5278;
+}
+
+.ai-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.ai-field-label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted, #5c6b70);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.ai-textarea {
+  width: 100%;
+  min-height: 82px;
+  padding: 11px 12px;
+  border: 1px solid rgba(13, 57, 89, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink, #17334a);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.ai-textarea:focus-visible {
+  outline: 2px solid var(--indigo-600, #24648e);
+  outline-offset: 1px;
+}
+
+.ai-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.ai-chip {
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px dashed rgba(13, 57, 89, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  color: #435c67;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ai-chip:hover {
+  border-style: solid;
+  background: rgba(36, 100, 142, 0.08);
+}
+
+.ai-field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ai-field-grid select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid rgba(13, 57, 89, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink, #17334a);
+  font: inherit;
+  font-size: 13px;
+}
+
+.ai-range-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-range-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--indigo-700, #174a73);
+}
+
+.ai-range-row output {
+  min-width: 40px;
+  color: var(--indigo-800, #0b3863);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+
+.ai-panel .lab-primary {
+  width: 100%;
+}
+
+.control-hint[data-tone="ok"] {
+  color: #2d6d5a;
+}
+
+.control-hint[data-tone="warn"] {
+  color: #8a5a22;
+}
+
+.control-hint[data-tone="error"] {
+  color: #9b3d35;
+}
+
+.ai-result {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(13, 57, 89, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.ai-result > p {
+  margin: 0;
+  color: #435c67;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.ai-citations summary {
+  color: var(--indigo-700, #174a73);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ai-citations ul {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-citations li {
+  padding-left: 10px;
+  border-left: 2px solid rgba(36, 100, 142, 0.28);
+}
+
+.ai-citations strong {
+  display: block;
+  color: #0b3863;
+  font-size: 12px;
+}
+
+.ai-citations p {
+  margin: 3px 0;
+  color: #5c6b70;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.ai-citations small {
+  color: #8a9695;
+  font-size: 11px;
+}
+
+.ai-result-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-result-actions .lab-quiet {
+  flex: 1;
+}
+
+@media (max-width: 760px) {
+  .ai-field-grid {
+    grid-template-columns: 1fr;
+  }
+}

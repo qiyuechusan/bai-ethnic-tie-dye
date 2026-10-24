@@ -5,22 +5,29 @@ import { drawSpiral } from './patterns/spiral.js';
 import { drawStitch } from './patterns/stitch.js';
 import { drawAccordion } from './patterns/accordion.js';
 import { drawBean } from './patterns/bean.js';
+import { drawMotif } from './patterns/motif.js';
+import {
+  DEFAULT_OXIDATION,
+  easeValue,
+  normalizeOxidation,
+  resolveFinalColor,
+} from './oxidation.js';
 
 const PATTERNS = {
   spiral: drawSpiral,
   stitch: drawStitch,
   accordion: drawAccordion,
   bean: drawBean,
+  motif: drawMotif,
 };
 
-// 黄绿 → 青绿 → 靛蓝，对应靛蓝染料接触空气后的氧化过程
-const OXIDATION_STOPS = ['#c9d27c', '#7e9a70', '#2d6d8e', '#0b3863'];
-const DEFAULT_COLOR = '#0b3863';
+// 黄绿 → 青绿 → 靛蓝，默认值仍与旧版一致；AI 模式可被后端参数覆盖。
+const DEFAULT_COLOR = DEFAULT_OXIDATION.finalColor;
 
 export function createDiyRenderer(canvas, options = {}) {
-  const width = options.width || 900;
-  const height = options.height || 1125;
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let width = options.width || 900;
+  let height = options.height || 1125;
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
   canvas.width = Math.round(width * dpr);
   canvas.height = Math.round(height * dpr);
@@ -29,12 +36,12 @@ export function createDiyRenderer(canvas, options = {}) {
   const ctx = canvas.getContext('2d');
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  const clothCanvas = createLayer(width, height);
-  const maskCanvas = createLayer(width, height);
-  const tintCanvas = createLayer(width, height);
-  const clothCtx = clothCanvas.getContext('2d');
-  const maskCtx = maskCanvas.getContext('2d');
-  const tintCtx = tintCanvas.getContext('2d');
+  let clothCanvas;
+  let maskCanvas;
+  let tintCanvas;
+  let clothCtx;
+  let maskCtx;
+  let tintCtx;
 
   const reducedMotion = window.matchMedia
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -42,6 +49,7 @@ export function createDiyRenderer(canvas, options = {}) {
 
   let method = null;
   let seed = options.seed || createSeed();
+  let oxidation = normalizeOxidation(options.oxidation);
   let animationId = 0;
   let destroyed = false;
   let lastRender = { color: DEFAULT_COLOR, tintAlpha: 0.24 };
@@ -51,6 +59,15 @@ export function createDiyRenderer(canvas, options = {}) {
     layer.width = layerWidth;
     layer.height = layerHeight;
     return layer;
+  }
+
+  function initLayers() {
+    clothCanvas = createLayer(width, height);
+    maskCanvas = createLayer(width, height);
+    tintCanvas = createLayer(width, height);
+    clothCtx = clothCanvas.getContext('2d');
+    maskCtx = maskCanvas.getContext('2d');
+    tintCtx = tintCanvas.getContext('2d');
   }
 
   function params() {
@@ -172,23 +189,46 @@ export function createDiyRenderer(canvas, options = {}) {
     return method;
   }
 
+  function setOxidationConfig(config) {
+    oxidation = normalizeOxidation(config);
+    return oxidation;
+  }
+
+  function getOxidationConfig() {
+    return { ...oxidation, stops: [...oxidation.stops] };
+  }
+
+  function resize(nextWidth, nextHeight) {
+    width = Math.max(600, Math.min(1600, Math.round(Number(nextWidth) || width)));
+    height = Math.max(600, Math.min(1600, Math.round(Number(nextHeight) || height)));
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(width * dpr);
+    canvas.height = Math.round(height * dpr);
+    canvas.style.aspectRatio = `${width} / ${height}`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    initLayers();
+    rebuild();
+  }
+
   function dye({ dips = 1, onProgress } = {}) {
     cancelAnimationFrame(animationId);
     if (!method) {
       rebuild();
     }
 
+    const config = normalizeOxidation(oxidation);
     const dipCount = Math.max(1, Math.min(4, Number(dips) || 1));
-    const finalColor = mixHex(DEFAULT_COLOR, '#061d35', (dipCount - 1) / 3);
+    const finalColor = resolveFinalColor(config, dipCount);
+    const dipColor = config.stops[0] || DEFAULT_OXIDATION.stops[0];
 
     if (reducedMotion) {
-      drawFrame({ color: finalColor, reveal: 1, sheen: 0, tintAlpha: 0.92 });
+      drawFrame({ color: finalColor, reveal: 1, sheen: 0, tintAlpha: config.tintAlpha });
       onProgress?.({ phase: 'done', progress: 1, color: finalColor });
       return Promise.resolve(finalColor);
     }
 
-    const dipDuration = 620;
-    const oxidationDuration = 2400;
+    const dipDuration = config.dipDurationMs;
+    const oxidationDuration = config.oxidationDurationMs;
     const start = performance.now();
 
     return new Promise((resolve) => {
@@ -203,27 +243,27 @@ export function createDiyRenderer(canvas, options = {}) {
           const progress = elapsed / dipDuration;
           const eased = 1 - Math.pow(1 - progress, 2);
           drawFrame({
-            color: '#c9d27c',
+            color: dipColor,
             reveal: eased,
             sheen: 0.35 * (1 - eased),
-            tintAlpha: 0.9,
+            tintAlpha: config.tintAlpha,
           });
-          onProgress?.({ phase: 'dip', progress, color: '#c9d27c' });
+          onProgress?.({ phase: 'dip', progress, color: dipColor });
           animationId = requestAnimationFrame(tick);
           return;
         }
 
         const progress = Math.min(1, (elapsed - dipDuration) / oxidationDuration);
-        const eased = 1 - Math.pow(1 - progress, 2.2);
-        const color = colorAt(OXIDATION_STOPS, eased);
+        const eased = easeValue(config.easing, progress);
+        const color = colorAt(config.stops, eased);
         const sheen = Math.sin(Math.PI * Math.min(1, progress + 0.08)) * (1 - progress * 0.55) * 0.8;
-        drawFrame({ color, reveal: 1, sheen, tintAlpha: 0.9 });
+        drawFrame({ color, reveal: 1, sheen, tintAlpha: config.tintAlpha });
         onProgress?.({ phase: 'oxidation', progress, color });
 
         if (progress < 1) {
           animationId = requestAnimationFrame(tick);
         } else {
-          drawFrame({ color: finalColor, reveal: 1, sheen: 0, tintAlpha: 0.92 });
+          drawFrame({ color: finalColor, reveal: 1, sheen: 0, tintAlpha: config.tintAlpha });
           onProgress?.({ phase: 'done', progress: 1, color: finalColor });
           resolve(finalColor);
         }
@@ -287,6 +327,8 @@ export function createDiyRenderer(canvas, options = {}) {
     cancelAnimationFrame(animationId);
   }
 
+  initLayers();
+
   // 没有 method 时先给一个默认螺旋，避免画布空白
   if (options.method) {
     method = options.method;
@@ -300,6 +342,9 @@ export function createDiyRenderer(canvas, options = {}) {
     setSeed,
     getSeed,
     getMethod,
+    setOxidationConfig,
+    getOxidationConfig,
+    resize,
     dye,
     exportPng,
     destroy,

@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:tiedye;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: false
+
+app:
+  auth:
+    require-login: false
+  ai:
+    mode: offline
+    api-key: ""
+    allow-offline-fallback: true
+    rag:
+      top-k: 6
+      min-score: 0.16
+      low-confidence: 0.18
+    agent:
+      max-iterations: 5
+      max-tool-calls: 4
+      history-turns: 8
+
+logging:
+  level:
+    com.baizu.tiedye: INFO

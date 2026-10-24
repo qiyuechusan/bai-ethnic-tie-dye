@@ -1,8 +1,21 @@
 import { request } from './http.js';
-import { mockDiyMethods } from './mock/diy-methods.js';
 
-export function fetchDiyMethods() {
-  return request('/diy/methods');
+export function generateDiyPattern(payload) {
+  return request('/diy/agent/pattern', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
 }
 
-export { mockDiyMethods };
+export function fetchDiySuggestions() {
+  return request('/diy/agent/suggestions');
+}
+
+export function fetchDiyHistory(sessionId) {
+  const params = new URLSearchParams();
+  if (sessionId) {
+    params.set('sessionId', sessionId);
+  }
+  const suffix = params.toString();
+  return request(`/diy/agent/history${suffix ? `?${suffix}` : ''}`);
+}

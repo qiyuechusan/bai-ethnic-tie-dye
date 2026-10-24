@@ -1,0 +1,30 @@
+{
+  "chunkKey": "sim_oxidation_profile_v1",
+  "category": "oxidation",
+  "title": "模拟器统一氧化参数口径",
+  "text": "本项目的 Canvas 氧化动画使用统一的演示口径，而不是某一间工坊的实测标准。基础动画：出缸色 #c9d27c（黄绿）→ #7e9a70（灰绿）→ #2d6d8e（蓝绿）→ #0b3863（靛蓝），浸染阶段约620毫秒，氧化阶段约2400毫秒。不同面料终点色略有差异：棉 #1a3660、麻 #24456e、丝 #1f4a66；氧化速率 k 值分别取 0.20、0.12、0.30 /分钟。染料浓度越高、浸染次数越多，终点色越深。以上均为项目模拟参数，传统手工氧化时长在不同工坊可从数秒到30分钟不等，答辩时应明确区分模拟参数与文献实测。",
+  "keywords": ["模拟参数", "氧化动画", "色值", "棉", "麻", "丝", "时长"],
+  "metadata": {
+    "keywords": ["模拟参数", "氧化动画", "色值", "棉", "麻", "丝"],
+    "base": {
+      "dipDurationMs": 620,
+      "oxidationDurationMs": 2400,
+      "tintAlpha": 0.92,
+      "stops": ["#c9d27c", "#7e9a70", "#2d6d8e", "#0b3863"],
+      "finalColor": "#0b3863"
+    },
+    "fabrics": {
+      "cotton": {"finalColor": "#1a3660", "k": 0.20, "dipMultiplier": 1.0},
+      "linen": {"finalColor": "#24456e", "k": 0.12, "dipMultiplier": 1.25},
+      "silk": {"finalColor": "#1f4a66", "k": 0.30, "dipMultiplier": 0.85}
+    },
+    "concentration": {
+      "low": "#3a5f8a",
+      "high": "#142c54"
+    },
+    "confidence_note": "模拟参数示例，非实测标定值"
+  },
+  "source": "项目模拟参数；参考鹿班/白族扎染公开氧化记录与色值示例",
+  "confidence": "C",
+  "role": "simulation"
+}

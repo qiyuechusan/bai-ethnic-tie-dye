@@ -1,0 +1,116 @@
+[
+  {
+    "chunk_id": "oxy_chem_01",
+    "category": "oxidation",
+    "text": "靛蓝（indigotin）几乎不溶于水，染色前需在碱性染液中经微生物发酵或还原剂还原为可溶性的隐色体靛白（呈黄绿色）。隐色体渗透进入纤维内部后，织物离开染缸接触空气，被氧气氧化重新生成不溶性靛蓝，固着于纤维，显现深蓝色。整个过程是还原-氧化循环：还原使其溶解上染，氧化使其固色显蓝。",
+    "metadata": {
+      "keywords": ["靛蓝", "隐色体", "靛白", "还原", "氧化"],
+      "fabric": null,
+      "difficulty_tag": "基础"
+    },
+    "source": "整理自：中国棉纺织行业协会靛蓝染色机理、澎湃新闻《荀子跟牛仔裤有什么关系》等公开资料"
+  },
+  {
+    "chunk_id": "oxy_stage_01",
+    "category": "oxidation",
+    "text": "浸染后刚出缸的织物呈黄绿色（隐色体颜色），并非最终蓝色；接触空气后由黄绿→灰绿→蓝绿→深蓝逐步氧化变色。完全氧化约需15-20分钟，期间需将织物展开、轻压排液以充分接触空气。氧化不充分时颜色发绿发灰，需再次浸染补色。氧化动画中出缸黄绿→氧化深蓝的渐变即对应此过程。",
+    "metadata": {
+      "keywords": ["出缸", "黄绿色", "氧化变色", "15-20分钟", "展开接触空气"],
+      "fabric": null,
+      "difficulty_tag": "基础"
+    },
+    "source": "整理自：Fabriculture《What Is Indigo Fabric?》、TextileTuts 靛蓝染色指南等公开资料"
+  },
+  {
+    "chunk_id": "oxy_cotton_01",
+    "category": "oxidation",
+    "text": "棉是纤维素纤维，吸湿与上染能力最强，隐色体渗透充分，氧化后呈深沉饱满的靛蓝，是蓝染效果最好的天然纤维。棉织物氧化速度快、色深稳定，一次浸染即可获得明显蓝色，多次浸染可达近黑的深蓝。",
+    "metadata": {
+      "keywords": ["棉", "纤维素", "上染", "深蓝"],
+      "fabric": "cotton",
+      "difficulty_tag": "基础"
+    },
+    "source": "整理自：TextileTuts、TheMazi 靛蓝染色指南（Cotton: Excellent，Best results）"
+  },
+  {
+    "chunk_id": "oxy_linen_01",
+    "category": "oxidation",
+    "text": "麻同为纤维素纤维但结构更致密、纤维较硬，隐色体渗透较慢，氧化后颜色比棉偏浅偏灰蓝，需更多次浸染才能达到棉同等色深。麻织物染色后呈现质朴的哑光灰蓝色调，工艺上常以增加浸染轮次补偿色深。",
+    "metadata": {
+      "keywords": ["麻", "渗透慢", "多次浸染", "灰蓝"],
+      "fabric": "linen",
+      "difficulty_tag": "基础"
+    },
+    "source": "整理自：TextileTuts 靛蓝染色指南（Linen: may require additional dips）"
+  },
+  {
+    "chunk_id": "oxy_silk_01",
+    "category": "oxidation",
+    "text": "丝为蛋白质纤维，对隐色体亲和力强、上染快，氧化后色泽鲜亮；由于天然丝本身略带黄色调，染出的蓝常带青绿光泽，呈现鲜亮偏青的观感。丝织物染色需温和操作，避免高温强碱损伤纤维。",
+    "metadata": {
+      "keywords": ["丝", "蛋白纤维", "上染快", "鲜亮偏青"],
+      "fabric": "silk",
+      "difficulty_tag": "基础"
+    },
+    "source": "整理自：MDPI《Durable Textile Dyeing Using Natural Indigo》、TheMazi 靛蓝染色指南（Wool & silk: gentler handling）"
+  },
+  {
+    "chunk_id": "oxy_concentration_01",
+    "category": "oxidation",
+    "text": "染液中隐色体浓度决定可上染的靛蓝总量：浓度高，纤维吸附的隐色体多，氧化后颜色深（深蓝至近黑）；浓度低，吸附量少，氧化后呈浅蓝、天青色。模拟参数中高浓度终点色接近 #142C54，低浓度终点色接近 #3A5F8A。",
+    "metadata": {
+      "keywords": ["浓度", "色深", "深浅", "吸附量"],
+      "fabric": null,
+      "difficulty_tag": "进阶",
+      "note": "色值 #142C54 / #3A5F8A 为项目模拟参数示例，非实测标定值"
+    },
+    "source": "整理稿：基于染液浓度与上染量关系的工艺推理，色值为模拟参数示例"
+  },
+  {
+    "chunk_id": "oxy_cycle_01",
+    "category": "oxidation",
+    "text": "传统染制采用浸透→捞出氧化→再浸染的循环：每次浸透数分钟后捞出，氧化约10分钟，再入缸，反复数次直至达到目标深度（如武陵山区印染技艺记载的反复五次染好）。每轮循环使底色加深一档，同时逐步将未扎紧区域染透，是多次浸染加深颜色的标准操作节奏。周城工坊实践中一般需浸染6-10次方达理想蓝色深度。",
+    "metadata": {
+      "keywords": ["浸染循环", "氧化10分钟", "反复浸染", "加深"],
+      "fabric": null,
+      "difficulty_tag": "进阶"
+    },
+    "source": "整理自：土家族文化网《武陵山区世居民族印染技艺概观》（浸透后氧化十分钟、反复五次）"
+  },
+  {
+    "chunk_id": "oxy_k_01",
+    "category": "oxidation",
+    "text": "氧化过程近似一级动力学：C(t)=1-e^(-k·t)，C 为氧化进度（0到1），t 为时间（分钟），k 为速率常数。模拟参数示例：棉 k=0.20/min（20分钟氧化约98%），麻 k=0.12/min（20分钟约91%，需多次浸染补偿），丝 k=0.30/min（10分钟约95%）。k 值随材质纤维结构差异而不同。",
+    "metadata": {
+      "keywords": ["氧化速率", "一级动力学", "k值", "公式"],
+      "fabric": null,
+      "difficulty_tag": "高阶",
+      "note": "k 值为项目模拟参数示例，非实测标定值"
+    },
+    "source": "整理稿：基于一级动力学建立的模拟模型，参数为示例值，实测数据需查专业文献补充"
+  },
+  {
+    "chunk_id": "oxy_keyframes_01",
+    "category": "oxidation",
+    "text": "氧化动画关键帧参考色阶（模拟参数示例）：起点出缸黄绿 #C9D84C → 过渡灰绿 #5B8C4A → 蓝绿 #2E5B4F → 终点靛蓝 #1A3660（棉材质、浓度0.8）。不同材质终点色：棉 #1A3660、麻 #24456E、丝 #1F4A66。前端按关键帧做颜色插值动画，动画节奏由各阶段 duration_s 控制。",
+    "metadata": {
+      "keywords": ["关键帧", "色阶", "hex", "动画参数"],
+      "fabric": null,
+      "difficulty_tag": "进阶",
+      "note": "全部色值为项目模拟参数示例"
+    },
+    "source": "整理稿：项目氧化动画模拟参数，色值为设计值示例"
+  },
+  {
+    "chunk_id": "oxy_zhoucheng_01",
+    "category": "oxidation",
+    "text": "周城工坊浸染-氧化时间参数（多来源记录，工坊间存在差异）：周城染匠记录为浸染10-15分钟后取出、氧化20-30分钟，重复浸染6-10次达到理想蓝色深度；另有工坊采用古法九浸九晒：每次浸泡约3分钟、氧化约30分钟，重复9次，染液恒温约25摄氏度、草木灰调pH约10.5-11.0；传统大幅布也有浸泡三天晾干、反复七次的做法。参数差异源于产品尺寸、布料厚度与目标色深不同，模拟器应以目标色深为主控制浸染轮次。",
+    "metadata": {
+      "keywords": ["周城", "浸染时间", "氧化时间", "九浸九晒", "浸染次数", "pH"],
+      "fabric": null,
+      "difficulty_tag": "进阶",
+      "note": "多来源记录存在工坊差异，均为可溯源记录（来源见source）"
+    },
+    "source": "Guide Me《周城扎染的蓝和白》（浸染10-15分钟/氧化20-30分钟/6-10次）；farlinktex白族扎染工艺（九浸九晒3分钟/30分钟/9次，pH10.5-11.0）；携程喜洲周城笔记（泡三天×7次）"
+  }
+]
