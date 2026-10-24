@@ -62,13 +62,14 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         seedPatterns();
         seedPatternQuiz();
+        seedPatternQuizExtra();
         seedMap();
         seedArtworks();
     }
 
     // ==================== 模块 3：纹样图鉴 ====================
 
-    private void seedPatterns() {
+private void seedPatterns() {
         if (patternRepository.count() > 0) {
             return;
         }
@@ -108,7 +109,6 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void seedPatternQuiz() {
-        // 兼容合并前创建的旧题库：旧行没有 scope，统一归入 knowledge。
         questionRepository.fillMissingScope();
         if (questionRepository.countByEnabledTrueAndScope("pattern") > 0) {
             return;
@@ -123,64 +123,107 @@ public class DataInitializer implements CommandLineRunner {
             log.warn("Pattern seed data is incomplete; pattern quiz seeding skipped");
             return;
         }
-
+        
         addQuestion("pattern", butterfly.getId(),
                 "白族扎染中的蝴蝶纹通常寄托什么愿望？",
                 "纹样寓意", 1,
                 "蝴蝶纹常成双出现，寓意爱情、吉祥与美好。",
                 "B",
-                "长寿与战争",
-                "爱情、吉祥与美好",
-                "财富与权力",
-                "离别与忧伤");
+                "长寿与战争", "爱情、吉祥与美好", "财富与权力", "离别与忧伤");
 
         addQuestion("pattern", plum.getId(),
                 "梅花纹在扎染中常象征什么品格？",
                 "纹样寓意", 1,
                 "梅花凌寒而开，常被赋予坚韧、高洁的品格。",
                 "A",
-                "坚韧与高洁",
-                "富贵与权力",
-                "速度与力量",
-                "丰收与富足");
+                "坚韧与高洁", "富贵与权力", "速度与力量", "丰收与富足");
 
         addQuestion("pattern", wave.getId(),
                 "连续水波纹通常表达什么寓意？",
                 "纹样寓意", 1,
                 "连续水波象征绵延不绝、生生不息。",
                 "C",
-                "离别与思念",
-                "战争与胜利",
-                "生生不息",
-                "财富与地位");
+                "离别与思念", "战争与胜利", "生生不息", "财富与地位");
 
         addQuestion("pattern", sun.getId(),
                 "太阳纹的放射状结构最常象征什么？",
                 "纹样寓意", 1,
                 "太阳纹象征光明、温暖与生命力。",
                 "A",
-                "光明与生命力",
-                "雨水与丰收",
-                "夜晚与安静",
-                "山川与道路");
+                "光明与生命力", "雨水与丰收", "夜晚与安静", "山川与道路");
 
         addQuestion("pattern", fish.getId(),
                 "鱼纹在民间纹样中常借助谐音表达什么？",
                 "纹样寓意", 1,
                 "“鱼”与“余”谐音，寓意年年有余、生活富足。",
                 "D",
-                "平安与健康",
-                "智慧与勇气",
-                "团圆与思念",
-                "年年有余、丰饶");
+                "平安与健康", "智慧与勇气", "团圆与思念", "年年有余、丰饶");
 
         log.info("Seeded {} pattern quiz questions", questionRepository.countByEnabledTrueAndScope("pattern"));
     }
 
+    // ==================== 模块 3：补充题目 ====================
+    private void seedPatternQuizExtra() {
+        Pattern ice = patternRepository.findByName("冰裂纹").orElse(null);
+        Pattern landscape = patternRepository.findByName("山水纹").orElse(null);
+        Pattern lotus = patternRepository.findByName("莲花纹").orElse(null);
+        Pattern octagon = patternRepository.findByName("八角纹").orElse(null);
+        
+        if (ice == null || landscape == null || lotus == null || octagon == null) {
+            log.warn("Pattern seed data is incomplete; pattern quiz extra seeding skipped");
+            return;
+        }
+        java.util.Set<Long> bound = questionRepository.findByEnabledTrueAndScopeOrderBySortOrderAsc("pattern").stream()
+                .map(QuizQuestion::getPatternId)
+                .filter(java.util.Objects::nonNull)
+                .collect(java.util.stream.Collectors.toSet());
+        
+        questionRepository.findByEnabledTrueAndScopeOrderBySortOrderAsc("pattern").stream()
+                .map(QuizQuestion::getPatternId)
+                .filter(java.util.Objects::nonNull)
+                .collect(java.util.stream.Collectors.toSet());
 
-    /**
-     * 写入一道模块 3 纹样图鉴题及四个选项。
-     */
+        if (!bound.contains(ice.getId())) {
+            addQuestion("pattern", ice.getId(),
+                    "冰裂纹的自然肌理来自哪种工艺效果？",
+                    "纹样工艺", 1,
+                    "布料折叠挤压后浸染，染液沿折痕渗入，形成不规则的冰裂纹理，强调手工与偶然。",
+                    "A",
+                    "折叠挤压后染液沿折痕渗入", "颜料直接绘制上去", "化学漂白剂处理", "丝网印刷机印制");
+        }
+        
+        if (!bound.contains(landscape.getId())) {
+            addQuestion("pattern", landscape.getId(),
+                    "山水纹在扎染中通常寄托什么？",
+                    "纹样寓意", 1,
+                    "山水纹把苍山洱海的轮廓收进布面，寄托对家园风物的眷恋。",
+                    "A",
+                    "苍洱风物、家园", "战争与胜利", "离别与思念", "财富与地位");
+        }
+        
+        if (!bound.contains(lotus.getId())) {
+            addQuestion("pattern", lotus.getId(),
+                    "莲花纹常用来表达什么？",
+                    "纹样寓意", 1,
+                    "莲花出淤泥而不染，常用来表达清雅与吉祥。",
+                    "B",
+                    "勇猛与力量", "清雅、洁净", "丰收与富足", "速度与效率");
+        }
+        
+        if (!bound.contains(octagon.getId())) {
+            addQuestion("pattern", octagon.getId(),
+                    "八角纹的对称结构常被解读为什么？",
+                    "纹样寓意", 1,
+                    "八角对称结构常见于白族民居与扎染几何纹样，象征几何秩序与太阳崇拜。",
+                    "D",
+                    "战争与防御", "离别与孤单", "爱情与家庭", "几何秩序、太阳崇拜");
+        }
+        log.info("Seeded extra pattern quiz questions, total {}",
+                questionRepository.countByEnabledTrueAndScope("pattern"));
+    }
+
+    // ==================== 基础添加方法 ====================
+
     private void addQuestion(String scope, Long patternId,
                              String stem, String category, int difficulty, String explanation,
                              String correctKey, String... optionTexts) {
@@ -212,6 +255,7 @@ public class DataInitializer implements CommandLineRunner {
 
         patternSortOrder += 10;
     }
+
 
     // ==================== 模块 5：非遗地图 ====================
 

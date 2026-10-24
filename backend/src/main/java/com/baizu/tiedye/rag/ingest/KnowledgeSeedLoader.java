@@ -32,7 +32,8 @@ public class KnowledgeSeedLoader {
             "rag/chunks/06_process.json",
             "rag/chunks/07_motif_semantics.json",
             "rag/chunks/08_differentiation_extra.json",
-            "rag/chunks/09_faq.json");
+            "rag/chunks/09_faq.json",
+            "rag/chunks/10_scenario.json");
 
     private static final String PROFILE_FILE = "rag/profiles/oxidation_profile_v1.json";
 
