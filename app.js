@@ -2084,11 +2084,11 @@
 // 阶段四：前后端联调逻辑
 // ==========================================
 function openModal(modalId) {
-  document.getElementById(modalId).classList.add('active');
-  if (modalId === 'modal-pattern') {
+  document.getElementById(modalId).classList.add("active");
+  if (modalId === "modal-pattern") {
+    // 模块三入口视图：只加载图鉴；竞答题目在点击“知识竞答”后由 module3-scenario.js 懒加载
     loadPatterns();
-    loadQuiz();
-  } else if (modalId === 'modal-ask') {
+  } else if (modalId === "modal-ask") {
     loadArtworks();
   }
 }
@@ -2114,25 +2114,28 @@ async function loadPatterns() {
 }
 
 function renderPatterns() {
-  const grid = document.getElementById('pattern-grid');
-  grid.innerHTML = allPatterns.map(p => {
-    const isUnlocked = unlockedIds.includes(p.id);
-    // 由于你的图片路径是 assets/xxx.png，可以直接用
-    return `
-      <div class="pattern-card ${isUnlocked ? 'unlocked' : ''}">
+  window.allPatterns = allPatterns; // 新增：暴露给 module3-scenario.js 弹纹样卡牌
+  const grid = document.getElementById("pattern-grid");
+  grid.innerHTML = allPatterns
+    .map((p) => {
+      const isUnlocked = unlockedIds.includes(p.id);
+      // 由于你的图片路径是 assets/xxx.png，可以直接用
+      return `
+      <div class="pattern-card ${isUnlocked ? "unlocked" : ""}">
         <img src="${p.imageUrl}" alt="${p.name}" onerror="this.src='assets/indigo-textile.svg'">
-        <h4>${isUnlocked ? p.name : '未解锁'}</h4>
-        <p>${isUnlocked ? p.meaning : '答对题目解锁'}</p>
+        <h4>${isUnlocked ? p.name : "未解锁"}</h4>
+        <p>${isUnlocked ? p.meaning : "答对题目解锁"}</p>
       </div>
     `;
-  }).join('');
+    })
+    .join("");
 }
 
 async function loadQuiz() {
   if (allQuestions.length > 0) return renderQuiz();
   try {
     // 模块 3 只取纹样题；正确答案只在提交后由后端返回。
-    const data = await window.LANBAI_API('/quiz/questions?scope=pattern&limit=10');
+    const data = await window.LANBAI_API("/quiz/questions?scope=pattern&limit=9");
     allQuestions = Array.isArray(data) ? data : (data.questions || []);
     currentQuizIndex = 0;
     renderQuiz();
@@ -2169,25 +2172,39 @@ function renderQuiz() {
 
 async function checkAnswer(question, button) {
   if (quizBusy) return;
-  const feedback = document.getElementById('quiz-feedback');
-  const buttons = Array.from(document.querySelectorAll('#quiz-options button'));
+  const feedback = document.getElementById("quiz-feedback");
+  const buttons = Array.from(document.querySelectorAll("#quiz-options button"));
   quizBusy = true;
-  buttons.forEach(item => { item.disabled = true; });
+  buttons.forEach((item) => {
+    item.disabled = true;
+  });
 
   try {
-    const result = await window.LANBAI_API('/quiz/answer', {
-      method: 'POST',
-      body: JSON.stringify({ questionId: question.id, optionKey: button.dataset.optionKey })
+    const result = await window.LANBAI_API("/quiz/answer", {
+      method: "POST",
+      body: JSON.stringify({
+        questionId: question.id,
+        optionKey: button.dataset.optionKey,
+      }),
     });
 
     if (result.correct) {
       feedback.style.color = "green";
-      feedback.textContent = `回答正确！${result.explanation || ''}`;
+      feedback.textContent = `回答正确！${result.explanation || ""}`;
 
       if (result.patternId && !unlockedIds.includes(result.patternId)) {
         unlockedIds.push(result.patternId);
-        localStorage.setItem('unlockedPatterns', JSON.stringify(unlockedIds));
+        localStorage.setItem("unlockedPatterns", JSON.stringify(unlockedIds));
         renderPatterns(); // 实时更新图鉴解锁状态
+      }
+
+      // 新增：答对弹出纹样卡牌奖励（由 module3-scenario.js 提供）
+      if (
+        result.patternId &&
+        typeof window.module3 !== "undefined" &&
+        window.module3.showPatternCard
+      ) {
+        window.module3.showPatternCard(result.patternId);
       }
 
       setTimeout(() => {
@@ -2197,14 +2214,18 @@ async function checkAnswer(question, button) {
       }, 1800);
     } else {
       feedback.style.color = "red";
-      feedback.textContent = '回答错误，请再试一次。';
-      buttons.forEach(item => { item.disabled = false; });
+      feedback.textContent = "回答错误，请再试一次。";
+      buttons.forEach((item) => {
+        item.disabled = false;
+      });
       quizBusy = false;
     }
   } catch (err) {
     feedback.style.color = "red";
-    feedback.textContent = err.message || '答题失败，请稍后重试。';
-    buttons.forEach(item => { item.disabled = false; });
+    feedback.textContent = err.message || "答题失败，请稍后重试。";
+    buttons.forEach((item) => {
+      item.disabled = false;
+    });
     quizBusy = false;
   }
 }
