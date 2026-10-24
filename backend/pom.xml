@@ -69,6 +69,7 @@
                     <include>diy.html</include>
                     <include>quiz.html</include>
                     <include>map.html</include>
+                    <include>place.html</include>
                     <include>timeline.html</include>
                     <include>styles.css</include>
                     <include>lab.css</include>
