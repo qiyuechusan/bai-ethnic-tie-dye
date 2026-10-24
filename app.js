@@ -829,9 +829,9 @@
         storyImg: "assets/zhoucheng-story.jpg",
         tour: [
           { text: "璞真白族扎染博物馆：了解扎染历史", img: "assets/museum.jpg" },
-          { text: "亲手体验：在传承人指导下扎花、浸染一块方巾", img: "assets/data-study.jpg" },
-          { text: "逛古戏台与村落", img: "assets/zhoucheng-2.jpg" },
-          { text: "品尝白族土八碗", img: "assets/zhoucheng-3.jpg" }
+          { text: "亲手体验：在传承人指导下扎花、浸染一块方巾", img: "assets/tiyan.jpg" },
+          { text: "逛古戏台与村落", img: "assets/guxi.jpg" },
+          { text: "品尝白族土八碗", img: "assets/tubawan.jpg" }
         ],
         photos: [
           "assets/zhoucheng.jpg",
