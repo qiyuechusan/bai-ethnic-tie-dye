@@ -24,7 +24,7 @@
             <path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/>
           </svg>
         </span>
-        <span class="brand-copy"><strong>蓝白之境</strong><small>THE REALM OF INDIGO</small></span>
+        <span class="brand-copy"><strong>蓝白之境</strong></span>
       </a>
       <nav class="main-nav" id="mainNav" aria-label="主导航">
         <a href="home.html">首页</a>
@@ -72,7 +72,7 @@
         </figure>
 
         <blockquote class="detail-profile-quote">
-          <span>在地絮语 · LOCAL VOICE</span>
+          <span>在地絮语</span>
           <p id="placeQuote">白族女儿会说话就会唱歌，会走路就会跳舞。</p>
         </blockquote>
           <div class="detail-extra-story">
@@ -106,7 +106,7 @@
               <div class="detail-story-heading">
               <span class="detail-section-number">01</span>
               <div>
-                <p class="detail-section-kicker">ABOUT THIS PLACE</p>
+                <p class="detail-section-kicker"></p>
                 <h2>苍山脚下，<br>这座城的故事。</h2>
               </div>
             </div>
@@ -115,7 +115,6 @@
           <button type="button" onclick="showExploreModal('master')" style="text-align:left; cursor:pointer; border:0; background:transparent; padding:0;" class="detail-record-card">
             <article style="width:100%; height:100%; border:0; margin:0;">
               <span>传承人</span>
-              <h3>MAKERS</h3>
               <p id="placeMaster">--</p>
             </article>
           </button>
@@ -123,7 +122,6 @@
           <button type="button" onclick="showExploreModal('pattern')" style="text-align:left; cursor:pointer; border:0; background:transparent; padding:0;" class="detail-record-card">
             <article style="width:100%; height:100%; border:0; margin:0;">
               <span>特色纹样</span>
-              <h3>PATTERNS</h3>
               <p id="placePattern">--</p>
             </article>
           </button>
@@ -131,7 +129,6 @@
           <button type="button" onclick="showExploreModal('see')" style="text-align:left; cursor:pointer; border:0; background:transparent; padding:0;" class="detail-record-card">
             <article style="width:100%; height:100%; border:0; margin:0;">
               <span>到了看什么</span>
-              <h3>TO SEE</h3>
               <p id="detailSee">--</p>
             </article>
           </button>
@@ -139,7 +136,6 @@
           <button type="button" onclick="showExploreModal('now')" style="text-align:left; cursor:pointer; border:0; background:transparent; padding:0;" class="detail-record-card">
             <article style="width:100%; height:100%; border:0; margin:0;">
               <span>今日图景</span>
-              <h3>NOW</h3>
               <p id="detailNow">--</p>
             </article>
           </button>
@@ -151,7 +147,7 @@
 
               <!-- 左侧：打卡清单 -->
               <div>
-                <p class="detail-section-kicker">A SMALL ITINERARY</p>
+                <p class="detail-section-kicker"></p>
                 <h2>去这里，可以做这四件事。</h2>
 
                 <div id="tourChecklist" class="tour-checklist"></div>
@@ -188,7 +184,7 @@
 
               <!-- 左侧：硬核科普文字 -->
               <div class="dye-science-text">
-                <p class="detail-section-kicker">PLANT DYE / 板蓝根</p>
+                <p class="detail-section-kicker"></p>
                 <h2>这抹蓝，究竟是哪里来的？</h2>
 
                 <div class="dye-text-block">
@@ -241,7 +237,7 @@
             <div class="detail-editorial-row" style="grid-template-columns: 1fr; gap: 20px; align-items: start;">
 
               <div>
-                <p class="detail-section-kicker">PATTERNS & DAILY LIFE</p>
+                <p class="detail-section-kicker"></p>
                 <h2>不仅是布，更是白族人的史诗。</h2>
                 <p class="detail-body-copy" style="max-width: 800px;">
                   扎染纹样进入婚嫁、节庆与日常服饰。蝴蝶纹承载创世想象，梅花纹寄托坚韧，几何连续纹则让布面像一段不断延伸的生活叙事。
@@ -263,7 +259,7 @@
                     <div id="tab-data" class="tab-content" style="display: none;">
             <div class="detail-data-heading">
               <div>
-                <p class="detail-section-kicker">LOCAL INDUSTRY</p>
+                <p class="detail-section-kicker"></p>
                 <h2>扎染给这里留下了什么？</h2>
               </div>
               <button type="button" class="data-badge-btn" onclick="alert('当前数据为线上抓取与线下访谈综合评估，部分年产值数据正在进一步调研中。')">数据看板</button>
@@ -322,7 +318,7 @@
             <path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/>
           </svg>
         </span>
-        <span class="brand-copy"><strong>蓝白之境</strong><small>THE REALM OF INDIGO</small></span>
+        <span class="brand-copy"><strong>蓝白之境</strong></span>
       </a>
       <p>让一匹蓝布，继续讲述<br>苍山洱海间的非遗故事。</p>
     </div>
@@ -426,8 +422,7 @@
         now: ["assets/data-study.jpg"]
       }
     };
-    function showExploreModal(type) {
-      const currentPlaceId = new URLSearchParams(window.location.search).get("place") || "zhoucheng";
+      function showExploreModal(type) {
       const place = window.currentPlaceData || {};
 
       document.getElementById("exploreModalKicker").textContent = `${place?.name || "当前地点"} · 详细档案`;
@@ -436,83 +431,53 @@
       const container = document.getElementById("exploreModalContent");
       let htmlContent = "";
 
-      // 👇 核心修复：如果是在巍山看传承人，强制使用下面这组数据 👇
-      let personsData = place?.persons;
-
-      if (currentPlaceId === "weishan" && type === "master") {
-        personsData = [
-          {
-            name: "熊文杰",
-            role: "省级代表性传承人",
-            img: "assets/person-xiongwenjie.jpg",
-            desc: "熊文杰，巍山扎染技艺省级代表性传承人。他结合彝族文化创新了多种染布技法，发明了扎花机，大大提高了产能，创立了兴巍工艺厂，产品远销海外。"
-          },
-          {
-            name: "熊天艳",
-            role: "县级代表性传承人",
-            img: "assets/person-xiongtianyan.jpg",
-            desc: "熊天艳，熊文杰之女，巍山扎染县级代表性传承人。她返乡接班，在古城非遗街区开设扎染体验馆，用年轻人的方式让巍山扎染成为当地文旅的新名片。"
-          }
-        ];
-      }
-
-      // 获取当前要展示的数据
-      let detail = place?.exploreData?.[type];
-      if (type === "pattern" && Array.isArray(place?.pattern)) {
-        detail = place.pattern;
-      }
-
-      // ================= 1. 传承人（一图一文） =================
-      if (type === "master" && Array.isArray(personsData) && personsData.length > 0) {
-        htmlContent = personsData.map(person => `
-          <div style="margin-bottom: 35px; border-bottom: 1px dashed rgba(13,55,87,0.15); padding-bottom: 20px;">
-            <img src="${person.img || 'assets/data-master.jpg'}"
-                 onerror="this.src='assets/data-master.jpg'"
-                 style="width: 100%; height: 220px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);"
-                 alt="${person.name}">
-            <h3 style="font-family: var(--font-round); color: #0b3863; font-size: 24px; margin-bottom: 5px;">${person.name}</h3>
-            <p style="color: #24648e; font-size: 13px; margin-bottom: 12px; font-weight: bold;">${person.role}</p>
-            <p style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify;">${person.desc}</p>
-          </div>
-        `).join("");
-      }
-      // ================= 2. 通用数组渲染 =================
-      else if (Array.isArray(detail) && detail.length > 0) {
-        htmlContent = detail.map(item => `
-          <div style="margin-bottom: 24px; border-bottom: 1px dashed rgba(13,55,87,0.15); padding-bottom: 20px;">
-            <img src="${item.img || 'assets/placeholder.jpg'}"
-                 onerror="this.src='assets/pattern-closeup.jpg'"
-                 style="width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);"
-                 alt="${item.title || '配图'}">
-            <h3 style="font-family: var(--font-round); color: #0b3863; font-size: 20px; margin-bottom: 8px;">${item.title || ''}</h3>
-            <p style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify;">${item.desc || item.text || ''}</p>
-          </div>
-        `).join("");
-      }
-      // ================= 3. 纯文本兜底 =================
-      else {
-        let text = "暂无详细档案。";
-        if (typeof detail === "string") {
-          text = detail;
-        } else if (detail && detail.text) {
-          text = detail.text;
-        } else if (place?.exploreData?.[type]) {
-          text = place.exploreData[type];
-        }
-
-        if (typeof text === 'object') {
-          text = "暂无纯文本描述，请在档案中查看图文。";
-        }
-
+      // ================= 1. 传承人（强制写死，不读 app.js 数据了） =================
+      if (type === "master") {
         htmlContent = `
-          <p style="color: #5c6f73; font-size: 15px; line-height: 1.9; text-align: justify;">${text}</p>
+          <div style="margin-bottom: 35px; border-bottom: 1px dashed rgba(13,55,87,0.15); padding-bottom: 20px;">
+            <img src="assets/person-duanyinkai.jpg"
+                 onerror="this.src='assets/data-master.jpg'"
+                 style="display:block !important; width: 100%; height: 220px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <h3 style="font-family: var(--font-round); color: #0b3863; font-size: 24px; margin-bottom: 5px;">段银开</h3>
+            <p style="color: #24648e; font-size: 13px; margin-bottom: 12px; font-weight: bold;">国家级代表性传承人</p>
+            <p style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify;">段银开，国家级非遗传承人，自幼随长辈学习扎染，精通全套72道扎染工序，创办璞真染坊并扩建为博物馆，带动上千名白族妇女就业。</p>
+          </div>
+          <div style="margin-bottom: 35px; border-bottom: 1px dashed rgba(13,55,87,0.15); padding-bottom: 20px;">
+            <img src="assets/person-zhanghanmin.jpg"
+                 onerror="this.src='assets/data-master.jpg'"
+                 style="display:block !important; width: 100%; height: 220px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <h3 style="font-family: var(--font-round); color: #0b3863; font-size: 24px; margin-bottom: 5px;">张翰敏</h3>
+            <p style="color: #24648e; font-size: 13px; margin-bottom: 12px; font-weight: bold;">州级代表性传承人</p>
+            <p style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify;">张翰敏，州级传承人，创立“蓝续”品牌，将现代审美与国际视野带入传统扎染，让周城扎染登上了国际时装周。</p>
+          </div>
         `;
+      }
+      // ================= 2. 其他卡片（纹样、风物等） =================
+      else {
+        let detail = place?.exploreData?.[type];
+        if (type === "pattern" && Array.isArray(place?.pattern)) {
+          detail = place.pattern;
+        }
+
+        if (Array.isArray(detail) && detail.length > 0) {
+          htmlContent = detail.map(item => `
+            <div style="margin-bottom: 24px; border-bottom: 1px dashed rgba(13,55,87,0.15); padding-bottom: 20px;">
+              <img src="${item.img || 'assets/pattern-closeup.jpg'}"
+                   onerror="this.src='assets/pattern-closeup.jpg'"
+                   style="display:block !important; width: 100%; height: 180px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+              <h3 style="font-family: var(--font-round); color: #0b3863; font-size: 20px; margin-bottom: 8px;">${item.title || ''}</h3>
+              <p style="color: #5c6f73; font-size: 15px; line-height: 1.8; text-align: justify;">${item.desc || item.text || ''}</p>
+            </div>
+          `).join("");
+        } else {
+          let text = typeof detail === "string" ? detail : (detail?.text || "暂无详细档案。");
+          htmlContent = `<p style="color: #5c6f73; font-size: 15px; line-height: 1.9; text-align: justify;">${text}</p>`;
+        }
       }
 
       container.innerHTML = htmlContent;
       document.getElementById("exploreModal").hidden = false;
       document.body.classList.add("modal-open");
-      document.querySelector("#exploreModal .puzzle-close")?.focus();
     }
     function closeExploreModal() {
       document.getElementById("exploreModal").hidden = true;
