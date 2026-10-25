@@ -476,6 +476,14 @@
           <span class="m3-entry-btn-title">🎭 情境剧本杀</span>
           <span class="m3-entry-btn-sub">三个情景等你来破局</span>
         </button>
+        <button
+          type="button"
+          class="m3-entry-btn m3-entry-btn-awards"
+          onclick="window.module3.openAwards()"
+        >
+          <span class="m3-entry-btn-title">🏆 我的成就</span>
+          <span class="m3-entry-btn-sub">查看剧本杀通关勋章</span>
+        </button>
       </div>
       <div class="gallery-wrapper">
         <h3>我的图鉴</h3>
@@ -570,6 +578,24 @@
         </div>
       </div>
     </div>
+
+    <!-- ===== 视图 4：我的成就 ===== -->
+    <div id="m3-awards" class="m3-view">
+      <div class="m3-view-head">
+        <button
+          type="button"
+          class="m3-back-btn"
+          onclick="window.module3.backToEntry()"
+        >
+          ← 返回
+        </button>
+        <h2 class="modal-title">我的成就</h2>
+        <span class="m3-view-tip">通关剧本杀情景，收集成就勋章</span>
+      </div>
+      <div id="m3-awards-grid" class="m3-awards-grid">
+        <!-- JS 动态渲染勋章 -->
+      </div>
+    </div>
   </div>
 
   <!-- ===== 成就卡奖励层（剧本杀通关） ===== -->
@@ -581,6 +607,15 @@
       <div class="m3-award-desc" id="m3-award-desc"></div>
       <button type="button" onclick="window.module3.closeAward()">
         收下成就
+      </button>
+      <button
+        type="button"
+        id="m3-award-replay"
+        class="m3-award-replay"
+        style="display: none;"
+        onclick="window.module3.replayRescueAnimation()"
+      >
+        再看一次动画
       </button>
     </div>
   </div>
@@ -595,6 +630,40 @@
       <button type="button" onclick="window.module3.closePatternCard()">
         收下纹样
       </button>
+    </div>
+  </div>
+
+  <!-- ===== 闯关答题弹层（剧情节点弹出，居中） ===== -->
+  <div id="m3-challenge-overlay" class="m3-overlay">
+    <div class="m3-challenge-card">
+      <div class="m3-challenge-title">闯关答题</div>
+      <p id="m3-challenge-question" class="m3-challenge-question"></p>
+      <input
+        id="m3-challenge-input"
+        type="text"
+        maxlength="120"
+        placeholder="输入你的答案…"
+        onkeydown="if(event.key==='Enter')window.module3.submitChallenge()"
+      />
+      <p id="m3-challenge-feedback" class="m3-challenge-feedback"></p>
+      <p id="m3-challenge-hint" class="m3-challenge-hint"></p>
+      <div class="m3-challenge-actions">
+        <button
+          type="button"
+          class="m3-challenge-ask"
+          onclick="window.module3.askTutorFromChallenge()"
+        >
+          向 <span id="m3-challenge-role">传承人</span> 提问 →
+        </button>
+        <button
+          type="button"
+          id="m3-challenge-submit"
+          class="m3-challenge-submit"
+          onclick="window.module3.submitChallenge()"
+        >
+          提交
+        </button>
+      </div>
     </div>
   </div>
 </div>

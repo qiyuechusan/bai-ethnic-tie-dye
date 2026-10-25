@@ -75,6 +75,7 @@
                     <include>place.html</include>
                     <include>timeline.html</include>
                     <include>styles.css</include>
+                    <include>module3-scenario.css</include>
                     <include>lab.css</include>
                     <include>lab-agent.css</include>
                     <include>tutor.css</include>

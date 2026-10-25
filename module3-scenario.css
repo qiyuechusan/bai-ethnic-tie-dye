@@ -491,3 +491,136 @@
     opacity: 1;
   }
 }
+
+/* ===== v2：我的成就 ===== */
+.m3-entry-btn-awards {
+  background: linear-gradient(135deg, #f4e8d0, #e4cfae);
+  color: #5a3e1b;
+  border: 1px solid rgba(90, 62, 27, 0.25);
+}
+.m3-awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.m3-award-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(31, 45, 77, 0.15);
+  text-align: center;
+  font-family: var(--font-serif);
+  background: var(--paper, #f4f0e5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.m3-award-tile.unlocked {
+  background: linear-gradient(160deg, #fff7e6, #f4e8d0);
+  border-color: rgba(180, 130, 40, 0.45);
+}
+.m3-award-tile.locked {
+  opacity: 0.55;
+  filter: grayscale(0.6);
+}
+.m3-award-tile-icon {
+  font-size: 40px;
+}
+.m3-award-tile-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2d4d;
+}
+.m3-award-tile-desc {
+  font-size: 13px;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+.m3-award-tile-date {
+  font-size: 12px;
+  color: #0b3863;
+  opacity: 0.8;
+}
+
+/* ===== v2：闯关答题弹层 ===== */
+.m3-challenge-card {
+  width: 460px;
+  max-width: 92vw;
+  background: var(--paper, #f4f0e5);
+  border-radius: 14px;
+  padding: 28px 26px;
+  font-family: var(--font-serif);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  animation: m3-pop 0.28s ease;
+}
+.m3-challenge-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b3863;
+  letter-spacing: 1px;
+}
+.m3-challenge-question {
+  margin: 14px 0 12px;
+  font-size: 19px;
+  line-height: 1.55;
+  font-weight: 700;
+  color: #1f2d4d;
+}
+.m3-challenge-card input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-family: var(--font-serif);
+  border: 1px solid rgba(31, 45, 77, 0.35);
+  border-radius: 8px;
+  background: #fff;
+}
+.m3-challenge-feedback {
+  min-height: 20px;
+  margin: 10px 0 2px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.m3-challenge-hint {
+  min-height: 18px;
+  margin: 2px 0 10px;
+  font-size: 13px;
+  color: #a06a00;
+}
+.m3-challenge-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+.m3-challenge-actions button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-family: var(--font-serif);
+}
+.m3-challenge-ask {
+  flex: 1;
+  background: #eef1f6;
+  color: #1f2d4d;
+  border: 1px solid rgba(31, 45, 77, 0.25) !important;
+}
+.m3-challenge-submit {
+  background: #1f2d4d;
+  color: #fff;
+}
+.m3-challenge-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== v2：成就卡回看动画 ===== */
+.m3-award-replay {
+  margin-left: 8px;
+  background: transparent !important;
+  color: #0b3863 !important;
+  border: 1px solid rgba(11, 56, 99, 0.45) !important;
+}

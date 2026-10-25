@@ -11,12 +11,6 @@ const SCENARIOS = {
     award: "火眼金睛",
     awardDesc: "你识破了“百年老字号”的化学印花骗局！",
     role: "传承人",
-    // 通关：每一组内命中任意关键词即达成该组；所有组都达成 → 通关（问句或 AI 回答命中均可）
-    winGroups: [
-      ["绞缬", "扎染", "防染", "针线", "捆扎", "扎缝"],
-      ["蓝印花布", "豆粉", "石灰", "刮浆", "灰缬"],
-      ["色晕", "水波纹", "晕染", "印花", "颜料"],
-    ],
     dialogue: [
       {
         speaker: "你",
@@ -34,6 +28,34 @@ const SCENARIOS = {
         speaker: "传承人",
         text: "（提示）你可以问我：这块布为什么不是正宗扎染？怎么分辨扎染和蓝印花布？",
       },
+      {
+        speaker: "你",
+        text: "（心里有了底）现在该向游客揭穿这个骗局了！",
+      },
+    ],
+    // 闯关节点：nodeIndex 为对话下标；nodeIndex 等于 dialogue.length 表示“对话播完后的收尾题”
+    challenges: [
+      {
+        id: "c1",
+        nodeIndex: 3,
+        question: "传承人让你找破绽，可你手里没有布。先想想：正宗白族扎染的花纹，边缘最典型的特征是什么？",
+        hint: "染液顺着纤维慢慢渗透，花纹边缘会留下什么？",
+        winGroups: [["色晕", "水波纹", "晕染", "渗"]],
+      },
+      {
+        id: "c2",
+        nodeIndex: 4,
+        question: "真正的白族扎染，靠什么来防染出花纹？",
+        hint: "扎染又叫绞缬，想一想是用什么把布“绑”起来的？",
+        winGroups: [["绞缬", "针线", "扎缝", "捆扎", "缝合", "防染"]],
+      },
+      {
+        id: "c3",
+        nodeIndex: 5,
+        question: "用一句话向游客揭穿：这块布为什么不是正宗扎染？",
+        hint: "从“工艺”和“花纹特征”两个角度说。",
+        winGroups: [["色晕", "水波纹", "晕染"], ["印花", "颜料", "整齐", "复制"]],
+      },
     ],
   },
   rescue: {
@@ -44,7 +66,6 @@ const SCENARIOS = {
     award: "氧化大师",
     awardDesc: "你搞懂了氧化显色，救回了这块靛蓝！",
     role: "师傅",
-    winGroups: [["黄绿", "靛白", "氧化", "通风", "显色", "变蓝", "见风"]],
     countdown: 90,
     dialogue: [
       {
@@ -59,6 +80,33 @@ const SCENARIOS = {
         speaker: "师傅",
         text: "（提示）别慌，先想清楚：染出来是黄绿色怎么办？靛白怎么变成靛蓝？",
       },
+      {
+        speaker: "师傅",
+        text: "（催促）快！捞出来！到院子里透透风！",
+      },
+    ],
+    challenges: [
+      {
+        id: "c1",
+        nodeIndex: 2,
+        question: "师傅说这是正常工序。为什么刚染好的布是黄绿色？",
+        hint: "靛白是什么颜色？它现在缺了什么才不变蓝？",
+        winGroups: [["靛白", "还原", "黄绿", "没氧化", "没"]],
+      },
+      {
+        id: "c2",
+        nodeIndex: 3,
+        question: "现在第一步该做什么？",
+        hint: "师傅的口头禅是什么？捞出来、透透风。",
+        winGroups: [["捞", "通风", "透风", "摊开", "氧化", "晾"]],
+      },
+      {
+        id: "c3",
+        nodeIndex: 4,
+        question: "为什么通风之后布会变成靛蓝？",
+        hint: "靛白遇到了空气里的什么？",
+        winGroups: [["氧化", "氧气", "空气", "靛蓝", "见风"]],
+      },
     ],
   },
   haute: {
@@ -69,21 +117,6 @@ const SCENARIOS = {
     award: "高定方案官",
     awardDesc: "你交付了“蝴蝶纹 + 植物染料”的创世神话方案！",
     role: "设计助手",
-    // 通关：两组都要命中（组内任一关键词即可）
-    winGroups: [
-      ["蝴蝶", "蝶纹", "化蝶", "创世", "神话"],
-      [
-        "板蓝根",
-        "蓼蓝",
-        "植物",
-        "染料",
-        "靛蓝",
-        "红花",
-        "苏木",
-        "栀子",
-        "环保",
-      ],
-    ],
     dialogue: [
       {
         speaker: "神秘设计师",
@@ -94,21 +127,54 @@ const SCENARIOS = {
         speaker: "设计助手",
         text: "（提示）先问我：白族有什么神话故事？可以对应什么纹样？用什么植物染料最环保？",
       },
+      {
+        speaker: "设计助手",
+        text: "（补充）蝴蝶纹讲的是人类化蝶的创世传说，蓼蓝是最天然的植物染料。",
+      },
+    ],
+    challenges: [
+      {
+        id: "c1",
+        nodeIndex: 2,
+        question: "设计师要“白族创世神话”的纹样。先想想：白族的创世神话和什么纹样有关？",
+        hint: "传说里，人类的祖先变成了什么？",
+        winGroups: [["蝴蝶", "化蝶", "蝶"]],
+      },
+      {
+        id: "c2",
+        nodeIndex: 3,
+        question: "用什么植物染料最环保？",
+        hint: "大理周城扎染的标配染料是什么？",
+        winGroups: [["板蓝根", "蓼蓝", "植物", "靛"]],
+      },
+      {
+        id: "c3",
+        nodeIndex: 4,
+        question: "把你的高定方案，一句话讲给设计师听。",
+        hint: "纹样 + 染料，两样都要说。",
+        winGroups: [["蝴蝶", "蝶纹", "化蝶"], ["板蓝根", "蓼蓝", "植物", "染料"]],
+      },
     ],
   },
 };
 
 // ==================== 状态 ====================
 const state = {
-  view: "entry", // entry | quiz | scenario
+  view: "entry", // entry | quiz | scenario | awards
   scenarioId: null,
   dialogueIndex: 0,
+  completedChallenges: [],
+  blockedByChallenge: false,
+  currentChallenge: null,
+  attempts: 0,
   countdownTimer: null,
   countdownLeft: 0,
   renderer: null,
+  extraLine: null,
 };
 
 let quizzesLoaded = false; // 竞答题目懒加载标记
+const AWARDS_KEY = "m3Awards";
 
 // ==================== 工具 ====================
 function $id(id) {
@@ -130,7 +196,7 @@ function escapeHtml(str) {
 }
 
 function showView(id) {
-  ["m3-entry", "m3-quiz", "m3-scenario"].forEach((v) => {
+  ["m3-entry", "m3-quiz", "m3-scenario", "m3-awards"].forEach((v) => {
     const el = $id(v);
     if (el) el.classList.toggle("active", v === id);
   });
@@ -161,6 +227,10 @@ function enterScenarios() {
 function backToEntry() {
   stopCountdown();
   state.scenarioId = null;
+  state.completedChallenges = [];
+  state.blockedByChallenge = false;
+  state.currentChallenge = null;
+  state.extraLine = null;
   state.view = "entry";
   showView("m3-entry");
 }
@@ -168,11 +238,71 @@ function backToEntry() {
 function backToScenarioMenu() {
   stopCountdown();
   state.scenarioId = null;
+  state.completedChallenges = [];
+  state.blockedByChallenge = false;
+  state.currentChallenge = null;
+  state.extraLine = null;
   renderScenarioMenu();
   $id("m3-scenario-menu")?.classList.add("active");
   $id("m3-scenario-play")?.classList.remove("active");
 }
 
+// ==================== 我的成就 ====================
+function loadAwards() {
+  try {
+    return JSON.parse(localStorage.getItem(AWARDS_KEY) || "[]");
+  } catch (err) {
+    return [];
+  }
+}
+
+function unlockAward(s) {
+  const list = loadAwards();
+  if (!list.some((a) => a.scenarioId === s.id)) {
+    list.push({
+      scenarioId: s.id,
+      award: s.award,
+      icon: s.icon,
+      awardDesc: s.awardDesc,
+      unlockedAt: new Date().toISOString().slice(0, 10),
+    });
+    localStorage.setItem(AWARDS_KEY, JSON.stringify(list));
+  }
+}
+
+function openAwards() {
+  state.view = "awards";
+  showView("m3-awards");
+  renderAwards();
+}
+
+function renderAwards() {
+  const grid = $id("m3-awards-grid");
+  if (!grid) return;
+  const list = loadAwards();
+  grid.innerHTML = Object.values(SCENARIOS)
+    .map((s) => {
+      const mine = list.find((a) => a.scenarioId === s.id);
+      if (mine) {
+        return `
+      <div class="m3-award-tile unlocked">
+        <span class="m3-award-tile-icon">${s.icon}</span>
+        <span class="m3-award-tile-name">${mine.award}</span>
+        <span class="m3-award-tile-desc">${mine.awardDesc}</span>
+        <span class="m3-award-tile-date">${mine.unlockedAt} 解锁</span>
+      </div>`;
+      }
+      return `
+      <div class="m3-award-tile locked">
+        <span class="m3-award-tile-icon">🔒</span>
+        <span class="m3-award-tile-name">${s.award}</span>
+        <span class="m3-award-tile-desc">通关「${s.title}」解锁</span>
+      </div>`;
+    })
+    .join("");
+}
+
+// ==================== 情景菜单 ====================
 function renderScenarioMenu() {
   const menu = $id("m3-scenario-menu");
   if (!menu) return;
@@ -196,9 +326,15 @@ function startScenario(id) {
   if (!s) return;
   state.scenarioId = id;
   state.dialogueIndex = 0;
+  state.completedChallenges = [];
+  state.blockedByChallenge = false;
+  state.currentChallenge = null;
+  state.attempts = 0;
+  state.extraLine = null;
   $id("m3-ask-log").innerHTML = "";
   $id("m3-ask-input").value = "";
   $id("m3-ask-role").textContent = s.role;
+  $id("m3-challenge-role").textContent = s.role;
   $id("m3-rescue-canvas-wrap")?.classList.remove("active");
   if (state.renderer) {
     state.renderer.destroy();
@@ -209,7 +345,7 @@ function startScenario(id) {
   $id("m3-scenario-play")?.classList.add("active");
   $id("m3-scenario-title").textContent = `${s.icon} ${s.title}`;
   $id("m3-scenario-hint").textContent =
-    `右框可随时向${s.role}提问，问对了就通关！`;
+    `右框可随时向${s.role}提问，剧情节点要自己答题通关！`;
 
   renderDialogue();
 
@@ -225,7 +361,7 @@ function startScenario(id) {
         stopCountdown();
         $id("m3-countdown")?.classList.remove("active");
         appendBotBubble(
-          `师傅已经走到染坊门口了！快抓紧最后的机会问问题——`,
+          `师傅已经走到染坊门口了！快抓紧最后的机会答题——`,
           [],
           false,
         );
@@ -239,9 +375,34 @@ function startScenario(id) {
 function nextDialogue() {
   const s = SCENARIOS[state.scenarioId];
   if (!s) return;
+  // 答题中断（去提问了）：点按钮重新弹出答题框
+  if (state.blockedByChallenge) {
+    if (state.currentChallenge) openChallenge(state.currentChallenge);
+    return;
+  }
   if (state.dialogueIndex < s.dialogue.length - 1) {
     state.dialogueIndex++;
     renderDialogue();
+    maybeTriggerChallenge(s);
+  } else {
+    // 对话已播完：触发仍未完成的收尾题（nodeIndex >= dialogue.length）
+    const last = s.challenges.find(
+      (c) => c.nodeIndex >= s.dialogue.length && !state.completedChallenges.includes(c.id),
+    );
+    if (last) {
+      state.blockedByChallenge = true;
+      openChallenge(last);
+    }
+  }
+}
+
+function maybeTriggerChallenge(s) {
+  const ch = s.challenges.find(
+    (c) => c.nodeIndex === state.dialogueIndex && !state.completedChallenges.includes(c.id),
+  );
+  if (ch) {
+    state.blockedByChallenge = true;
+    openChallenge(ch);
   }
 }
 
@@ -249,7 +410,7 @@ function renderDialogue() {
   const s = SCENARIOS[state.scenarioId];
   if (!s) return;
   const wrap = $id("m3-stage");
-  wrap.innerHTML = s.dialogue
+  const lines = s.dialogue
     .slice(0, state.dialogueIndex + 1)
     .map(
       (d) => `
@@ -258,17 +419,160 @@ function renderDialogue() {
       <span class="m3-bubble-text">${escapeHtml(d.text)}</span>
     </div>
   `,
-    )
-    .join("");
+    );
+  if (state.extraLine) {
+    lines.push(`
+    <div class="m3-bubble">
+      <span class="m3-bubble-who">${escapeHtml(state.extraLine.speaker)}</span>
+      <span class="m3-bubble-text">${escapeHtml(state.extraLine.text)}</span>
+    </div>
+  `);
+  }
+  wrap.innerHTML = lines.join("");
   const last = wrap.lastElementChild;
   if (last) last.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  $id("m3-stage-next")?.classList.toggle(
-    "active",
-    state.dialogueIndex < s.dialogue.length - 1,
+
+  // “继续剧情 →”按钮状态：答题中断时可点击回到答题框
+  const remaining = s.challenges.filter(
+    (c) => !state.completedChallenges.includes(c.id),
   );
+  const nextBtn = $id("m3-stage-next");
+  if (state.blockedByChallenge && state.currentChallenge) {
+    nextBtn.classList.add("active");
+    nextBtn.textContent = "继续答题 →";
+    nextBtn.disabled = false;
+  } else if (state.dialogueIndex < s.dialogue.length - 1) {
+    nextBtn.classList.add("active");
+    nextBtn.textContent = "继续剧情 →";
+    nextBtn.disabled = state.blockedByChallenge;
+  } else if (remaining.length > 0) {
+    nextBtn.classList.add("active");
+    nextBtn.textContent = "迎接最终挑战 →";
+    nextBtn.disabled = state.blockedByChallenge;
+  } else {
+    nextBtn.classList.remove("active");
+  }
 }
 
-// ==================== AI 问答（模块三自己的接口） ====================
+// ==================== 闯关答题 ====================
+function openChallenge(ch) {
+  state.currentChallenge = ch;
+  state.attempts = 0;
+  $id("m3-challenge-question").textContent = ch.question;
+  $id("m3-challenge-input").value = "";
+  $id("m3-challenge-feedback").textContent = "";
+  $id("m3-challenge-hint").textContent = "";
+  $id("m3-challenge-submit").disabled = false;
+  $id("m3-challenge-overlay")?.classList.add("active");
+  setTimeout(() => $id("m3-challenge-input")?.focus(), 60);
+}
+
+function closeChallenge() {
+  $id("m3-challenge-overlay")?.classList.remove("active");
+  state.currentChallenge = null;
+  state.attempts = 0;
+}
+
+function dismissChallengeForAsk() {
+  // 只是收起弹层去提问：保留当前关卡与锁定状态，提问后自动重开
+  $id("m3-challenge-overlay")?.classList.remove("active");
+  state.attempts = 0;
+}
+
+function askTutorFromChallenge() {
+  dismissChallengeForAsk();
+  const input = $id("m3-ask-input");
+  input?.scrollIntoView({ behavior: "smooth", block: "center" });
+  setTimeout(() => input?.focus(), 260);
+}
+
+async function submitChallenge() {
+  const s = SCENARIOS[state.scenarioId];
+  const ch = state.currentChallenge;
+  const input = $id("m3-challenge-input");
+  const answer = (input?.value || "").trim();
+  if (!answer || !ch || !s) return;
+
+  const submitBtn = $id("m3-challenge-submit");
+  const feedbackEl = $id("m3-challenge-feedback");
+  submitBtn.disabled = true;
+
+  try {
+    const data = await window.LANBAI_API("/scenario/answer", {
+      method: "POST",
+      body: JSON.stringify({
+        scenarioId: s.id,
+        challengeId: ch.id,
+        userAnswer: answer,
+      }),
+    });
+    if (data.correct) {
+      state.completedChallenges.push(ch.id);
+      state.blockedByChallenge = false;
+      feedbackEl.textContent = data.feedback || "答对了！";
+      feedbackEl.style.color = "green";
+      closeChallenge();
+      handleChallengePassed(s, data.feedback);
+    } else {
+      state.attempts++;
+      feedbackEl.textContent = data.feedback || "再想想。";
+      feedbackEl.style.color = "#a06a00";
+      if (state.attempts >= 2) {
+        $id("m3-challenge-hint").textContent =
+          "提示：" + (data.hint || ch.hint || "");
+      }
+      submitBtn.disabled = false;
+      input.focus();
+    }
+  } catch (err) {
+    if (err.status === 401) {
+      alert("这个情境需要登录后才能答题，请先登录。");
+      window.location.href = "index.html?loginRequired=1";
+      return;
+    }
+    // 后端接口不可用时的本地关键词兜底，保证离线也能玩
+    const allHit = ch.winGroups.every((group) =>
+      group.some((word) => answer.includes(word)),
+    );
+    if (allHit) {
+      state.completedChallenges.push(ch.id);
+      state.blockedByChallenge = false;
+      feedbackEl.textContent = "答对了！";
+      feedbackEl.style.color = "green";
+      closeChallenge();
+      handleChallengePassed(s, "答对了！");
+    } else {
+      state.attempts++;
+      feedbackEl.textContent =
+        "（连不上判分服务，先按线索再想想）" + (err.message || "");
+      feedbackEl.style.color = "#a06a00";
+      if (state.attempts >= 2) {
+        $id("m3-challenge-hint").textContent = "提示：" + (ch.hint || "");
+      }
+      submitBtn.disabled = false;
+      input.focus();
+    }
+  }
+}
+
+function handleChallengePassed(s, feedbackText) {
+  const allDone = s.challenges.every((c) =>
+    state.completedChallenges.includes(c.id),
+  );
+  if (allDone) {
+    stopCountdown();
+    $id("m3-countdown")?.classList.remove("active");
+    showAward(s);
+  } else {
+    state.extraLine = {
+      speaker: s.role,
+      text: "（肯定）" + (feedbackText || "对，就是这样！"),
+    };
+    renderDialogue();
+  }
+}
+
+// ==================== AI 问答（模块三自己的接口，只给线索） ====================
 async function askScenario() {
   const input = $id("m3-ask-input");
   const question = input.value.trim();
@@ -283,7 +587,7 @@ async function askScenario() {
       body: JSON.stringify({ scenarioId: state.scenarioId, question }),
     });
     replacePendingBot(data.text, data.citations || [], data.lowConfidence);
-    checkScenarioWin(question, data.text);
+    // 不再自动弹出答题框：让用户先读完线索，点“继续答题 →”再回到答题
   } catch (err) {
     if (err.status === 401) {
       alert("这个情境需要登录后才能提问，请先登录。");
@@ -356,33 +660,25 @@ function scrollAsk() {
   log.scrollTop = log.scrollHeight;
 }
 
-// ==================== 通关判定（前端关键词） ====================
-function checkScenarioWin(question, aiText) {
-  const s = SCENARIOS[state.scenarioId];
-  if (!s || !s.winGroups) return;
-  const hay = (question || "") + (aiText || "");
-  const allHit = s.winGroups.every((group) =>
-    group.some((word) => hay.includes(word)),
-  );
-  if (allHit) {
-    stopCountdown();
-    $id("m3-countdown")?.classList.remove("active");
-    showAward(s);
-  }
-}
-
 // ==================== 成就卡 + 布料动画 ====================
 function showAward(s) {
+  unlockAward(s);
   $id("m3-award-icon").textContent = s.icon;
   $id("m3-award-name").textContent = s.award;
   $id("m3-award-desc").textContent = s.awardDesc;
+  const replay = $id("m3-award-replay");
+  if (replay) replay.style.display = s.id === "rescue" ? "inline-block" : "none";
   $id("m3-award-overlay")?.classList.add("active");
   if (s.id === "rescue") playRescueAnimation();
 }
 
 function closeAward() {
+  // 关闭成就卡后停留在剧情页：成就已存档可在“我的成就”回看，救援动画留在下方可回看
   $id("m3-award-overlay")?.classList.remove("active");
-  backToScenarioMenu();
+}
+
+function replayRescueAnimation() {
+  playRescueAnimation();
 }
 
 function playRescueAnimation() {
@@ -459,4 +755,9 @@ window.module3 = {
   showPatternCard,
   closePatternCard,
   closeAward,
+  openAwards,
+  submitChallenge,
+  closeChallenge,
+  askTutorFromChallenge,
+  replayRescueAnimation,
 };
