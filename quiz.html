@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="蓝白之境·问蓝知染：和白族扎染智能导师对话，检索知识库、辨析概念、生成练习题与纹样。">
+  <meta name="description" content="苍洱纹册·问蓝知染：和白族扎染智能导师对话，检索知识库、辨析概念、生成练习题与纹样。">
   <meta name="theme-color" content="#f4f0e5">
-  <title>蓝白之境 · 问蓝知染</title>
+  <title>苍洱纹册· 问蓝知染</title>
   <link rel="icon" type="image/svg+xml" href="assets/indigo-textile.svg">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="lab.css">
   <link rel="stylesheet" href="lab-agent.css">
-  <link rel="stylesheet" href="tutor.css">
+  <link rel="stylesheet" href="tutor.css?v=20261110a">
   <script defer src="js/api-base.js"></script>
   <script defer src="app.js"></script>
-  <script type="module" src="js/tutor-page.js?v=20261024b"></script>
+  <script type="module" src="js/tutor-page.js?v=20261110a"></script>
 </head>
 <body class="page-home page-lab page-quiz">
   <a class="skip-link" href="#main-content">跳到主要内容</a>
@@ -22,7 +22,7 @@
 
   <header class="site-header" id="siteHeader">
     <div class="nav-shell">
-      <a class="brand" href="home.html" aria-label="蓝白之境首页">
+      <a class="brand" href="home.html" aria-label="苍洱纹册首页">
         <span class="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 48 48">
             <path d="M24 4.5C19.4 13 13.2 20 13.2 28.1a10.8 10.8 0 1 0 21.6 0C34.8 20 28.6 13 24 4.5Z"/>
@@ -30,8 +30,7 @@
           </svg>
         </span>
         <span class="brand-copy">
-          <strong>蓝白之境</strong>
-          <small>THE REALM OF INDIGO</small>
+          <strong>苍洱纹册</strong>
         </span>
       </a>
 
@@ -78,7 +77,11 @@
         <div class="tutor-toolbar">
           <div class="tutor-toolbar-title">
             <span class="section-number">01 / 智能导师</span>
-            <strong>问蓝知染</strong>
+              <div class="tutor-title-line">
+                <strong>问蓝知染</strong>
+                <span class="tutor-mode-tag" id="tutorAiStatus" role="status" aria-live="polite">状态读取中</span>
+              </div>
+              <p class="tutor-mode-note" id="tutorAiStatusNote" hidden></p>
           </div>
           <div class="tutor-toolbar-actions">
             <button class="lab-quiet" id="tutorHistoryButton" type="button">历史会话</button>
@@ -148,6 +151,21 @@
     </section>
   </div>
 
+  <div class="tutor-knowledge-modal" id="tutorKnowledgeModal" hidden>
+    <button class="tutor-history-backdrop" id="tutorKnowledgeBackdrop" type="button" aria-label="关闭知识库阅览"></button>
+    <section class="tutor-knowledge-card" role="dialog" aria-modal="true" aria-labelledby="tutorKnowledgeTitle">
+      <header class="tutor-history-head">
+        <div>
+          <span class="section-number">知识库阅览</span>
+          <h2 id="tutorKnowledgeTitle">知识分片</h2>
+          <p class="tutor-knowledge-summary" id="tutorKnowledgeSummary"></p>
+        </div>
+        <button class="tutor-history-close" id="tutorKnowledgeClose" type="button" aria-label="关闭">×</button>
+      </header>
+      <div class="tutor-knowledge-list" id="tutorKnowledgeList"></div>
+    </section>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-brand">
       <a class="brand invert" href="home.html" aria-label="蓝白之境首页">
@@ -179,7 +197,6 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 BAIZU TIE-DYE DIGITAL MUSEUM</span>
       <span>云南大理 · 白族扎染数字科普站</span>
     </div>
   </footer>

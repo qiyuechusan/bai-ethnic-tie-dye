@@ -44,7 +44,7 @@ export function assistantBubble(data, handlers = {}) {
   const cardsBox = document.createElement('div');
   cardsBox.className = 'tutor-cards';
   (data.cards || []).forEach((card) => {
-    const element = renderCard(card, handlers);
+    const element = renderCard(card, handlers, { history: Boolean(data.history) });
     if (element) {
       cardsBox.append(element);
     }
@@ -60,11 +60,22 @@ export function assistantBubble(data, handlers = {}) {
     bubble.append(renderPromptGroup('继续问', data.suggestedPrompts, handlers));
   }
 
+  if (typeof data.onRetry === 'function') {
+    const retryRow = document.createElement('div');
+    retryRow.className = 'tutor-retry-row';
+    const retryButton = document.createElement('button');
+    retryButton.type = 'button';
+    retryButton.textContent = '重新发送这次问题';
+    retryButton.addEventListener('click', data.onRetry);
+    retryRow.append(retryButton);
+    bubble.append(retryRow);
+  }
+
   message.append(avatar, bubble);
   return message;
 }
 
-export function historyBubble(item) {
+export function historyBubble(item, handlers = {}) {
   if (item.role === 'user') {
     return userBubble(item.content || '');
   }
@@ -72,17 +83,18 @@ export function historyBubble(item) {
   return assistantBubble({
     text: item.content || '',
     citations: payload.citations || [],
-    cards: [],
+    cards: Array.isArray(payload.cards) ? payload.cards : [],
     relatedQuestions: [],
     suggestedPrompts: [],
     lowConfidence: Boolean(payload.lowConfidence),
-  });
+    history: true,
+  }, handlers);
 }
 
-function renderCard(card, handlers) {
+function renderCard(card, handlers, options = {}) {
   switch (card.type) {
     case 'quiz':
-      return renderQuizCard(card.quiz, handlers);
+      return renderQuizCard(card.quiz, handlers, options.history);
     case 'pattern':
       return renderPatternCard(card.pattern);
     case 'clarify':
@@ -94,13 +106,14 @@ function renderCard(card, handlers) {
   }
 }
 
-function renderQuizCard(quiz, handlers) {
+function renderQuizCard(quiz, handlers, history = false) {
   const card = document.createElement('div');
   card.className = 'tutor-card quiz-card';
+  card.classList.toggle('is-history', history);
 
   const kicker = document.createElement('span');
   kicker.className = 'tutor-card-kicker';
-  kicker.textContent = `辨析题 · ${difficultyText(quiz.difficulty)}`;
+  kicker.textContent = `${history ? '历史题卡' : '辨析题'} · ${difficultyText(quiz.difficulty)}`;
   card.append(kicker);
 
   const stem = document.createElement('h3');
@@ -119,6 +132,7 @@ function renderQuizCard(quiz, handlers) {
     button.dataset.key = option.key;
     button.setAttribute('role', 'radio');
     button.setAttribute('aria-checked', 'false');
+    button.disabled = history;
 
     const key = document.createElement('b');
     key.textContent = option.key;
@@ -127,6 +141,9 @@ function renderQuizCard(quiz, handlers) {
     button.append(key, text);
 
     button.addEventListener('click', () => {
+      if (history) {
+        return;
+      }
       if (card.dataset.answered === 'true') {
         return;
       }
@@ -147,6 +164,14 @@ function renderQuizCard(quiz, handlers) {
     hint.className = 'tutor-quiz-hint';
     hint.textContent = `提示：${quiz.hint}`;
     card.append(hint);
+  }
+
+  if (history) {
+    const note = document.createElement('p');
+    note.className = 'tutor-history-card-note';
+    note.textContent = '这是历史会话中的题目，仅保留题干与选项，不再重复提交判分。';
+    card.append(note);
+    return card;
   }
 
   const submitButton = document.createElement('button');
