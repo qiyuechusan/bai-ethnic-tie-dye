@@ -52,16 +52,8 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
+        
+        
     </dependencies>
 
     <build>
@@ -83,6 +75,7 @@
                     <include>place.html</include>
                     <include>timeline.html</include>
                     <include>styles.css</include>
+                    <include>module3-scenario.css</include>
                     <include>lab.css</include>
                     <include>lab-agent.css</include>
                     <include>tutor.css</include>

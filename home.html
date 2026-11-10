@@ -8,8 +8,10 @@
   <title>蓝白之境 · 白族扎染数字科普</title>
   <link rel="icon" type="image/svg+xml" href="assets/indigo-textile.svg">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="module3-scenario.css" />
   <script defer src="js/api-base.js"></script>
   <script defer src="app.js"></script>
+  <script type="module" src="js/module3-scenario.js"></script>
   <style>
     /* 增加一点平滑过渡，切换时不突兀 */
     .page-view {
@@ -219,7 +221,6 @@
           <article class="module-card module-pattern reveal is-visible" data-modal="modal-pattern" role="button" tabindex="0" aria-haspopup="dialog" aria-label="展区 03：纹样图鉴与闯关答题，打开纹样图鉴">
             <div class="card-topline">
               <span class="module-number">展区 03</span>
-              <span class="module-state">COLLECT</span>
             </div>
             <div class="pattern-art" aria-hidden="true">
               <svg viewBox="0 0 220 180">
@@ -291,7 +292,7 @@
           <!-- 展区 06 -->
           <article class="module-card module-gallery reveal is-visible" data-modal="modal-ask" role="button" tabindex="0" aria-haspopup="dialog" aria-label="展区 06：一方蓝布万千手艺，打开作品墙">
             <div class="gallery-copy">
-              <div class="card-topline"><span class="module-number">展区 06</span><span class="module-state">COMMUNITY GALLERY</span></div>
+              <div class="card-topline"><span class="module-number">展区 06</span></div>
               <div>
                 <span class="module-icon" aria-hidden="true">
                   <svg viewBox="0 0 48 48"><rect x="6" y="9" width="36" height="30" rx="2"></rect><path d="m6 33 10-10 8 8 6-6 12 12M15 19h.1"></path></svg>
@@ -317,7 +318,6 @@
         <article class="module-card module-pattern reveal is-visible" data-modal="modal-pattern" role="button" tabindex="0" aria-haspopup="dialog" aria-label="打开纹样图鉴与闯关答题" style="min-height: 600px;">
           <div class="card-topline">
             <span class="module-number">展区 03 · 详情</span>
-            <span class="module-state">COLLECT</span>
           </div>
           <div class="pattern-art" aria-hidden="true" style="min-height: 300px;">
             <svg viewBox="0 0 220 180" style="width: 300px;">
@@ -332,7 +332,7 @@
               <svg viewBox="0 0 48 48"><path d="M24 9c-9 0-16 6-16 14 0 6 4 10 9 12l-2 7 9-4 9 4-2-7c5-2 9-6 9-12 0-8-7-14-16-14Z"></path><path d="M24 15v15M16 19c3 4 5 6 8 6s5-2 8-6"></path></svg>
             </span>
             <h3 style="font-size: 48px;">纹样图鉴<br>× 闯关答题</h3>
-            <p style="font-size: 18px;">读懂蝴蝶、梅花与铜钱纹的寓意，再用知识解锁下一张图鉴卡。（B同学负责在此处开发答题与收集功能）。</p>
+            <p style="font-size: 18px;">读懂蝴蝶、梅花与铜钱纹的寓意，再用知识解锁下一张图鉴卡。</p>
           </div>
         </article>
       </div>
@@ -449,21 +449,62 @@
   </script>
   <!-- ===== 模块 3：图鉴与闯关 遮罩层 ===== -->
   <div id="modal-pattern" class="custom-modal">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeModal('modal-pattern')">&times;</button>
-      <h2 class="modal-title">纹样图鉴与闯关</h2>
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('modal-pattern')">
+      &times;
+    </button>
 
-      <!-- 图鉴展示区 -->
+    <!-- ===== 视图 1：入口（图鉴 + 双按钮） ===== -->
+    <div id="m3-entry" class="m3-view active">
+      <h2 class="modal-title">纹样图鉴 · 知识竞答 · 剧本杀</h2>
+      <div class="m3-entry-buttons">
+        <button
+          type="button"
+          class="m3-entry-btn m3-entry-btn-quiz"
+          onclick="window.module3.enterQuiz()"
+        >
+          <span class="m3-entry-btn-title">📚 知识竞答</span>
+          <span class="m3-entry-btn-sub">答对解锁纹样卡牌</span>
+        </button>
+        <button
+          type="button"
+          class="m3-entry-btn m3-entry-btn-scenario"
+          onclick="window.module3.enterScenarios()"
+        >
+          <span class="m3-entry-btn-title">🎭 情境剧本杀</span>
+          <span class="m3-entry-btn-sub">三个情景等你来破局</span>
+        </button>
+        <button
+          type="button"
+          class="m3-entry-btn m3-entry-btn-awards"
+          onclick="window.module3.openAwards()"
+        >
+          <span class="m3-entry-btn-title">🏆 我的成就</span>
+          <span class="m3-entry-btn-sub">查看剧本杀通关勋章</span>
+        </button>
+      </div>
       <div class="gallery-wrapper">
         <h3>我的图鉴</h3>
         <div id="pattern-grid" class="pattern-grid">
           <!-- JS 动态渲染纹样卡片 -->
         </div>
       </div>
+    </div>
 
-      <!-- 闯关答题区 -->
+    <!-- ===== 视图 2：知识竞答 ===== -->
+    <div id="m3-quiz" class="m3-view">
+      <div class="m3-view-head">
+        <button
+          type="button"
+          class="m3-back-btn"
+          onclick="window.module3.backToEntry()"
+        >
+          ← 返回
+        </button>
+        <h2 class="modal-title">知识竞答</h2>
+        <span class="m3-view-tip">答对一题，解锁一张纹样卡牌</span>
+      </div>
       <div class="quiz-wrapper">
-        <h3>知识闯关</h3>
         <div id="quiz-container">
           <p id="quiz-question">加载题目中...</p>
           <div id="quiz-options" class="quiz-options"></div>
@@ -471,7 +512,159 @@
         </div>
       </div>
     </div>
+
+    <!-- ===== 视图 3：情境剧本杀 ===== -->
+    <div id="m3-scenario" class="m3-view">
+      <div class="m3-view-head">
+        <button
+          type="button"
+          class="m3-back-btn"
+          onclick="window.module3.backToEntry()"
+        >
+          ← 返回
+        </button>
+        <h2 class="modal-title">情境剧本杀</h2>
+        <span class="m3-view-tip">选择一个情景，向右框 AI 提问破局</span>
+      </div>
+      <div id="m3-scenario-menu" class="m3-scenario-menu"></div>
+
+      <div id="m3-scenario-play" class="m3-scenario-play">
+        <div class="m3-play-head">
+          <h3 id="m3-scenario-title"></h3>
+          <span id="m3-scenario-hint" class="m3-scenario-hint"></span>
+          <div id="m3-countdown" class="m3-countdown">
+            <span class="m3-countdown-num"></span>
+            <div class="m3-countdown-track">
+              <div class="m3-countdown-bar"></div>
+            </div>
+          </div>
+        </div>
+        <div class="m3-play-layout">
+          <div class="m3-stage-wrap">
+            <div id="m3-stage" class="m3-stage"></div>
+            <button
+              type="button"
+              id="m3-stage-next"
+              class="m3-stage-next"
+              onclick="window.module3.nextDialogue()"
+            >
+              继续剧情 →
+            </button>
+          </div>
+          <div class="m3-ask-wrap">
+            <div class="m3-ask-head">
+              向 <span id="m3-ask-role">传承人</span> 提问
+            </div>
+            <div id="m3-ask-log" class="m3-ask-log"></div>
+            <div class="m3-ask-input-row">
+              <input
+                id="m3-ask-input"
+                type="text"
+                maxlength="500"
+                placeholder="输入你的问题…"
+                onkeydown="if(event.key==='Enter')window.module3.askScenario()"
+              />
+              <button type="button" onclick="window.module3.askScenario()">
+                提问
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="m3-rescue-canvas-wrap" class="m3-rescue-canvas-wrap">
+          <canvas id="m3-rescue-canvas"></canvas>
+          <p id="m3-rescue-status" class="m3-rescue-status"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 视图 4：我的成就 ===== -->
+    <div id="m3-awards" class="m3-view">
+      <div class="m3-view-head">
+        <button
+          type="button"
+          class="m3-back-btn"
+          onclick="window.module3.backToEntry()"
+        >
+          ← 返回
+        </button>
+        <h2 class="modal-title">我的成就</h2>
+        <span class="m3-view-tip">通关剧本杀情景，收集成就勋章</span>
+      </div>
+      <div id="m3-awards-grid" class="m3-awards-grid">
+        <!-- JS 动态渲染勋章 -->
+      </div>
+    </div>
   </div>
+
+  <!-- ===== 成就卡奖励层（剧本杀通关） ===== -->
+  <div id="m3-award-overlay" class="m3-overlay">
+    <div class="m3-award-card">
+      <div class="m3-award-icon" id="m3-award-icon">🏅</div>
+      <div class="m3-award-title">成就解锁</div>
+      <div class="m3-award-name" id="m3-award-name">火眼金睛</div>
+      <div class="m3-award-desc" id="m3-award-desc"></div>
+      <button type="button" onclick="window.module3.closeAward()">
+        收下成就
+      </button>
+      <button
+        type="button"
+        id="m3-award-replay"
+        class="m3-award-replay"
+        style="display: none;"
+        onclick="window.module3.replayRescueAnimation()"
+      >
+        再看一次动画
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== 纹样卡牌奖励层（知识竞答答对） ===== -->
+  <div id="m3-pattern-card-overlay" class="m3-overlay">
+    <div class="m3-pattern-card">
+      <img id="m3-pattern-card-img" alt="纹样" />
+      <h4 id="m3-pattern-card-name"></h4>
+      <p id="m3-pattern-card-meaning" class="m3-pattern-card-meaning"></p>
+      <p id="m3-pattern-card-desc" class="m3-pattern-card-desc"></p>
+      <button type="button" onclick="window.module3.closePatternCard()">
+        收下纹样
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== 闯关答题弹层（剧情节点弹出，居中） ===== -->
+  <div id="m3-challenge-overlay" class="m3-overlay">
+    <div class="m3-challenge-card">
+      <div class="m3-challenge-title">闯关答题</div>
+      <p id="m3-challenge-question" class="m3-challenge-question"></p>
+      <input
+        id="m3-challenge-input"
+        type="text"
+        maxlength="120"
+        placeholder="输入你的答案…"
+        onkeydown="if(event.key==='Enter')window.module3.submitChallenge()"
+      />
+      <p id="m3-challenge-feedback" class="m3-challenge-feedback"></p>
+      <p id="m3-challenge-hint" class="m3-challenge-hint"></p>
+      <div class="m3-challenge-actions">
+        <button
+          type="button"
+          class="m3-challenge-ask"
+          onclick="window.module3.askTutorFromChallenge()"
+        >
+          向 <span id="m3-challenge-role">传承人</span> 提问 →
+        </button>
+        <button
+          type="button"
+          id="m3-challenge-submit"
+          class="m3-challenge-submit"
+          onclick="window.module3.submitChallenge()"
+        >
+          提交
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- ===== 模块 4：作品墙 遮罩层 ===== -->
   <div id="modal-ask" class="custom-modal" style="align-items: flex-start; padding-top: 5vh;">

@@ -40,7 +40,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/diy.html",
                         "/quiz.html",
                         "/api/diy/agent/**",
-                        "/api/tutor/**");
+                        "/api/tutor/**",
+                        "/api/scenario/**");
     }
 
     @Override
