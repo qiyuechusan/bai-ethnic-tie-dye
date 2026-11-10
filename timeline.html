@@ -7,8 +7,10 @@
   <meta name="theme-color" content="#f4f0e5">
   <title>七步成蓝 · 工艺长卷 | 蓝白之境</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="craft-clinic.css">
   <script defer src="js/api-base.js"></script>
   <script defer src="app.js"></script>
+  <script defer src="js/craft-clinic.js"></script>
 </head>
 <body class="page-home page-standalone">
   <a class="skip-link" href="#main-content">跳到主要内容</a>
@@ -379,6 +381,91 @@
             </figure>
           </article>
         </div>
+
+        <section class="dye-clinic" id="dyeClinic" aria-labelledby="clinicTitle">
+          <header class="clinic-heading">
+            <div>
+              <p class="clinic-kicker">P.08 · 染坊问诊</p>
+              <h2 id="clinicTitle">布染“翻车”了，<br><em>先别急着重来。</em></h2>
+            </div>
+            <div class="clinic-intro">
+              <p>
+                同一块布，问题往往藏在一个很小的动作里。先观察症状，再判断原因，
+                最后按处方逐项排查。四种常见失误，看看你能诊明几个。
+              </p>
+              <div class="clinic-progress" aria-label="问诊进度">
+                <span>已诊明</span>
+                <strong><span id="clinicProgressText">0</span> / 04</strong>
+                <span class="clinic-progress-track" aria-hidden="true"><i id="clinicProgressBar"></i></span>
+              </div>
+            </div>
+          </header>
+
+          <div class="clinic-layout">
+            <nav class="clinic-cases" aria-label="翻车症状列表">
+              <div class="clinic-cases-head">
+                <span>今日候诊</span>
+                <span><b id="clinicCaseCount">04</b> 例</span>
+              </div>
+              <div id="clinicCases" role="tablist" aria-label="选择一种翻车症状"></div>
+            </nav>
+
+            <article class="clinic-exam" id="clinicPanel" role="tabpanel" tabindex="0">
+              <div class="clinic-visual">
+                <div class="clinic-visual-top">
+                  <span id="clinicSymptomTag">症状 01</span>
+                  <span>布面观察记录</span>
+                </div>
+                <div class="clinic-cloth-wrap">
+                  <div class="clinic-cloth symptom-bleed" id="clinicCloth" aria-hidden="true">
+                    <span class="clinic-motif"></span>
+                  </div>
+                </div>
+                <div class="clinic-observation">
+                  <span>你看到的是</span>
+                  <p id="clinicSymptom"></p>
+                </div>
+              </div>
+
+              <div class="clinic-diagnosis">
+                <div class="clinic-diagnosis-head">
+                  <span>先别重染 · 判断原因</span>
+                  <span id="clinicQuestionNo">01 / 04</span>
+                </div>
+                <h3 class="clinic-question" id="clinicQuestion"></h3>
+                <div class="clinic-options" id="clinicOptions" role="group" aria-label="选择一个可能原因"></div>
+
+                <div class="clinic-feedback" id="clinicFeedback" aria-live="polite" hidden>
+                  <strong class="clinic-feedback-title" id="clinicFeedbackTitle"></strong>
+                  <p id="clinicFeedbackText"></p>
+                  <div class="clinic-prescription" id="clinicPrescription" hidden>
+                    <strong>修复处方</strong>
+                    <ol id="clinicPrescriptionList"></ol>
+                    <p class="clinic-prevent" id="clinicPrevent"></p>
+                  </div>
+                  <button class="clinic-next" id="clinicNext" type="button" hidden>诊断下一种症状 →</button>
+                </div>
+
+                <p class="clinic-note">
+                  注：扎染受布料、染缸状态、气候和手法共同影响，这里给出的是常见排查顺序，并非唯一结论。
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <div class="clinic-complete" id="clinicComplete" tabindex="-1" hidden>
+            <span class="clinic-complete-stamp">染坊<br>值日生</span>
+            <div>
+              <small>问诊记录 · 04 / 04</small>
+              <h3>四种翻车都已诊明</h3>
+              <p>真正的手艺不是从不失手，而是知道下一次从哪里改。</p>
+            </div>
+            <div class="clinic-complete-actions">
+              <button id="clinicRestart" type="button">再诊一遍</button>
+              <a href="diy.html">去实验室试一块布 →</a>
+            </div>
+          </div>
+        </section>
 
         <footer class="book-colophon">
           <div>

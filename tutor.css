@@ -34,6 +34,49 @@
   font-size: 18px;
 }
 
+.tutor-title-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tutor-mode-tag {
+  padding: 2px 8px;
+  border: 1px solid rgba(13, 57, 89, 0.18);
+  border-radius: 999px;
+  background: rgba(13, 57, 89, 0.05);
+  color: #6b7c80;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.tutor-mode-tag.is-online {
+  border-color: rgba(36, 100, 142, 0.34);
+  background: rgba(36, 100, 142, 0.08);
+  color: #1d5278;
+}
+
+.tutor-mode-tag.is-warning {
+  border-color: rgba(158, 106, 42, 0.34);
+  background: rgba(158, 106, 42, 0.09);
+  color: #8a5a22;
+}
+
+.tutor-mode-tag.is-offline {
+  border-color: rgba(127, 74, 69, 0.32);
+  background: rgba(127, 74, 69, 0.07);
+  color: #80544f;
+}
+
+.tutor-mode-note {
+  max-width: 540px;
+  margin: 3px 0 0;
+  color: #7b8888;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
 .tutor-toolbar-actions {
   display: flex;
   gap: 8px;
@@ -145,17 +188,6 @@
   margin-bottom: 0;
 }
 
-.tutor-mode-tag {
-  display: inline-block;
-  margin-bottom: 6px;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(158, 106, 42, 0.12);
-  color: #8a5a22;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-}
-
 .tutor-low-confidence {
   margin: 8px 0 0;
   padding-left: 9px;
@@ -218,6 +250,18 @@
   border: 1px solid rgba(13, 57, 89, 0.14);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.7);
+}
+
+.tutor-card.is-history {
+  border-style: dashed;
+  background: rgba(250, 247, 239, 0.74);
+}
+
+.tutor-history-card-note {
+  margin: 8px 0 0;
+  color: #8a9695;
+  font-size: 11px;
+  font-style: italic;
 }
 
 .tutor-card-kicker {
@@ -332,6 +376,31 @@
 .tutor-error-line {
   color: #9b3d35;
   font-size: 12px;
+}
+
+.tutor-retry-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px dashed rgba(13, 57, 89, 0.12);
+}
+
+.tutor-retry-row button {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(13, 57, 89, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.66);
+  color: var(--indigo-700, #174a73);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.tutor-retry-row button:hover {
+  border-color: rgba(36, 100, 142, 0.4);
+  background: rgba(36, 100, 142, 0.07);
 }
 
 .tutor-pattern-wrap {
@@ -483,6 +552,26 @@
   color: #6b7c80;
   font-size: 11px;
   line-height: 1.6;
+}
+
+.tutor-category-browse {
+  display: inline-flex;
+  margin-bottom: 7px;
+  padding: 0;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  color: var(--indigo-700, #174a73);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.tutor-category-browse:hover {
+  color: var(--indigo-800, #0b3863);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .tutor-category .tutor-chip {
@@ -721,4 +810,88 @@
   color: #6b7c80;
   font-size: 13px;
   text-align: center;
+}
+
+/* 知识分片阅览 */
+.tutor-knowledge-modal {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  display: grid;
+  padding: 24px;
+  place-items: center;
+}
+
+.tutor-knowledge-modal[hidden] {
+  display: none;
+}
+
+.tutor-knowledge-card {
+  position: relative;
+  display: grid;
+  width: min(760px, 100%);
+  max-height: 78vh;
+  padding: 20px;
+  gap: 14px;
+  border: 1px solid rgba(13, 57, 89, 0.14);
+  border-radius: 14px;
+  background: var(--paper, #f4f0e5);
+  box-shadow: 0 24px 60px rgba(11, 34, 54, 0.24);
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.tutor-knowledge-summary {
+  margin: 5px 0 0;
+  color: #6b7c80;
+  font-size: 12px;
+}
+
+.tutor-knowledge-list {
+  display: grid;
+  overflow-y: auto;
+  padding-right: 5px;
+  gap: 10px;
+}
+
+.tutor-knowledge-item {
+  padding: 14px 15px;
+  border: 1px solid rgba(13, 57, 89, 0.13);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.tutor-knowledge-item h3 {
+  margin: 0;
+  color: var(--indigo-800, #0b3863);
+  font-family: var(--font-round, inherit);
+  font-size: 16px;
+}
+
+.tutor-knowledge-item p {
+  margin: 7px 0;
+  color: #53696d;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.tutor-knowledge-meta {
+  display: flex;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: #81908f;
+  font-size: 10px;
+}
+
+.tutor-knowledge-meta span {
+  padding: 2px 7px;
+  border: 1px solid rgba(13, 57, 89, 0.12);
+  border-radius: 999px;
+}
+
+.tutor-knowledge-actions {
+  display: flex;
+  margin-top: 9px;
+  flex-wrap: wrap;
+  gap: 7px;
 }

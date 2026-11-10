@@ -1,7 +1,9 @@
 import {
   chatWithTutor,
+  fetchAiStatus,
   fetchTutorCatalog,
   fetchTutorHistory,
+  fetchTutorKnowledge,
   fetchTutorSessions,
   fetchTutorStats,
   submitTutorAnswer,
@@ -22,10 +24,18 @@ const statsCard = $('tutorStatsCard');
 const statsBox = $('tutorStats');
 const historyModal = $('tutorHistoryModal');
 const historyList = $('tutorHistoryList');
+const newSessionButton = $('tutorNewSession');
+const aiStatusBadge = $('tutorAiStatus');
+const aiStatusNote = $('tutorAiStatusNote');
+const knowledgeModal = $('tutorKnowledgeModal');
+const knowledgeTitle = $('tutorKnowledgeTitle');
+const knowledgeSummary = $('tutorKnowledgeSummary');
+const knowledgeList = $('tutorKnowledgeList');
 
 let sessionId = readSession();
 let catalog = null;
 let busy = false;
+let lastKnowledgeTrigger = null;
 
 function readSession() {
   try {
@@ -55,6 +65,51 @@ function setBusy(value) {
   busy = value;
   sendButton.disabled = value;
   input.disabled = value;
+  if (newSessionButton) newSessionButton.disabled = value;
+}
+
+function renderAiStatus(status) {
+  if (!aiStatusBadge) {
+    return;
+  }
+  aiStatusBadge.classList.remove('is-online', 'is-warning', 'is-offline');
+
+  if (!status) {
+    aiStatusBadge.textContent = '状态未知';
+    aiStatusBadge.classList.add('is-warning');
+    if (aiStatusNote) {
+      aiStatusNote.hidden = true;
+      aiStatusNote.textContent = '';
+    }
+    return;
+  }
+
+  if (status.llmAvailable && !status.degraded) {
+    aiStatusBadge.textContent = 'AI 在线';
+    aiStatusBadge.classList.add('is-online');
+    if (aiStatusNote) {
+      aiStatusNote.hidden = true;
+      aiStatusNote.textContent = '';
+    }
+    return;
+  }
+
+  aiStatusBadge.textContent = status.llmAvailable ? '检索可用 · AI 降级' : 'AI 服务未配置';
+  aiStatusBadge.classList.add(status.llmAvailable ? 'is-warning' : 'is-offline');
+  if (aiStatusNote) {
+    const reason = status.degradedReason || '当前只能使用本地知识索引，生成类回答可能不可用。';
+    aiStatusNote.textContent = `${reason}${status.knowledgeCount ? ` · 本地知识 ${status.knowledgeCount} 条` : ''}`;
+    aiStatusNote.hidden = false;
+  }
+}
+
+async function loadAiStatus() {
+  try {
+    renderAiStatus(await fetchAiStatus());
+  } catch (error) {
+    console.warn('[Tutor] AI 状态读取失败', error);
+    renderAiStatus(null);
+  }
 }
 
 function showEmpty() {
@@ -108,6 +163,15 @@ function renderCatalog(nextCatalog) {
     description.textContent = category.description || '';
     item.append(description);
 
+    const browse = document.createElement('button');
+    browse.type = 'button';
+    browse.className = 'tutor-category-browse';
+    browse.textContent = `阅览 ${category.count} 条知识 →`;
+    browse.addEventListener('click', (event) => {
+      openKnowledge(category, event.currentTarget);
+    });
+    item.append(browse);
+
     const chips = document.createElement('div');
     chips.className = 'tutor-quick-chips';
     (category.samplePrompts || []).forEach((prompt) => {
@@ -146,13 +210,20 @@ function renderStats(stats) {
     return;
   }
   const attempts = Number(stats?.attempts) || 0;
-  if (attempts === 0) {
-    statsCard.hidden = true;
-    statsBox.replaceChildren();
-    return;
-  }
   statsCard.hidden = false;
   statsBox.replaceChildren();
+
+  if (attempts === 0) {
+    const empty = document.createElement('p');
+    empty.textContent = '还没有答题记录。先做一道辨析题，这里会记录正确率与掌握度。';
+    const start = document.createElement('button');
+    start.type = 'button';
+    start.className = 'tutor-chip';
+    start.textContent = '开始第一道练习';
+    start.addEventListener('click', () => submitMessage('考我一道防染辨析题'));
+    statsBox.append(empty, start);
+    return;
+  }
 
   const overview = document.createElement('p');
   const accuracy = Math.round((Number(stats.accuracy) || 0) * 100);
@@ -174,18 +245,123 @@ function renderStats(stats) {
     row.append(bar);
     statsBox.append(row);
   });
+
+  const weakest = (stats.topics || []).reduce((current, topic) => {
+    if (!current) return topic;
+    return Number(topic.mastery) < Number(current.mastery) ? topic : current;
+  }, null);
+  if (weakest) {
+    const category = catalog?.categories?.find((item) => item.key === weakest.topic);
+    const practice = document.createElement('button');
+    practice.type = 'button';
+    practice.className = 'tutor-chip';
+    practice.textContent = `针对「${category?.label || weakest.topic}」再练一题`;
+    practice.addEventListener('click', () => {
+      submitMessage(`围绕${category?.label || weakest.topic}再考我一道题`);
+    });
+    statsBox.append(practice);
+  }
 }
 
 async function refreshStats() {
-  if (!sessionId) {
-    renderStats(null);
-    return;
-  }
   try {
-    const stats = await fetchTutorStats(sessionId);
+    const stats = await fetchTutorStats(sessionId || '');
     renderStats(stats);
   } catch (error) {
     console.warn('[Tutor] 学习画像读取失败', error);
+  }
+}
+
+function closeKnowledge() {
+  if (!knowledgeModal) {
+    return;
+  }
+  knowledgeModal.hidden = true;
+  lastKnowledgeTrigger?.focus?.({ preventScroll: true });
+  lastKnowledgeTrigger = null;
+}
+
+function renderKnowledgePage(page, category) {
+  if (!knowledgeList || !knowledgeSummary) {
+    return;
+  }
+  knowledgeSummary.textContent = `「${category.label}」共 ${page.total ?? 0} 条分片，展示前 ${page.items?.length ?? 0} 条。`;
+  knowledgeList.replaceChildren();
+
+  if (!Array.isArray(page.items) || page.items.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'tutor-history-empty';
+    empty.textContent = '这个分类暂时没有可展示的知识分片。';
+    knowledgeList.append(empty);
+    return;
+  }
+
+  page.items.forEach((item) => {
+    const article = document.createElement('article');
+    article.className = 'tutor-knowledge-item';
+
+    const title = document.createElement('h3');
+    title.textContent = item.title || '知识分片';
+    const meta = document.createElement('div');
+    meta.className = 'tutor-knowledge-meta';
+    [item.source, item.confidence ? `可信度 ${item.confidence}` : '', item.chunkKey]
+      .filter(Boolean)
+      .forEach((text) => {
+        const tag = document.createElement('span');
+        tag.textContent = text;
+        meta.append(tag);
+      });
+    const summary = document.createElement('p');
+    summary.textContent = item.summary || '';
+    article.append(title, meta, summary);
+
+    if (Array.isArray(item.keywords) && item.keywords.length > 0) {
+      const keywordText = document.createElement('p');
+      keywordText.textContent = `关键词：${item.keywords.join(' · ')}`;
+      article.append(keywordText);
+    }
+
+    if (Array.isArray(item.relatedPrompts) && item.relatedPrompts.length > 0) {
+      const actions = document.createElement('div');
+      actions.className = 'tutor-knowledge-actions';
+      item.relatedPrompts.slice(0, 3).forEach((prompt) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'tutor-chip';
+        button.textContent = prompt;
+        button.addEventListener('click', () => {
+          closeKnowledge();
+          submitMessage(prompt);
+        });
+        actions.append(button);
+      });
+      article.append(actions);
+    }
+
+    knowledgeList.append(article);
+  });
+}
+
+async function openKnowledge(category, trigger = null) {
+  if (!knowledgeModal || !knowledgeList || !knowledgeTitle) {
+    return;
+  }
+  lastKnowledgeTrigger = trigger;
+  knowledgeTitle.textContent = category.label || '知识分片';
+  knowledgeSummary.textContent = '正在读取知识分片…';
+  knowledgeList.replaceChildren();
+  knowledgeModal.hidden = false;
+  $('tutorKnowledgeClose')?.focus({ preventScroll: true });
+
+  try {
+    const page = await fetchTutorKnowledge({ category: category.key, limit: 50 });
+    renderKnowledgePage(page, category);
+  } catch (error) {
+    knowledgeList.replaceChildren();
+    const failed = document.createElement('p');
+    failed.className = 'tutor-history-empty';
+    failed.textContent = error.message || '知识分片读取失败，请稍后重试。';
+    knowledgeList.append(failed);
   }
 }
 
@@ -202,7 +378,7 @@ function typingIndicator() {
   return element;
 }
 
-async function submitMessage(rawText) {
+async function submitMessage(rawText, options = {}) {
   const text = String(rawText || '').trim();
   if (!text || busy) {
     return;
@@ -211,7 +387,9 @@ async function submitMessage(rawText) {
     messagesBox.prepend(emptyState);
   }
   emptyState.hidden = true;
-  messagesBox.append(userBubble(text));
+  if (!options.reuseUserMessage) {
+    messagesBox.append(userBubble(text));
+  }
   input.value = '';
   scrollToBottom();
 
@@ -246,16 +424,32 @@ async function submitMessage(rawText) {
       window.location.href = 'index.html?loginRequired=1';
       return;
     }
-    const bubble = assistantBubble({
-      text: `智能导师服务暂时不可用：${error.message || '请稍后重试。'}`,
+
+    const staleSession = error?.status === 403;
+    if (staleSession) {
+      sessionId = '';
+      writeSession('');
+      renderStats(null);
+    }
+
+    let failureBubble = null;
+    failureBubble = assistantBubble({
+      text: staleSession
+        ? '上一个会话已经失效，或不属于当前账号。我已经为你切换到新会话，可以直接重试这次问题。'
+        : `智能导师服务暂时不可用：${error.message || '请稍后重试。'}`,
       citations: [],
       cards: [],
       relatedQuestions: [],
       suggestedPrompts: [],
       lowConfidence: true,
       degraded: false,
+      onRetry: () => {
+        if (busy || !failureBubble) return;
+        failureBubble.remove();
+        submitMessage(text, { reuseUserMessage: true });
+      },
     }, handlers);
-    messagesBox.append(bubble);
+    messagesBox.append(failureBubble);
     scrollToBottom();
   } finally {
     setBusy(false);
@@ -287,11 +481,15 @@ async function loadHistory(targetSessionId = sessionId) {
     emptyState.hidden = true;
     messagesBox.querySelectorAll('.tutor-msg, .tutor-typing').forEach((item) => item.remove());
     items.forEach((item) => {
-      messagesBox.append(historyBubble(item));
+      messagesBox.append(historyBubble(item, handlers));
     });
     scrollToBottom();
   } catch (error) {
     console.warn('[Tutor] 历史记录读取失败', error);
+    if (error?.status === 403) {
+      sessionId = '';
+      writeSession('');
+    }
     showEmpty();
   }
 }
@@ -396,7 +594,7 @@ async function init() {
       catalogBox.append(failed);
     }
   }
-  await Promise.all([loadHistory(), refreshStats()]);
+  await Promise.all([loadAiStatus(), loadHistory(), refreshStats()]);
 
   const params = new URLSearchParams(window.location.search);
   const initialQuestion = params.get('q');
@@ -420,10 +618,13 @@ async function requireLogin() {
 }
 
 function newSession() {
+  if (busy) {
+    return;
+  }
   sessionId = '';
   writeSession('');
   showEmpty();
-  renderStats(null);
+  refreshStats();
   input.focus();
 }
 
@@ -433,6 +634,9 @@ composer?.addEventListener('submit', (event) => {
 });
 
 input?.addEventListener('keydown', (event) => {
+  if (event.isComposing || event.keyCode === 229) {
+    return;
+  }
   if (event.key === 'Enter' && !event.shiftKey) {
     event.preventDefault();
     composer.requestSubmit();
@@ -447,10 +651,13 @@ $('tutorNewSession')?.addEventListener('click', newSession);
 $('tutorHistoryButton')?.addEventListener('click', openHistory);
 $('tutorHistoryClose')?.addEventListener('click', closeHistory);
 $('tutorHistoryBackdrop')?.addEventListener('click', closeHistory);
+$('tutorKnowledgeClose')?.addEventListener('click', closeKnowledge);
+$('tutorKnowledgeBackdrop')?.addEventListener('click', closeKnowledge);
 
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
     closeHistory();
+    closeKnowledge();
   }
 });
 

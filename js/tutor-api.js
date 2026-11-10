@@ -25,6 +25,10 @@ export function fetchTutorCatalog() {
   return request('/tutor/catalog');
 }
 
+export function fetchAiStatus() {
+  return request('/ai/status');
+}
+
 export function fetchTutorKnowledge({ category = '', offset = 0, limit = 20 } = {}) {
   const params = new URLSearchParams({
     offset: String(offset),
@@ -44,6 +48,7 @@ export function fetchTutorHistory(sessionId) {
   return request(`/tutor/history?sessionId=${encodeURIComponent(sessionId)}`);
 }
 
-export function fetchTutorStats(sessionId) {
-  return request(`/tutor/stats?sessionId=${encodeURIComponent(sessionId)}`);
+export function fetchTutorStats(sessionId = '') {
+  const query = sessionId ? `?sessionId=${encodeURIComponent(sessionId)}` : '';
+  return request(`/tutor/stats${query}`);
 }
