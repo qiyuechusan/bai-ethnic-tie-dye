@@ -612,6 +612,11 @@
       if (typeof window.switchView === "function") window.switchView(viewName);
       if (typeof window.openModal === "function") window.openModal(modalId);
     }
+    if (deepLink === "#scenario") {
+      if (typeof window.switchView === "function") window.switchView("heritage");
+      if (typeof window.openModal === "function") window.openModal("modal-pattern");
+      window.setTimeout(() => window.module3?.enterScenarios?.(), 80);
+    }
   }
 
   function setupCraftStory() {
