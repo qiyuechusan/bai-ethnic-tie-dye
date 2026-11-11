@@ -1,0 +1,199 @@
+<template>
+<a class="skip-link" href="#main-content">跳到主要内容</a>
+  <canvas class="dye-canvas" id="dyeCanvas" aria-hidden="true"></canvas>
+  <div class="paper-grain" aria-hidden="true"></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="nav-shell">
+      <a class="brand" href="/home" aria-label="苍洱纹册首页">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 4.5C19.4 13 13.2 20 13.2 28.1a10.8 10.8 0 1 0 21.6 0C34.8 20 28.6 13 24 4.5Z"/>
+            <path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/>
+          </svg>
+        </span>
+        <span class="brand-copy">
+          <strong>苍洱纹册</strong>
+        </span>
+      </a>
+
+      <nav class="main-nav" id="mainNav" aria-label="主导航">
+        <a href="/home">首页</a>
+        <a href="/home#modules">六个展区</a>
+        <a href="/diy">扎染实验室</a>
+        <a href="/timeline">工艺长卷</a>
+        <a href="/pattern">智染研习社</a>
+        <a class="is-active" href="/quiz" aria-current="page">问蓝知染</a>
+        <a href="/map">寻迹地图</a>
+        <a href="/gallery">作品墙</a>
+        <a class="mobile-login" href="/login">登录 / 注册</a>
+      </nav>
+
+      <div class="header-actions">
+        <span class="visitor-state"><i></i>访客漫游中</span>
+        <a class="header-login" href="/login">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="3.2"></circle>
+            <path d="M5.5 20c.6-4 2.7-6 6.5-6s5.9 2 6.5 6"></path>
+          </svg>
+          登录 / 注册
+        </a>
+        <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="打开菜单">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="lab-page" id="main-content">
+    <header class="lab-heading reveal">
+      <div class="lab-heading-copy">
+        <h1>问蓝知染，<br><em>一问问到底。</em></h1>
+      </div>
+      <div class="lab-heading-side">
+        <p>先检索知识库，再决定是答疑、出题，还是调用扎染实验室画一张纹样。<br>答不上来时，它会告诉你“没收录”，而不是编一个答案。</p>
+      </div>
+    </header>
+
+    <section class="tutor-shell lab-panel reveal" id="tutorView" aria-label="智能非遗导师">
+      <div class="tutor-main">
+        <div class="tutor-toolbar">
+          <div class="tutor-toolbar-title">
+            <span class="section-number">01 / 智能导师</span>
+              <div class="tutor-title-line">
+                <strong>问蓝知染</strong>
+                <span class="tutor-mode-tag" id="tutorAiStatus" role="status" aria-live="polite">状态读取中</span>
+              </div>
+              <p class="tutor-mode-note" id="tutorAiStatusNote" hidden></p>
+          </div>
+          <div class="tutor-toolbar-actions">
+            <button class="lab-quiet" id="tutorHistoryButton" type="button">历史会话</button>
+            <button class="lab-quiet" id="tutorNewSession" type="button">新会话</button>
+          </div>
+        </div>
+
+        <div class="tutor-messages" id="tutorMessages" role="log" aria-live="polite">
+          <div class="tutor-empty" id="tutorEmpty">
+            <span class="section-number">从这里开始</span>
+            <h2>先看看我能回答什么。</h2>
+            <p>我掌握白族扎染的扎结技法、氧化显色、纹样语义、易混辨析、非遗与产地、工艺流程。你可以直接提问，也可以让我出题或画纹样。</p>
+            <div class="tutor-suggestions" id="tutorEmptySuggestions"></div>
+          </div>
+        </div>
+
+        <form class="tutor-composer" id="tutorComposer">
+          <label class="sr-only" for="tutorInput">输入问题</label>
+          <textarea id="tutorInput" rows="2" maxlength="500"
+            placeholder="试试：扎染和蜡染怎么区分？"></textarea>
+          <div class="tutor-composer-actions">
+            <div class="tutor-quick-actions">
+              <button type="button" class="tutor-chip" data-quick="考我一道防染辨析题">出题</button>
+              <button type="button" class="tutor-chip" data-quick="画一个蝴蝶纹看看">画纹样</button>
+            </div>
+            <button class="lab-primary" id="tutorSend" type="submit">
+              <span>发送</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10M13 7l5 5-5 5"></path></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <aside class="tutor-side">
+        <div class="tutor-side-card">
+          <span class="section-number">02 / 知识范围</span>
+          <div id="tutorCatalog">
+            <p class="tutor-catalog-summary">正在读取知识库…</p>
+          </div>
+        </div>
+
+        <div class="tutor-side-card" id="tutorStatsCard" hidden>
+          <span class="section-number">03 / 学习画像</span>
+          <div id="tutorStats"></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="lab-notes reveal" aria-label="使用说明">
+      <div><span>01</span><p><strong>先问</strong><small>用自然语言提问，导师会先检索知识库。</small></p></div>
+      <div><span>02</span><p><strong>再辨</strong><small>出题、判分与学习画像都由服务端完成。</small></p></div>
+      <div><span>03</span><p><strong>后看</strong><small>每条回答都附引用，可回到知识分片查证。</small></p></div>
+    </section>
+  </main>
+
+  <div class="tutor-history-modal" id="tutorHistoryModal" hidden>
+    <button class="tutor-history-backdrop" id="tutorHistoryBackdrop" type="button" aria-label="关闭历史会话"></button>
+    <section class="tutor-history-card" role="dialog" aria-modal="true" aria-labelledby="tutorHistoryTitle">
+      <header class="tutor-history-head">
+        <div>
+          <span class="section-number">历史会话</span>
+          <h2 id="tutorHistoryTitle">我的提问记录</h2>
+        </div>
+        <button class="tutor-history-close" id="tutorHistoryClose" type="button" aria-label="关闭">×</button>
+      </header>
+      <div class="tutor-history-list" id="tutorHistoryList"></div>
+    </section>
+  </div>
+
+  <div class="tutor-knowledge-modal" id="tutorKnowledgeModal" hidden>
+    <button class="tutor-history-backdrop" id="tutorKnowledgeBackdrop" type="button" aria-label="关闭知识库阅览"></button>
+    <section class="tutor-knowledge-card" role="dialog" aria-modal="true" aria-labelledby="tutorKnowledgeTitle">
+      <header class="tutor-history-head">
+        <div>
+          <span class="section-number">知识库阅览</span>
+          <h2 id="tutorKnowledgeTitle">知识分片</h2>
+          <p class="tutor-knowledge-summary" id="tutorKnowledgeSummary"></p>
+        </div>
+        <button class="tutor-history-close" id="tutorKnowledgeClose" type="button" aria-label="关闭">×</button>
+      </header>
+      <div class="tutor-knowledge-list" id="tutorKnowledgeList"></div>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <a class="brand invert" href="/home" aria-label="蓝白之境首页">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48">
+            <path d="M24 4.5C19.4 13 13.2 20 13.2 28.1a10.8 10.8 0 1 0 21.6 0C34.8 20 28.6 13 24 4.5Z"/>
+            <path class="brand-mark-line" d="M18 28.2c2.7-1.9 4.2-4.1 4.5-6.8M24 34.5c.2-6.1 2.9-10.6 8.2-13.5"/>
+          </svg>
+        </span>
+        <span class="brand-copy"><strong>蓝白之境</strong><small>THE REALM OF INDIGO</small></span>
+      </a>
+      <p>让一匹蓝布，继续讲述<br>苍山洱海间的非遗故事。</p>
+    </div>
+    <div class="footer-nav">
+      <div>
+        <span>探索</span>
+        <a href="/home#modules">六大展区</a>
+        <a href="/diy">扎染实验室</a>
+        <a href="/timeline">工艺长卷</a>
+        <a href="/pattern">智染研习社</a>
+        <a href="/quiz">问蓝知染</a>
+        <a href="/map">寻迹地图</a>
+        <a href="/gallery">作品墙</a>
+      </div>
+      <div>
+        <span>连接</span>
+        <a href="/login">登录 / 注册</a>
+        <a href="/home">返回首页</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>云南大理 · 白族扎染数字科普站</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</template>
+
+<script setup>
+import { onMounted } from 'vue'
+import { initTutorPage } from '@/legacy/tutor'
+import { initPage } from '@/legacy/app'
+
+onMounted(async () => {
+  await initTutorPage()
+  initPage()
+})
+</script>

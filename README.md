@@ -1,6 +1,6 @@
 # 蓝白之境 · 白族扎染数字科普站
 
-一个以白族扎染为主题的数字非遗科普站。前端是原生 HTML / CSS / JavaScript 多页面应用，后端统一为 **JDK 17 + Spring Boot 3.5 + Spring Data JPA + MySQL 8**，前后端同源部署，启动一个进程即可浏览全部页面。
+一个以白族扎染为主题的数字非遗科普站。前端为 **Vite + Vue 3** 工程（`frontend/`），后端统一为 **JDK 17 + Spring Boot 3.5 + Spring Data JPA + MySQL 8**，仅提供 REST API。
 
 ## 功能模块
 
@@ -85,11 +85,19 @@
 | `docs/agent-api.md` | 模块 5/6 接口、JSON 参数、ReAct 动作与数据结构说明 |
 
 ## 拉取项目后如何启动
-安装 **JDK 17**、**MySQL 8**，并确保 MySQL 服务已启动。
-进入后端目录启动（首次启动会自动建库建表并写入演示数据）：
+安装 **JDK 17**、**MySQL 8**、**Node.js 18+**，并确保 MySQL 服务已启动。
+
+### 启动后端（端口 8080）
    ```powershell
    cd backend
    $env:DB_PASSWORD="你的MySQL密码"
    .\mvnw.cmd spring-boot:run
    ```
-浏览器访问 <http://localhost:8080/>。前端页面、接口、上传图片都由这一个进程提供，不需要再单独启动前端。
+
+### 启动前端（端口 5173）
+   ```powershell
+   cd frontend
+   npm install
+   npm run dev
+   ```
+浏览器访问 <http://localhost:5173/>。

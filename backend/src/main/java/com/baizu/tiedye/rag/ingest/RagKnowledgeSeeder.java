@@ -112,7 +112,7 @@ public class RagKnowledgeSeeder implements ApplicationRunner {
         int targetDimension = target.dimensions();
         boolean degraded = !canEmbed;
         String degradedReason = !canEmbed
-                ? "未配置 DASHSCOPE_API_KEY，AI 功能不可用"
+                ? null
                 : runtimeStatus.getDegradedReason();
 
         List<RagSeedPair> pairs = new ArrayList<>();
