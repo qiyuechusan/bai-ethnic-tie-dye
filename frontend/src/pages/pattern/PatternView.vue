@@ -224,7 +224,7 @@
   
   <div id="m3-pattern-card-overlay" class="m3-overlay">
     <div class="m3-pattern-card">
-      <img id="m3-pattern-card-img" alt="纹样" />
+      <img id="m3-pattern-card-img" alt="纹样" loading="lazy" decoding="async" />
       <h4 id="m3-pattern-card-name"></h4>
       <p id="m3-pattern-card-meaning" class="m3-pattern-card-meaning"></p>
       <p id="m3-pattern-card-desc" class="m3-pattern-card-desc"></p>

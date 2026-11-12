@@ -128,7 +128,7 @@
               <span class="place-cloth cloth-b"></span><span class="place-figure"></span>
             </div>
             
-            <img id="placePhoto" class="real-photo-layer" src="" alt="实景图">
+            <img id="placePhoto" class="real-photo-layer" src="" alt="实景图" decoding="async">
             <span class="place-coordinate" id="placeCoordinate" style="z-index: 8;">坐标加载中...</span>
             <button id="togglePhotoBtn" class="toggle-photo-btn">看实景</button>
           </div>
@@ -227,7 +227,7 @@
 
                 
                 <figure style="margin-top: 15px; margin-bottom: 15px;">
-                  <img src="/assets/data-study.jpg" alt="扎染研学体验" style="width: 100%; height: 90px; object-fit: cover; border-radius: 6px;">
+                  <img src="/assets/data-study.jpg" alt="扎染研学体验" loading="lazy" decoding="async" style="width: 100%; height: 90px; object-fit: cover; border-radius: 6px;">
                   <figcaption style="text-align: right; font-size: 10px; color: #8a9695; margin-top: 4px; font-style: italic;">▲ 非遗扎染研学实景</figcaption>
                 </figure>
 
@@ -266,7 +266,7 @@
 
                 
                 <figure style="margin-top: 15px; margin-bottom: 15px;">
-                  <img src="/assets/data-master.jpg" alt="手艺人教学" style="width: 100%; height: 90px; object-fit: cover; border-radius: 6px;">
+                  <img src="/assets/data-master.jpg" alt="手艺人教学" loading="lazy" decoding="async" style="width: 100%; height: 90px; object-fit: cover; border-radius: 6px;">
                   <figcaption style="text-align: right; font-size: 10px; color: #8a9695; margin-top: 4px; font-style: italic;">▲ 老手艺人教授扎花技法</figcaption>
                 </figure>
 

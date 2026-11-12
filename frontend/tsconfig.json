@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": false,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["vite/client", "node"]
+  },
+  "include": [
+    "src/env.d.ts",
+    "src/api/client.ts",
+    "src/api/artworks.ts",
+    "src/types/**/*.ts",
+    "src/utils/**/*.ts",
+    "src/components/gallery/**/*.vue",
+    "src/pages/gallery/GalleryView.vue"
+  ]
+}

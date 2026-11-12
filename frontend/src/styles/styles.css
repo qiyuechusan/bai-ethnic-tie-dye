@@ -7601,3 +7601,113 @@ body.page-place-detail {
     overflow-y: auto;
   }
 }
+
+/* ===== Vue 作品墙组件 ===== */
+.gallery-page-content {
+  width: 100%;
+  max-width: 1200px !important;
+  margin: 0 auto;
+  padding: 28px 0 0;
+  border: none;
+  background: transparent !important;
+  box-shadow: none;
+}
+
+.gallery-page-toolbar {
+  display: flex;
+  margin-bottom: 28px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.gallery-page-title {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 36px;
+}
+
+.gallery-upload-button {
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--indigo-800);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.gallery-upload-button:hover {
+  background: var(--indigo-700);
+}
+
+.gallery-feedback {
+  width: 100%;
+  margin: 24px 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.gallery-feedback.is-error,
+.upload-error {
+  color: #9b3d35;
+}
+
+.upload-placeholder {
+  color: #999;
+  font-family: var(--font-serif);
+}
+
+.upload-section .polaroid-photo-preview {
+  width: 100%;
+  padding: 0;
+  background: #f0f0f0;
+  color: var(--muted);
+}
+
+.upload-section .polaroid-photo-preview:hover {
+  background: #f7f3eb;
+}
+
+.upload-section .polaroid-photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.upload-title-input {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.upload-method-select {
+  margin-top: 10px;
+}
+
+.upload-error {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.upload-actions {
+  display: flex;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.upload-cancel {
+  background: #ccc !important;
+  color: #333 !important;
+}
+
+.polaroid-card:focus-visible {
+  outline: 2px solid var(--indigo-700);
+  outline-offset: 5px;
+}
+
+.like-vat:disabled {
+  cursor: default;
+}

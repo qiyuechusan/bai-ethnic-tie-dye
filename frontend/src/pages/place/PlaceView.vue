@@ -52,7 +52,7 @@
         </div>
 
           <figure class="place-detail-photo">
-          <img id="detailPhoto" src="/assets/zhoucheng.jpg" alt="白族扎染地点实景">
+          <img id="detailPhoto" src="/assets/zhoucheng.jpg" alt="白族扎染地点实景" decoding="async">
           <button type="button" class="photo-nav-btn prev" id="photoPrevBtn" aria-label="上一张图片">←</button>
           <button type="button" class="photo-nav-btn next" id="photoNextBtn" aria-label="下一张图片">→</button>
           <span class="detail-photo-index" id="detailIndex">1 / 3</span>
@@ -71,7 +71,7 @@
           </p>
           <figure class="detail-story-figure">
             
-            <img id="detailStoryImg" src="/assets/zhoucheng-story.jpg" alt="在地故事实景">
+            <img id="detailStoryImg" src="/assets/zhoucheng-story.jpg" alt="在地故事实景" loading="lazy" decoding="async">
             <figcaption>日常生活中的扎染图景</figcaption>
           </figure>
         </div>
@@ -150,7 +150,7 @@
                   <span>点击左侧任务<br>解锁实景</span>
                 </div>
                 
-                <img id="tourPhotoReveal" src="" alt="解锁实景" class="tour-photo-reveal" style="display: none;">
+                <img id="tourPhotoReveal" src="" alt="解锁实景" class="tour-photo-reveal" loading="lazy" decoding="async" style="display: none;">
 
                                
                 <div id="tourAchievement" class="tour-achievement" style="display: none;">
@@ -195,7 +195,7 @@
               <div class="dye-right-col">
                 
                 <figure class="dye-top-image">
-                  <img src="/assets/indigo-vat.jpg" alt="植物染料和染缸">
+                  <img src="/assets/indigo-vat.jpg" alt="植物染料和染缸" loading="lazy" decoding="async">
                   <figcaption>传统植物制靛与染缸</figcaption>
                 </figure>
 

@@ -136,7 +136,7 @@
               <span class="page-fold" aria-hidden="true"></span>
             </div>
             <figure class="step-real-image right-image">
-              <img src="/assets/step1-cailancao.jpg" alt="采蓝草实景">
+              <img src="/assets/step1-cailancao.jpg" alt="采蓝草实景" loading="lazy" decoding="async">
               <figcaption>苍山脚下的板蓝根</figcaption>
             </figure>
           </article>
@@ -176,7 +176,7 @@
               <span class="page-fold" aria-hidden="true"></span>
             </div>
             <figure class="step-real-image left-image">
-              <img src="/assets/step2-zhidian.jpg" alt="制靛实景">
+              <img src="/assets/step2-zhidian.jpg" alt="制靛实景" loading="lazy" decoding="async">
               <figcaption>古法发酵的靛蓝染缸</figcaption>
             </figure>
           </article>
@@ -214,7 +214,7 @@
               <span class="page-fold" aria-hidden="true"></span>
             </div>
             <figure class="step-real-image right-image">
-              <img src="/assets/step3-zhahua.jpg" alt="扎花实景">
+              <img src="/assets/step3-zhahua.jpg" alt="扎花实景" loading="lazy" decoding="async">
               <figcaption>一针一线缝扎出的防染图案</figcaption>
             </figure>
           </article>
@@ -253,7 +253,7 @@
               <span class="page-fold" aria-hidden="true"></span>
             </div>
             <figure class="step-real-image left-image">
-              <img src="/assets/step4-jinran.jpg" alt="浸染实景">
+              <img src="/assets/step4-jinran.jpg" alt="浸染实景" loading="lazy" decoding="async">
               <figcaption>布匹在染液中反复浸润</figcaption>
             </figure>
           </article>
@@ -291,7 +291,7 @@
               <span class="page-fold" aria-hidden="true"></span>
             </div>
             <figure class="step-real-image right-image">
-              <img src="/assets/step5-yanghua.jpg" alt="氧化实景">
+              <img src="/assets/step5-yanghua.jpg" alt="氧化实景" loading="lazy" decoding="async">
               <figcaption>接触空气后，黄绿渐变深蓝</figcaption>
             </figure>
           </article>
@@ -330,7 +330,7 @@
               <span class="page-fold" aria-hidden="true"></span>
             </div>
             <figure class="step-real-image left-image">
-              <img src="/assets/step6-chaixian.jpg" alt="拆线实景">
+              <img src="/assets/step6-chaixian.jpg" alt="拆线实景" loading="lazy" decoding="async">
               <figcaption>拆开线结，蓝白花纹显露</figcaption>
             </figure>
           </article>
@@ -362,7 +362,7 @@
               <span class="page-fold" aria-hidden="true"></span>
             </div>
             <figure class="step-real-image right-image">
-              <img src="/assets/step7-liangshai.jpg" alt="晾晒实景">
+              <img src="/assets/step7-liangshai.jpg" alt="晾晒实景" loading="lazy" decoding="async">
               <figcaption>蓝天下随风轻扬的扎染布</figcaption>
             </figure>
           </article>

@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: tiedye
+  config:
+    # 支持从仓库根目录或 backend 目录读取本地 .env；文件缺失时不影响启动。
+    import: optional:file:../.env[.properties],optional:file:.env[.properties]
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:mysql}
   jpa:

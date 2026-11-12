@@ -1,103 +1,213 @@
-# 蓝白之境 · 白族扎染数字科普站
+# 苍洱纹册 · 白族扎染数字科普站
 
-一个以白族扎染为主题的数字非遗科普站。前端为 **Vite + Vue 3** 工程（`frontend/`），后端统一为 **JDK 17 + Spring Boot 3.5 + Spring Data JPA + MySQL 8**，仅提供 REST API。
+苍洱纹册是面向青年用户的数字非遗科普网站，以云南大理白族扎染为切入点，通过“看、玩、问、练”的数字体验介绍蓝靛植物染、扎结工艺、传统纹样、传承地与人。
 
-## 功能模块
+项目前端使用 Vite + Vue 3，后端使用 Spring Boot，AI 部分包含 DashScope/Qwen 大模型接入、混合 RAG 检索、ReAct 工具调用、输出校验和可追溯引用。
 
-| 模块 | 页面 | 内容 |
+## 核心功能
+
+| 模块 | 功能 |
+|---|---|
+| 登录与访客 | 注册、登录、游客漫游、Cookie 会话 |
+| 扎染实验室 | 自然语言生成纹样参数、Canvas 纹样渲染、氧化显色动画 |
+| 工艺长卷 | 七步成蓝线装书交互、氧化变色、染坊翻车诊断 |
+| 智染研习社 | 纹样图鉴、知识竞答、情境剧本杀、成就收集 |
+| 问蓝知染 | RAG 问答、动态出题、纹样绘制、学习画像、历史会话 |
+| 苍洱染迹 | 周城、喜洲、巍山非遗地图与产业数据 |
+| 匠人作品墙 | 作品浏览、筛选、上传、点赞、图片查看 |
+
+## 技术架构
+
+```text
+┌────────────────────────────────────────────┐
+│ Vite + Vue 3 + Vue Router + Pinia          │
+│ 页面路由、会话状态、Canvas、可视化交互      │
+└──────────────────────┬─────────────────────┘
+                       │ /api
+┌──────────────────────▼─────────────────────┐
+│ Spring Boot 3.5 / Java 17                  │
+│ Auth · Content · Artwork · Atlas           │
+│ RAG · ReAct Agent · Scenario               │
+└──────────────┬──────────────────┬──────────┘
+               │                  │
+        ┌──────▼──────┐    ┌──────▼─────────┐
+        │ MySQL 8     │    │ DashScope API  │
+        │ 业务与RAG   │    │ Qwen LLM /     │
+        │ 数据        │    │ Embedding      │
+        └─────────────┘    └────────────────┘
+```
+
+### AI 链路
+
+1. 将扎染知识拆分为带来源、关键词和可信度的知识分片。
+2. 使用向量相似度、关键词和元数据组成混合检索。
+3. Agent 通过 `retrieve`、`gen_quiz`、`draw_pattern`、`grade_answer`、`clarify` 等工具决定下一步。
+4. 模型只允许引用本轮检索到的知识分片。
+5. JSON 输出经过结构校验；纹样参数还经过范围和渲染器校验。
+6. 未配置模型时明确降级或报错，不把规则结果伪装成模型回答。
+
+主要实现位于：
+
+- `backend/src/main/java/com/baizu/tiedye/rag/`
+- `backend/src/main/java/com/baizu/tiedye/tutor/`
+- `backend/src/main/java/com/baizu/tiedye/diy/agent/`
+- `backend/src/main/java/com/baizu/tiedye/scenario/`
+
+## 目录结构
+
+```text
+.
+├─ frontend/                 Vue 3 前端工程（正式入口）
+│  ├─ src/pages/             各功能页面
+│  ├─ src/components/        Vue/渲染相关组件
+│  ├─ src/legacy/            迁移中的旧交互逻辑
+│  ├─ src/router/            Vue Router
+│  ├─ src/stores/            Pinia 状态
+│  └─ src/styles/            页面样式
+├─ backend/                  Spring Boot 后端
+│  ├─ src/main/java/         业务、RAG、Agent、REST API
+│  ├─ src/main/resources/    配置与知识库 JSON
+│  └─ src/test/              H2 自动化测试
+├─ assets/                   公共图片资源
+├─ db/                       MySQL 初始化脚本
+├─ .env.example              环境变量模板
+└─ README.md
+```
+
+仓库根目录的旧 HTML 页面用于早期静态版本兼容；正式前端入口为 `frontend/`。
+
+## 环境要求
+
+- JDK 17
+- MySQL 8
+- Node.js 18 或更高版本
+- npm 9 或更高版本
+- DashScope API Key（在线 AI 功能需要）
+
+## 环境变量
+
+复制模板：
+
+```powershell
+Copy-Item .env.example .env
+```
+
+然后填写 `.env`。不要提交真实密钥。
+
+Spring Boot 启动时会自动读取仓库根目录或 `backend/` 目录下的 `.env` 文件。
+
+| 变量 | 必填 | 说明 |
 |---|---|---|
-| 登录 / 访客 | `index.html` | 注册、登录、游客漫游、会话保持 |
-| 六大展区 | `home.html` | 首页、六个展区入口、纹样图鉴、作品墙 |
-| 纹样图鉴 | `home.html` → 展区 03 | 9 个纹样、答题解锁、纹样寓意 |
-| 作品墙 | `home.html` → 展区 06 | 作品浏览、筛选、点赞、图片上传 |
-| 工艺长卷 | `timeline.html` | 七步成蓝的工序长卷 |
-| 非遗地图 | `map.html` | 周城 / 喜洲 / 巍山三地故事与统计图表 |
-| 扎染实验室 | `diy.html` | 用自然语言生成纹样与氧化参数（需登录） |
-| 问蓝知染 | `quiz.html` | 智能非遗导师：RAG 问答、出题、画纹样、历史会话（需登录） |
+| `DB_PASSWORD` | 是 | MySQL 密码 |
+| `DB_USERNAME` | 否 | 数据库用户名，默认 `root` |
+| `DB_URL` | 否 | MySQL JDBC 地址 |
+| `SERVER_PORT` | 否 | 后端端口，默认 `8080` |
+| `DASHSCOPE_API_KEY` | 在线 AI 必填 | DashScope API Key |
+| `DASHSCOPE_CHAT_MODEL` | 否 | 问答模型 |
+| `DASHSCOPE_EMBEDDING_MODEL` | 否 | 向量模型 |
+| `AI_MODE` | 否 | `auto`、`dashscope` 或 `offline` |
+| `AI_ALLOW_OFFLINE_FALLBACK` | 否 | 是否允许本地规则兜底 |
+| `RAG_REINDEX_TOKEN` | 否 | 知识库重建接口令牌 |
+| `UPLOAD_DIR` | 否 | 用户作品保存目录 |
+| `CORS_ALLOWED_ORIGINS` | 否 | 前端开发地址白名单 |
 
-## 协作开发
+`application.yml` 使用 `${变量名:默认值}` 读取这些配置。PowerShell 临时设置示例：
 
-### 负责「工艺长卷（模块 02）」和「非遗地图（模块 05）」的同学
+```powershell
+$env:DB_PASSWORD="你的MySQL密码"
+$env:DASHSCOPE_API_KEY="你的DashScope密钥"
+$env:AI_MODE="auto"
+```
 
-**工艺长卷 `timeline.html`**
+## 本地启动
 
-| 文件 | 用途 |
+### 1. 准备数据库
+
+启动 MySQL 后，可以让 Spring Data JPA 自动建表，也可以执行：
+
+```powershell
+mysql -u root -p --default-character-set=utf8mb4 --execute="source db/mysql-init.sql"
+```
+
+### 2. 启动后端
+
+```powershell
+cd backend
+$env:DB_PASSWORD="你的MySQL密码"
+$env:DASHSCOPE_API_KEY="你的DashScope密钥"
+.\mvnw.cmd spring-boot:run
+```
+
+后端地址：`http://localhost:8080`
+
+### 3. 启动前端
+
+```powershell
+cd frontend
+npm ci
+npm run dev
+```
+
+前端地址：`http://localhost:5173`
+
+Vite 会将 `/api` 和 `/uploads` 代理到 `http://localhost:8080`。
+
+## 构建与检查
+
+前端：
+
+```powershell
+cd frontend
+npm ci
+npm run typecheck
+npm run build
+npm run preview
+```
+
+后端测试：
+
+```powershell
+cd backend
+.\mvnw.cmd test
+```
+
+生产环境的 `frontend/dist` 可部署到 Nginx、静态对象存储或其他静态托管服务，并反向代理 `/api`、`/uploads` 到 Spring Boot。
+
+## 主要接口
+
+| 接口 | 用途 |
 |---|---|
-| `timeline.html` | 长卷页面结构、七步工序内容 |
-| `app.js` → `setupCraftStory()` | 滚动进度、书页展开、绣线动画 |
-| `styles.css` → `.craft-book` / `.book-*` / `.cover-*` 段落 | 长卷与封面样式 |
-| `assets/` | 长卷配图资源 |
+| `POST /api/register` | 注册 |
+| `POST /api/login` | 登录 |
+| `GET /api/patterns` | 纹样图鉴 |
+| `GET /api/artworks` | 作品列表 |
+| `GET /api/map/places` | 非遗地点 |
+| `GET /api/map/stats` | 地区产业数据 |
+| `POST /api/diy/agent/pattern` | AI 纹样参数生成 |
+| `POST /api/tutor/chat` | RAG + ReAct 智能导师 |
+| `GET /api/tutor/catalog` | 知识分类 |
+| `GET /api/tutor/knowledge` | 知识分片阅览 |
+| `POST /api/scenario/ask` | 剧本杀知识问答 |
+| `POST /api/scenario/answer` | 剧本杀挑战判题 |
+| `POST /api/admin/rag/reindex` | 重建 RAG 索引 |
 
-**非遗地图 `map.html`**
+## 团队与分工
 
-| 文件 | 用途 |
+| 成员 | 主要工作 |
 |---|---|
-| `map.html` | 地图页面、地点标记、人物图鉴弹层 |
-| `app.js` → `setupAtlas()` | 地点切换、ECharts 图表、图鉴弹层交互 |
-| `assets/echarts.min.js` | 图表库 |
-| `styles.css` → `/* --- 3. 非遗地图 (map) --- */` 之后的 `.atlas-*` / `.marker-*` / `.ink-*` | 地图与图表样式 |
-| `backend/src/main/java/com/baizu/tiedye/atlas/` | 地图后端：`controller/AtlasController.java`、`service/AtlasService.java`、`repository/*`、`entity/MapPlace.java`、`entity/MapStat.java`、`dto/*` |
-| `db/mysql-init.sql` | 表结构：`map_place`、`map_stat` |
-| `bootstrap/DataInitializer.java` → `seedMap()` | 三个地点与统计数据 |
-| 接口 | `GET /api/map/places`、`GET /api/map/stats?place=zhoucheng` |
+| 王一帆 | 项目统筹、整合联调、扎染实验室、问蓝知染与 AI 技术链路 |
+| 罗丽梅（Git：llm935） | 纹样图鉴、知识竞答、作品墙与相关资料 |
+| 侯晓然（Git：Xiaoran Hou） | 前端框架、工艺模块、情境剧本杀与前端整合 |
 
-### 负责「模块 3 纹样图鉴」和「模块 4 作品墙」的同学
+以上分工根据仓库提交记录和模块归属整理。
 
-**模块 3：纹样图鉴 × 闯关答题**
+## Git 历史
 
-| 文件 | 用途 |
-|---|---|
-| `home.html` | 展区 03 卡片、`#view-heritage` 纹样视图、`#modal-pattern` 图鉴与答题弹层 |
-| `app.js` | `openModal / closeModal / loadPatterns / renderPatterns / loadQuiz / renderQuiz / checkAnswer` |
-| `styles.css` → `模块 3 / 4：纹样图鉴与作品墙` 段落 | `.pattern-grid`、`.pattern-card`、`#modal-pattern .quiz-*` 等样式 |
-| `backend/src/main/java/com/baizu/tiedye/pattern/` | 纹样接口：`controller/dto/entity/repository/service` |
-| `backend/src/main/java/com/baizu/tiedye/quiz/` | 题库接口：`controller/dto/entity/repository/service` |
-| `db/mysql-init.sql` | 表结构：`pattern`、`quiz_question`、`quiz_option`（模块 3） |
-| `bootstrap/DataInitializer.java` | `seedPatterns()`、`seedKnowledgeQuiz()`、`seedPatternQuiz()` |
-| 接口 | `GET /api/patterns`、`GET /api/quiz/questions?scope=pattern&limit=10`、`POST /api/quiz/answer` |
+主开发分支及 Pull Request 记录保留在仓库中。提交范围覆盖静态原型、Vue 迁移、AI/RAG、情景剧本杀、页面整合和问题修复。
 
-**模块 4：作品墙**
+## 已知配置说明
 
-| 文件 | 用途 |
-|---|---|
-| `home.html` | 展区 06 卡片、`#modal-ask` 作品墙弹层、上传表单、`#lightbox` 大图预览 |
-| `app.js` | `loadArtworks / renderArtworks / filterArtworks / likeArtwork / handleUpload / previewImage / toggleUploadForm / openLightbox / closeLightbox / likeFromLightbox` |
-| `styles.css` → `模块 3 / 4` 段落 | `.gallery-*`、`.polaroid-*`、`.like-*`、`.upload-*`、`#lightbox` 等样式 |
-| `backend/src/main/java/com/baizu/tiedye/artwork/` | 作品接口：`controller/dto/entity/repository/service` |
-| `db/mysql-init.sql` | 表结构：`artwork` |
-| `bootstrap/DataInitializer.java` → `seedArtworks()` | 9 条演示作品 |
-| 上传目录 | `${UPLOAD_DIR}`，默认 `backend/uploads`，通过 `/uploads/**` 访问 |
-| 接口 | `GET /api/artworks`、`POST /api/artworks/upload`、`POST /api/artworks/{id}/like` |
-
-
-**全站公共文件**
-
-| 文件 | 用途 |
-|---|---|
-| `place.html` | 地点完整手记、传承人、纹样、打卡指南和产业数据 |
-| `js/api-base.js` | 接口地址与统一请求封装，所有模块共用 |
-| `js/http.js` | 统一请求头、Cookie 与接口响应处理 |
-| `styles.css` 顶部变量与通用组件 | 全站字体、颜色、按钮、页头页脚 |
-| `backend/src/main/java/com/baizu/tiedye/common/` | 统一接口响应与异常处理 |
-| `bootstrap/DataInitializer.java` | 旧模块的演示数据 |
-| `db/mysql-init.sql` | 交付用建库建表脚本（包含模块 5/6 新表） |
-| `db/agent-rag-init.sql` | 已有数据库的模块 5/6 升级脚本 |
-| `docs/agent-api.md` | 模块 5/6 接口、JSON 参数、ReAct 动作与数据结构说明 |
-
-## 拉取项目后如何启动
-安装 **JDK 17**、**MySQL 8**、**Node.js 18+**，并确保 MySQL 服务已启动。
-
-### 启动后端（端口 8080）
-   ```powershell
-   cd backend
-   $env:DB_PASSWORD="你的MySQL密码"
-   .\mvnw.cmd spring-boot:run
-   ```
-
-### 启动前端（端口 5173）
-   ```powershell
-   cd frontend
-   npm install
-   npm run dev
-   ```
-浏览器访问 <http://localhost:5173/>。
+- 未配置 `DASHSCOPE_API_KEY` 时，页面应显示 AI 离线/未配置状态。
+- `AI_ALLOW_OFFLINE_FALLBACK=true` 仅建议用于离线演示。
+- 上传文件不会提交到 Git，默认保存在 `UPLOAD_DIR`。
+- 数据库密码、API Key 和重建令牌不得写入源码。
