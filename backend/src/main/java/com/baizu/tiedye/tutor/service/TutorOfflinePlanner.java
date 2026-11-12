@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Service;
 
+import com.baizu.tiedye.ai.client.LlmClient;
 import com.baizu.tiedye.ai.config.AiProperties;
 import com.baizu.tiedye.rag.model.RagHit;
 import com.baizu.tiedye.rag.model.RetrievalResult;
@@ -37,17 +38,20 @@ public class TutorOfflinePlanner {
     private final RagCatalogService catalogService;
     private final RagRetrievalService retrievalService;
     private final AiProperties properties;
+    private final LlmClient llmClient;
     private final ObjectMapper objectMapper;
 
     public TutorOfflinePlanner(ToolRegistry toolRegistry,
                                RagCatalogService catalogService,
                                RagRetrievalService retrievalService,
                                AiProperties properties,
+                               LlmClient llmClient,
                                ObjectMapper objectMapper) {
         this.toolRegistry = toolRegistry;
         this.catalogService = catalogService;
         this.retrievalService = retrievalService;
         this.properties = properties;
+        this.llmClient = llmClient;
         this.objectMapper = objectMapper;
     }
 
@@ -126,6 +130,12 @@ public class TutorOfflinePlanner {
     }
 
     private void handleQuiz(TutorTurnContext context) {
+        if (!llmClient.isAvailable()) {
+            context.addObservation("智能出题服务未配置，当前无法生成新题。");
+            context.setAnswerText("智能出题服务暂未配置。知识问答、纹样生成和已有题目的判题仍可继续使用。");
+            context.setLowConfidence(false);
+            return;
+        }
         int difficulty = context.getStats().stream()
                 .filter(stat -> "differentiation".equals(stat.topic()))
                 .map(QuizStatDto::nextDifficulty)

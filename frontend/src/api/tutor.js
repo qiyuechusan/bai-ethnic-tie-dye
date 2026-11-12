@@ -1,4 +1,4 @@
-import { request } from './client.js';
+import { request } from './client';
 
 export function chatWithTutor(payload) {
   return request('/tutor/chat', {

@@ -53,6 +53,23 @@ function assetsPlugin() {
   }
 }
 
+const apiProxy = {
+  '/api': {
+    target: 'http://localhost:8080',
+    changeOrigin: true,
+    configure: (proxy) => {
+      proxy.on('proxyReq', (proxyReq) => proxyReq.removeHeader('origin'))
+    },
+  },
+  '/uploads': {
+    target: 'http://localhost:8080',
+    changeOrigin: true,
+    configure: (proxy) => {
+      proxy.on('proxyReq', (proxyReq) => proxyReq.removeHeader('origin'))
+    },
+  },
+}
+
 export default defineConfig({
   plugins: [
     vue({
@@ -71,21 +88,13 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        configure: (proxy) => {
-          proxy.on('proxyReq', (proxyReq) => proxyReq.removeHeader('origin'))
-        },
-      },
-      '/uploads': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        configure: (proxy) => {
-          proxy.on('proxyReq', (proxyReq) => proxyReq.removeHeader('origin'))
-        },
-      },
-    },
+    proxy: apiProxy,
+  },
+  preview: {
+    port: 4173,
+    proxy: apiProxy,
+  },
+  optimizeDeps: {
+    noDiscovery: true,
   },
 })
