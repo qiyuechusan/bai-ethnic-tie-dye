@@ -169,7 +169,12 @@ Vite 会将 `/api` 和 `/uploads` 代理到 `http://localhost:8080`。
 
 ## Git 历史
 
-主开发分支及 Pull Request 记录保留在仓库中。提交范围覆盖静态原型、Vue 迁移、AI/RAG、情景剧本杀、页面整合和问题修复。
+本项目保留完整的开发提交与 Pull Request 记录，体现从原型、Vue 前端迁移到 AI/RAG 功能集成的迭代过程。
+
+- [全部提交记录](https://github.com/qiyuechusan/bai-ethnic-tie-dye/commits/main)
+- [Pull Requests](https://github.com/qiyuechusan/bai-ethnic-tie-dye/pulls)
+
+主要开发节点包括：前端框架搭建、工艺长卷与非遗地图开发、知识问答与 RAG 集成、剧本杀与作品墙模块整合、系统测试与部署文档完善。
 
 ## 已知配置说明
 
