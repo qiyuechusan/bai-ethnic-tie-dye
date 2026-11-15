@@ -86,14 +86,7 @@
 
 ## 环境变量
 
-复制模板：
-
-```powershell
-Copy-Item .env.example .env
-```
-
-然后填写 `.env`。不要提交真实密钥。
-
+打开‘.env’文件，直接填写数据库密码和大模型密钥。
 Spring Boot 启动时会自动读取仓库根目录或 `backend/` 目录下的 `.env` 文件。
 
 | 变量 | 必填 | 说明 |
@@ -111,13 +104,8 @@ Spring Boot 启动时会自动读取仓库根目录或 `backend/` 目录下的 `
 | `UPLOAD_DIR` | 否 | 用户作品保存目录 |
 | `CORS_ALLOWED_ORIGINS` | 否 | 前端开发地址白名单 |
 
-`application.yml` 使用 `${变量名:默认值}` 读取这些配置。PowerShell 临时设置示例：
+`application.yml` 使用 `${变量名:默认值}` 读取这些配置。
 
-```powershell
-$env:DB_PASSWORD="你的MySQL密码"
-$env:DASHSCOPE_API_KEY="你的DashScope密钥"
-$env:AI_MODE="auto"
-```
 
 ## 本地启动
 
@@ -133,8 +121,6 @@ mysql -u root -p --default-character-set=utf8mb4 --execute="source db/mysql-init
 
 ```powershell
 cd backend
-$env:DB_PASSWORD="你的MySQL密码"
-$env:DASHSCOPE_API_KEY="你的DashScope密钥"
 .\mvnw.cmd spring-boot:run
 ```
 
@@ -152,24 +138,6 @@ npm run dev
 
 Vite 会将 `/api` 和 `/uploads` 代理到 `http://localhost:8080`。
 
-## 构建与检查
-
-前端：
-
-```powershell
-cd frontend
-npm ci
-npm run typecheck
-npm run build
-npm run preview
-```
-
-后端测试：
-
-```powershell
-cd backend
-.\mvnw.cmd test
-```
 
 ## 主要接口
 
